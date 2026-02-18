@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classifica Sessione Laboratoriale - Livorno | AI-PACT</title>
+    <style>
+        :root {
+            --primary: #1a3a5c; --primary-light: #2c5f8a; --accent: #e67e22;
+            --accent-gold: #f1c40f; --accent-silver: #95a5a6; --accent-bronze: #cd7f32;
+            --success: #27ae60; --warning: #f39c12; --danger: #e74c3c;
+            --bg: #f0f4f8; --card-bg: #ffffff; --text: #2c3e50; --text-light: #7f8c8d; --border: #e1e8ed;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.7; color: var(--text); background: var(--bg); }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        header { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; padding: 2.5rem 0; margin-bottom: 2rem; }
+        header .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        header h1 { font-size: 2rem; font-weight: 700; }
+        header .subtitle { opacity: 0.85; font-size: 1rem; margin-top: 0.3rem; }
+        .header-badge { background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 8px; font-size: 0.9rem; }
+        .header-brand { font-size: 1.1rem; font-weight: 700; letter-spacing: 1px; opacity: 0.9; }
+        .card { background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); padding: 30px; margin-bottom: 25px; border: 1px solid var(--border); }
+        .card h2 { font-size: 1.4rem; font-weight: 600; color: var(--primary); margin-bottom: 1.2rem; padding-bottom: 0.6rem; border-bottom: 2px solid var(--border); }
+        .card-winner { border: 2px solid var(--accent-gold); background: linear-gradient(135deg, #fffdf0, #fff9e6); }
+        .podium { display: flex; justify-content: center; align-items: flex-end; gap: 20px; margin: 2rem 0; flex-wrap: wrap; }
+        .podium-item { text-align: center; padding: 25px 30px; border-radius: 12px; background: var(--card-bg); box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid var(--border); min-width: 200px; }
+        .podium-item.first { order: 0; transform: scale(1.08); border-color: var(--accent-gold); box-shadow: 0 6px 20px rgba(241,196,15,0.3); }
+        .podium-item.second { order: -1; }
+        .podium-item.third { order: 1; }
+        .medal { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
+        .podium-score { font-size: 2rem; font-weight: 700; color: var(--primary); }
+        .podium-name { font-size: 0.95rem; color: var(--text-light); margin-top: 0.3rem; }
+        .podium-group { font-weight: 600; font-size: 1.1rem; margin-top: 0.5rem; }
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        thead th { background: var(--primary); color: white; padding: 12px 15px; text-align: left; font-weight: 600; white-space: nowrap; }
+        tbody td { padding: 12px 15px; border-bottom: 1px solid var(--border); }
+        tbody tr:nth-child(even) { background: #f8fafc; }
+        tbody tr:hover { background: #edf2f7; }
+        tbody tr.winner-row { background: #fffdf0; border-left: 4px solid var(--accent-gold); }
+        .total-cell { font-weight: 700; font-size: 1.05rem; }
+        .score-bar { background: #e8ecf1; border-radius: 10px; height: 24px; position: relative; overflow: hidden; min-width: 80px; }
+        .score-bar-fill { height: 100%; border-radius: 10px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; }
+        .score-bar-fill span { font-size: 0.75rem; font-weight: 700; color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+        .score-high { background: linear-gradient(90deg, #2ecc71, #27ae60); }
+        .score-mid { background: linear-gradient(90deg, #f39c12, #e67e22); }
+        .score-low { background: linear-gradient(90deg, #e74c3c, #c0392b); }
+        .criteria-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .criteria-card { background: #f8fafc; border-radius: 8px; padding: 20px; border: 1px solid var(--border); }
+        .criteria-card h3 { font-size: 1rem; color: var(--primary); margin-bottom: 0.8rem; }
+        .criteria-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+        .criteria-bar-label { font-size: 0.85rem; min-width: 70px; color: var(--text-light); }
+        .criteria-bar-container { flex: 1; }
+        .criteria-avg { font-size: 0.85rem; color: var(--text-light); margin-top: 0.5rem; font-style: italic; }
+        .mentions { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+        .mention-badge { padding: 20px; border-radius: 10px; text-align: center; }
+        .mention-badge .mention-icon { font-size: 1.8rem; display: block; margin-bottom: 0.5rem; }
+        .mention-badge .mention-title { font-weight: 600; font-size: 0.9rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; }
+        .mention-badge .mention-group { font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-top: 0.3rem; }
+        .mention-innovation { background: linear-gradient(135deg, #e8f8f5, #d5f5e3); border: 1px solid #a3d9c8; }
+        .mention-presentation { background: linear-gradient(135deg, #eaf2f8, #d4e6f1); border: 1px solid #a9cce3; }
+        .mention-impact { background: linear-gradient(135deg, #fef9e7, #fdebd0); border: 1px solid #f5cba7; }
+        .point-list { list-style: none; padding: 0; }
+        .point-list li { padding: 10px 15px; margin-bottom: 8px; border-radius: 8px; border-left: 4px solid var(--primary-light); background: #f8fafc; }
+        .point-list.strengths li { border-left-color: var(--success); }
+        .point-list.weaknesses li { border-left-color: var(--danger); }
+        .point-list.recommendations li { border-left-color: var(--accent); }
+        footer { background: var(--primary); color: white; text-align: center; padding: 1.5rem; margin-top: 2rem; font-size: 0.9rem; opacity: 0.9; }
+        @media (max-width: 768px) { header h1 { font-size: 1.5rem; } .card { padding: 20px; } .podium { flex-direction: column; align-items: center; } .podium-item.first { order: -1; transform: scale(1); } .criteria-grid { grid-template-columns: 1fr; } body { font-size: 0.9rem; } }
+        @media print { body { background: white; } .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; } header, footer { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+    </style>
+</head>
+<body>
+
+    <!-- 1. HEADER -->
+    <header>
+        <div class="container">
+            <div>
+                <h1>Classifica Sessione Laboratoriale</h1>
+                <p class="subtitle">Sede: Livorno - Laboratorio A</p>
+                <div style="display: flex; gap: 1rem; margin-top: 0.8rem; flex-wrap: wrap;">
+                    <span class="header-badge">Valutazione: 17 febbraio 2026</span>
+                    <span class="header-badge">Gruppi valutati: 5</span>
+                </div>
+            </div>
+            <div class="header-brand">AI-PACT</div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- 2. PODIO -->
+        <div class="card">
+            <h2>Podio</h2>
+            <div class="podium">
+                <!-- Secondo posto (order: -1, appare a sinistra) -->
+                <div class="podium-item second">
+                    <span class="medal">&#129352;</span>
+                    <div class="podium-score">8.6</div>
+                    <div class="podium-group">Gruppo 4</div>
+                    <div class="podium-name">Comunicazione Istituzionale e Moderazione Social</div>
+                </div>
+                <!-- Primo posto (order: 0, appare al centro) -->
+                <div class="podium-item first">
+                    <span class="medal">&#129351;</span>
+                    <div class="podium-score">9.0</div>
+                    <div class="podium-group">Gruppo 1</div>
+                    <div class="podium-name">Assistente alla Redazione Atti Amministrativi</div>
+                </div>
+                <!-- Terzo posto (order: 1, appare a destra) -->
+                <div class="podium-item third">
+                    <span class="medal">&#129353;</span>
+                    <div class="podium-score">8.3</div>
+                    <div class="podium-group">Gruppo 5</div>
+                    <div class="podium-name">Smistamento Intelligente Protocollo e Segnalazioni</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. TABELLA COMPARATIVA -->
+        <div class="card">
+            <h2>Tabella Comparativa</h2>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Gruppo</th>
+                            <th>Progetto</th>
+                            <th>Completezza</th>
+                            <th>Qualit&agrave;</th>
+                            <th>Innovazione</th>
+                            <th>Presentazione</th>
+                            <th>Impatto</th>
+                            <th>Totale</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 1. Gruppo 1 - 9.0 -->
+                        <tr class="winner-row">
+                            <td>1</td>
+                            <td><strong>Gruppo 1</strong></td>
+                            <td>Assistente Redazione Atti</td>
+                            <td>
+                                <div class="score-bar"><div class="score-bar-fill score-high" style="width:95%;"><span>9.5</span></div></div>
+                            </td>
+                            <td>
+                                <div class="score-bar"><div class="score-bar-fill score-high" style="width:90%;"><span>9.0</span></div></div>
+                            </td>
+                            <td>
+                                <div class="score-bar"><div class="score-bar-fill score-high" style="width:95%;"><span>9.5</span></div></div>
+                            </td>
+                            <td>
+                                <div class="score-bar"><div class="score-bar-fill score-high" style="width:80%;"><span>8.0</span></div></div>
+                            </td>
+                            <td>
+                                <div class="score-bar"><div class="score-bar-fill score-high" style="width:90%;"><span>9.0</span></div></div>
+                            </td>
+                            <td class="total-cell">
+                                <div class="score-bar"><div class="score-bar-fill score-high" style="width:90%;"><span>9.0</span></div></div>
+                            </td>
+                        </tr>
+                        <!-- 2. Gruppo 4 - 8.6 -->
+                        <tr>
+                            <td>2</td>
+                            <td><strong>Gruppo 4</strong></td>
+                            <td>Comunicazione e Moderazione Social</td>
+                            <td>
+                                <div class="score-bar"><div class="score-bar-fill score-high" style="width:85%;"><span>8.5</span></div></div>
+                            </td>
+                            <td>
+                                <div class="score-bar"><div class="score-bar-fill score-high" style="width:90%;"><span>9.0</span></div></div>
+                            </td>
+                            <td>
+                                <div class="score-bar"><div class="score-bar-fill score-high" style="width:85%;"><span>8.5</span></div></div>
+                            </td>
+                            <td>
+                                <div class="score-bar"><div class="score-bar-fill score-high" style="width:90%;"><span>9.0</span></div></div>
+                            </td>
+                            <td>
+                                <div class="score-bar"><div class="score-bar-fill score-high" style="width:80%;"><span>8.0</span></div></div>
+                            </td>
+                            <td class="total-cell">
+                                <div class="score-bar"><div class="score-bar-fill score-high" style="width:86%;"><span>8.6</span></div></div>
+                            </td>
+                        </tr>
+                        <!-- 3. Gruppo 5 - 8.3 -->
+                        <tr>
+                            <td>3</td>
+                            <td><strong>Gruppo 5</strong></td>
+                            <td>Smistamento Protocollo e Segnalazioni</td>
+                            <td>
+                                <div class="score-bar"><div class="score-bar-fill score-high" style="width:85%;"><span>8.5</span></div></div>
+                            </td>
+                            <td>
+                                <div class="score-bar"><div class="score-bar-fill score-high" style="width:82%;"><span>8.2</span></div></div>
+                            </td>
+                            <td>
+                                <div class="score-bar"><div class="score-bar-fill score-mid" style="width:75%;"><span>7.5</span></div></div>
+                            </td>
+                            <td>
+                                <div class="score-bar"><div class="score-bar-fill score-high" style="width:90%;"><span>9.0</span></div></div>
+                            </td>
+                            <td>
+                                <div class="score-bar"><div class="score-bar-fill score-high" style="width:85%;"><span>8.5</span></div></div>
+                            </td>
+                            <td class="total-cell">
+                                <div class="score-bar"><div class="score-bar-fill score-high" style="width:83%;"><span>8.3</span></div></div>
+                            </td>
+                        </tr>
+                        <!-- 4. Gruppo 3 - 8.1 -->
+                        <tr>
+                            <td>4</td>
+                            <td><strong>Gruppo 3</strong></td>
+                            <td>Istruttoria Tributi e Allegati</td>
+                            <td>
+                                <div class="score-bar"><div class="score-bar-fill score-high" style="width:85%;"><span>8.5</span></div></div>
+                            </td>
+                            <td>
+                                <div class="score-bar"><div class="score-bar-fill score-high" style="width:80%;"><span>8.0</span></div></div>
+                            </td>
+                            <td>
+                                <div class="score-bar"><div class="score-bar-fill score-mid" style="width:75%;"><span>7.5</span></div></div>
+                            </td>
+                            <td>
+                                <div class="score-bar"><div class="score-bar-fill score-high" style="width:80%;"><span>8.0</span></div></div>
+                            </td>
+                            <td>
+                                <div class="score-bar"><div class="score-bar-fill score-high" style="width:85%;"><span>8.5</span></div></div>
+                            </td>
+                            <td class="total-cell">
+                                <div class="score-bar"><div class="score-bar-fill score-high" style="width:81%;"><span>8.1</span></div></div>
+                            </td>
+                        </tr>
+                        <!-- 5. Gruppo 7 - 8.1 -->
+                        <tr>
+                            <td>5</td>
+                            <td><strong>Gruppo 7</strong></td>
+                            <td>Piano Raccolta Rifiuti Data-Driven</td>
+                            <td>
+                                <div class="score-bar"><div class="score-bar-fill score-high" style="width:85%;"><span>8.5</span></div></div>
+                            </td>
+                            <td>
+                                <div class="score-bar"><div class="score-bar-fill score-high" style="width:80%;"><span>8.0</span></div></div>
+                            </td>
+                            <td>
+                                <div class="score-bar"><div class="score-bar-fill score-mid" style="width:75%;"><span>7.5</span></div></div>
+                            </td>
+                            <td>
+                                <div class="score-bar"><div class="score-bar-fill score-mid" style="width:78%;"><span>7.8</span></div></div>
+                            </td>
+                            <td>
+                                <div class="score-bar"><div class="score-bar-fill score-high" style="width:85%;"><span>8.5</span></div></div>
+                            </td>
+                            <td class="total-cell">
+                                <div class="score-bar"><div class="score-bar-fill score-high" style="width:81%;"><span>8.1</span></div></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 4. ANALISI PER CRITERIO -->
+        <div class="card">
+            <h2>Analisi per Criterio</h2>
+            <div class="criteria-grid">
+
+                <!-- Completezza dell'analisi -->
+                <div class="criteria-card">
+                    <h3>1. Completezza dell'analisi</h3>
+                    <div class="criteria-bar-row">
+                        <span class="criteria-bar-label">Gruppo 1</span>
+                        <div class="criteria-bar-container">
+                            <div class="score-bar"><div class="score-bar-fill score-high" style="width:95%;"><span>9.5</span></div></div>
+                        </div>
+                    </div>
+                    <div class="criteria-bar-row">
+                        <span class="criteria-bar-label">Gruppo 3</span>
+                        <div class="criteria-bar-container">
+                            <div class="score-bar"><div class="score-bar-fill score-high" style="width:85%;"><span>8.5</span></div></div>
+                        </div>
+                    </div>
+                    <div class="criteria-bar-row">
+                        <span class="criteria-bar-label">Gruppo 4</span>
+                        <div class="criteria-bar-container">
+                            <div class="score-bar"><div class="score-bar-fill score-high" style="width:85%;"><span>8.5</span></div></div>
+                        </div>
+                    </div>
+                    <div class="criteria-bar-row">
+                        <span class="criteria-bar-label">Gruppo 5</span>
+                        <div class="criteria-bar-container">
+                            <div class="score-bar"><div class="score-bar-fill score-high" style="width:85%;"><span>8.5</span></div></div>
+                        </div>
+                    </div>
+                    <div class="criteria-bar-row">
+                        <span class="criteria-bar-label">Gruppo 7</span>
+                        <div class="criteria-bar-container">
+                            <div class="score-bar"><div class="score-bar-fill score-high" style="width:85%;"><span>8.5</span></div></div>
+                        </div>
+                    </div>
+                    <p class="criteria-avg">Media sessione: 8.7</p>
+                </div>
+
+                <!-- Qualita della soluzione -->
+                <div class="criteria-card">
+                    <h3>2. Qualit&agrave; della soluzione</h3>
+                    <div class="criteria-bar-row">
+                        <span class="criteria-bar-label">Gruppo 1</span>
+                        <div class="criteria-bar-container">
+                            <div class="score-bar"><div class="score-bar-fill score-high" style="width:90%;"><span>9.0</span></div></div>
+                        </div>
+                    </div>
+                    <div class="criteria-bar-row">
+                        <span class="criteria-bar-label">Gruppo 4</span>
+                        <div class="criteria-bar-container">
+                            <div class="score-bar"><div class="score-bar-fill score-high" style="width:90%;"><span>9.0</span></div></div>
+                        </div>
+                    </div>
+                    <div class="criteria-bar-row">
+                        <span class="criteria-bar-label">Gruppo 5</span>
+                        <div class="criteria-bar-container">
+                            <div class="score-bar"><div class="score-bar-fill score-high" style="width:82%;"><span>8.2</span></div></div>
+                        </div>
+                    </div>
+                    <div class="criteria-bar-row">
+                        <span class="criteria-bar-label">Gruppo 3</span>
+                        <div class="criteria-bar-container">
+                            <div class="score-bar"><div class="score-bar-fill score-high" style="width:80%;"><span>8.0</span></div></div>
+                        </div>
+                    </div>
+                    <div class="criteria-bar-row">
+                        <span class="criteria-bar-label">Gruppo 7</span>
+                        <div class="criteria-bar-container">
+                            <div class="score-bar"><div class="score-bar-fill score-high" style="width:80%;"><span>8.0</span></div></div>
+                        </div>
+                    </div>
+                    <p class="criteria-avg">Media sessione: 8.4</p>
+                </div>
+
+                <!-- Innovativita e uso dell'IA -->
+                <div class="criteria-card">
+                    <h3>3. Innovativit&agrave; e uso dell'IA</h3>
+                    <div class="criteria-bar-row">
+                        <span class="criteria-bar-label">Gruppo 1</span>
+                        <div class="criteria-bar-container">
+                            <div class="score-bar"><div class="score-bar-fill score-high" style="width:95%;"><span>9.5</span></div></div>
+                        </div>
+                    </div>
+                    <div class="criteria-bar-row">
+                        <span class="criteria-bar-label">Gruppo 4</span>
+                        <div class="criteria-bar-container">
+                            <div class="score-bar"><div class="score-bar-fill score-high" style="width:85%;"><span>8.5</span></div></div>
+                        </div>
+                    </div>
+                    <div class="criteria-bar-row">
+                        <span class="criteria-bar-label">Gruppo 3</span>
+                        <div class="criteria-bar-container">
+                            <div class="score-bar"><div class="score-bar-fill score-mid" style="width:75%;"><span>7.5</span></div></div>
+                        </div>
+                    </div>
+                    <div class="criteria-bar-row">
+                        <span class="criteria-bar-label">Gruppo 5</span>
+                        <div class="criteria-bar-container">
+                            <div class="score-bar"><div class="score-bar-fill score-mid" style="width:75%;"><span>7.5</span></div></div>
+                        </div>
+                    </div>
+                    <div class="criteria-bar-row">
+                        <span class="criteria-bar-label">Gruppo 7</span>
+                        <div class="criteria-bar-container">
+                            <div class="score-bar"><div class="score-bar-fill score-mid" style="width:75%;"><span>7.5</span></div></div>
+                        </div>
+                    </div>
+                    <p class="criteria-avg">Media sessione: 8.1</p>
+                </div>
+
+                <!-- Presentabilita del report -->
+                <div class="criteria-card">
+                    <h3>4. Presentabilit&agrave; del report</h3>
+                    <div class="criteria-bar-row">
+                        <span class="criteria-bar-label">Gruppo 4</span>
+                        <div class="criteria-bar-container">
+                            <div class="score-bar"><div class="score-bar-fill score-high" style="width:90%;"><span>9.0</span></div></div>
+                        </div>
+                    </div>
+                    <div class="criteria-bar-row">
+                        <span class="criteria-bar-label">Gruppo 5</span>
+                        <div class="criteria-bar-container">
+                            <div class="score-bar"><div class="score-bar-fill score-high" style="width:90%;"><span>9.0</span></div></div>
+                        </div>
+                    </div>
+                    <div class="criteria-bar-row">
+                        <span class="criteria-bar-label">Gruppo 1</span>
+                        <div class="criteria-bar-container">
+                            <div class="score-bar"><div class="score-bar-fill score-high" style="width:80%;"><span>8.0</span></div></div>
+                        </div>
+                    </div>
+                    <div class="criteria-bar-row">
+                        <span class="criteria-bar-label">Gruppo 3</span>
+                        <div class="criteria-bar-container">
+                            <div class="score-bar"><div class="score-bar-fill score-high" style="width:80%;"><span>8.0</span></div></div>
+                        </div>
+                    </div>
+                    <div class="criteria-bar-row">
+                        <span class="criteria-bar-label">Gruppo 7</span>
+                        <div class="criteria-bar-container">
+                            <div class="score-bar"><div class="score-bar-fill score-mid" style="width:78%;"><span>7.8</span></div></div>
+                        </div>
+                    </div>
+                    <p class="criteria-avg">Media sessione: 8.4</p>
+                </div>
+
+                <!-- Impatto potenziale sulla PA -->
+                <div class="criteria-card" style="grid-column: 1 / -1; max-width: 540px;">
+                    <h3>5. Impatto potenziale sulla PA</h3>
+                    <div class="criteria-bar-row">
+                        <span class="criteria-bar-label">Gruppo 1</span>
+                        <div class="criteria-bar-container">
+                            <div class="score-bar"><div class="score-bar-fill score-high" style="width:90%;"><span>9.0</span></div></div>
+                        </div>
+                    </div>
+                    <div class="criteria-bar-row">
+                        <span class="criteria-bar-label">Gruppo 3</span>
+                        <div class="criteria-bar-container">
+                            <div class="score-bar"><div class="score-bar-fill score-high" style="width:85%;"><span>8.5</span></div></div>
+                        </div>
+                    </div>
+                    <div class="criteria-bar-row">
+                        <span class="criteria-bar-label">Gruppo 5</span>
+                        <div class="criteria-bar-container">
+                            <div class="score-bar"><div class="score-bar-fill score-high" style="width:85%;"><span>8.5</span></div></div>
+                        </div>
+                    </div>
+                    <div class="criteria-bar-row">
+                        <span class="criteria-bar-label">Gruppo 7</span>
+                        <div class="criteria-bar-container">
+                            <div class="score-bar"><div class="score-bar-fill score-high" style="width:85%;"><span>8.5</span></div></div>
+                        </div>
+                    </div>
+                    <div class="criteria-bar-row">
+                        <span class="criteria-bar-label">Gruppo 4</span>
+                        <div class="criteria-bar-container">
+                            <div class="score-bar"><div class="score-bar-fill score-high" style="width:80%;"><span>8.0</span></div></div>
+                        </div>
+                    </div>
+                    <p class="criteria-avg">Media sessione: 8.5</p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 5. ANALISI TRASVERSALE -->
+        <div class="card">
+            <h2>Analisi Trasversale</h2>
+
+            <h3 style="color: var(--success); margin-bottom: 0.8rem;">Punti di forza della sessione</h3>
+            <ul class="point-list strengths">
+                <li><strong>Eccellente comprensione del contesto PA:</strong> Tutti e 5 i gruppi hanno dimostrato una conoscenza solida e concreta dei processi amministrativi, dei vincoli normativi e delle dinamiche organizzative della Pubblica Amministrazione. I progetti non sono esercizi teorici, ma risposte a problemi reali e quotidiani.</li>
+                <li><strong>Livello qualitativo uniformemente alto:</strong> La media complessiva della sessione si attesta a 8.4/10, con uno scarto minimo tra il primo e l'ultimo classificato (0.9 punti). Questo indica una partecipazione omogenea e un buon livello di preparazione trasversale, notevole considerando che i gruppi avevano a disposizione solo 1-1.5 ore.</li>
+                <li><strong>Forte orientamento alla concretezza:</strong> Quasi tutti i gruppi hanno prodotto deliverable operativi (template, dashboard, piani, report interattivi) piuttosto che documenti puramente descrittivi. Questo approccio pragmatico e il vero valore aggiunto della sessione.</li>
+                <li><strong>Competenza di dominio elevata:</strong> I riferimenti normativi (GDPR, CAD, D.Lgs. 267/2000), gli strumenti citati (Sicraweb EVO, Graph API), e la conoscenza dei processi interni dimostrano che i partecipanti sono professionisti con esperienza diretta nella PA.</li>
+            </ul>
+
+            <h3 style="color: var(--danger); margin-top: 1.5rem; margin-bottom: 0.8rem;">Aree di miglioramento comuni</h3>
+            <ul class="point-list weaknesses">
+                <li><strong>Uso dell'IA prevalentemente descrittivo:</strong> La criticita piu ricorrente (3 gruppi su 5) e la mancanza di prototipi funzionanti che dimostrino concretamente le capacita dell'IA. L'IA viene spesso descritta come strumento futuro piuttosto che utilizzata attivamente nel deliverable prodotto.</li>
+                <li><strong>Assenza generalizzata di stime economiche:</strong> Nessun gruppo ha incluso un'analisi costi-benefici, nemmeno di massima. Per rendere i progetti convincenti davanti a dirigenti e decisori, un ordine di grandezza dell'investimento necessario sarebbe stato fondamentale.</li>
+                <li><strong>Placeholder e refusi nei deliverable:</strong> Diversi gruppi hanno lasciato segnaposto non compilati ("[Nome Comune]") o errori minori nei file prodotti. Pur comprensibile nel vincolo temporale, una revisione finale di 5 minuti avrebbe migliorato la qualita percepita.</li>
+            </ul>
+        </div>
+
+        <!-- 6. IL VINCITORE -->
+        <div class="card card-winner">
+            <h2 style="color: #b8860b;">Il Vincitore - Gruppo 1</h2>
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <span style="font-size: 3rem;">&#127942;</span>
+                <div style="font-size: 2.5rem; font-weight: 800; color: var(--primary); margin-top: 0.5rem;">9.0 / 10</div>
+                <div style="font-size: 1.2rem; font-weight: 600; color: var(--text); margin-top: 0.3rem;">Assistente alla Redazione Atti Amministrativi</div>
+                <div style="font-size: 0.95rem; color: var(--text-light); margin-top: 0.2rem;">Gruppo 1 - Atti Amministrativi</div>
+            </div>
+            <div style="background: #fff; border-radius: 8px; padding: 20px; border: 1px solid #f0e6c0;">
+                <p style="margin-bottom: 1rem;">Il Gruppo 1 si aggiudica il primo posto della sessione di Livorno con un punteggio nettamente superiore alla media (9.0 contro 8.4). Il progetto si distingue per tre motivi principali:</p>
+                <p style="margin-bottom: 0.8rem;"><strong>Uso esemplare dell'IA come strumento critico:</strong> La conversazione documentata con Gemini 2.5 Flash mostra un dialogo strutturato e progressivo, in cui il gruppo ha guidato l'IA con domande mirate, ha corretto un errore dell'IA sul Canone Unico Patrimoniale, e ha utilizzato le risposte come base per produrre deliverable concreti. Questo e l'approccio ideale: l'IA come collaboratore da verificare, non come oracolo da seguire passivamente.</p>
+                <p style="margin-bottom: 0.8rem;"><strong>Deliverable immediatamente operativi:</strong> I 4 template di atti amministrativi (determina di autorizzazione, determina di diniego, pareri CUP, sezione richiamati) sono documenti che un Comune potrebbe adottare fin da subito, con la corretta struttura giuridica e i riferimenti normativi pertinenti.</p>
+                <p><strong>Analisi completa e contestualizzata:</strong> Requisiti funzionali, approccio tecnologico RAG, piano di adozione su 12 mesi, tabelle pro/contro per ogni aspetto: il progetto copre l'intero ciclo decisionale, dalla comprensione del problema alla roadmap di implementazione.</p>
+            </div>
+        </div>
+
+        <!-- 7. MENZIONI SPECIALI -->
+        <div class="card">
+            <h2>Menzioni Speciali</h2>
+            <div class="mentions">
+                <div class="mention-badge mention-innovation">
+                    <span class="mention-icon">&#128161;</span>
+                    <div class="mention-title">Miglior Innovazione</div>
+                    <div class="mention-group">Gruppo 1 - Atti Amministrativi</div>
+                    <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.3rem;">Innovativit&agrave; e uso dell'IA: 9.5/10</div>
+                    <div style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.2rem;">Uso iterativo e critico dell'IA con correzione degli errori del modello</div>
+                </div>
+                <div class="mention-badge mention-presentation">
+                    <span class="mention-icon">&#127912;</span>
+                    <div class="mention-title">Miglior Presentazione</div>
+                    <div class="mention-group">Gruppo 5 - Protocollo e Segnalazioni</div>
+                    <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.3rem;">Presentabilit&agrave; del report: 9.0/10</div>
+                    <div style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.2rem;">HTML professionale con navigazione sticky, accordion, Chart.js e design responsive</div>
+                </div>
+                <div class="mention-badge mention-impact">
+                    <span class="mention-icon">&#127919;</span>
+                    <div class="mention-title">Maggior Impatto</div>
+                    <div class="mention-group">Gruppo 1 - Atti Amministrativi</div>
+                    <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.3rem;">Impatto potenziale sulla PA: 9.0/10</div>
+                    <div style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.2rem;">Template di atti immediatamente adottabili con piano di rollout su 12 mesi</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. RACCOMANDAZIONI -->
+        <div class="card">
+            <h2>Raccomandazioni per i Prossimi Laboratori</h2>
+            <ul class="point-list recommendations">
+                <li><strong>Dedicare 15-20 minuti alla prototipazione IA concreta:</strong> La principale area di miglioramento trasversale e la mancanza di dimostrazioni pratiche dell'IA. Nei prossimi laboratori, si potrebbe prevedere una fase guidata in cui ogni gruppo testa almeno un prompt reale con un LLM sul proprio caso d'uso e include l'output nel deliverable. Questo trasformerebbe le proposte da descrittive a dimostrative.</li>
+                <li><strong>Fornire un template di analisi costi-benefici semplificato:</strong> Poiche nessun gruppo ha incluso stime economiche, un foglio precompilato con voci di costo standard (licenze software, ore di formazione, sviluppo, change management) aiuterebbe i partecipanti a completare il quadro decisionale senza richiedere competenze finanziarie specifiche.</li>
+                <li><strong>Prevedere 10 minuti finali di revisione e pulizia:</strong> Diversi deliverable contengono placeholder non sostituiti, refusi o errori HTML minori. Una fase strutturata di revisione finale, magari con una checklist di controllo, migliorerebbe la qualita percepita dei lavori senza richiedere tempo aggiuntivo significativo.</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- 9. FOOTER -->
+    <footer>
+        <div class="container">
+            <p>Valutazione generata automaticamente - Progetto AI-PACT</p>
+            <p style="margin-top: 0.3rem; font-size: 0.8rem;">17 febbraio 2026</p>
+        </div>
+    </footer>
+
+</body>
+</html>

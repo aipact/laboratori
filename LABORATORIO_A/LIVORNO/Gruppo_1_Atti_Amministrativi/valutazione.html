@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang=\"it\">
+<head>
+    <meta charset=\"UTF-8\">
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+    <title>Valutazione - Gruppo 1 Atti Amministrativi | AI-PACT</title>
+    <style>
+        :root {
+            --primary: #1a3a5c;
+            --primary-light: #2c5f8a;
+            --accent: #e67e22;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --bg: #f0f4f8;
+            --card-bg: #ffffff;
+            --text: #2c3e50;
+            --text-light: #7f8c8d;
+            --border: #e1e8ed;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.7; color: var(--text); background: var(--bg); }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+        header { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; padding: 2.5rem 0; margin-bottom: 2rem; }
+        header h1 { font-size: 1.8rem; font-weight: 700; }
+        header .subtitle { opacity: 0.85; font-size: 1rem; margin-top: 0.3rem; }
+        .header-meta { display: flex; gap: 1rem; margin-top: 0.8rem; flex-wrap: wrap; }
+        .header-badge { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 8px; font-size: 0.85rem; }
+        .card { background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); padding: 30px; margin-bottom: 25px; border: 1px solid var(--border); }
+        .card h2 { font-size: 1.3rem; font-weight: 600; color: var(--primary); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border); }
+        .total-score { text-align: center; padding: 2rem; }
+        .total-score .score-value { font-size: 4rem; font-weight: 800; line-height: 1; }
+        .total-score .score-label { font-size: 1rem; color: var(--text-light); margin-top: 0.5rem; }
+        .score-high-text { color: var(--success); }
+        .score-mid-text { color: var(--warning); }
+        .score-low-text { color: var(--danger); }
+        table { width: 100%; border-collapse: collapse; }
+        thead th { background: var(--primary); color: white; padding: 12px 15px; text-align: left; font-weight: 600; }
+        tbody td { padding: 12px 15px; border-bottom: 1px solid var(--border); }
+        tbody tr:nth-child(even) { background: #f8fafc; }
+        .total-row { font-weight: 700; background: #edf2f7 !important; }
+        .score-bar { background: #e8ecf1; border-radius: 10px; height: 24px; position: relative; overflow: hidden; min-width: 100px; }
+        .score-bar-fill { height: 100%; border-radius: 10px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; }
+        .score-bar-fill span { font-size: 0.75rem; font-weight: 700; color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+        .score-high { background: linear-gradient(90deg, #2ecc71, #27ae60); }
+        .score-mid { background: linear-gradient(90deg, #f39c12, #e67e22); }
+        .score-low { background: linear-gradient(90deg, #e74c3c, #c0392b); }
+        .point-list { list-style: none; padding: 0; }
+        .point-list li { padding: 10px 15px; margin-bottom: 8px; border-radius: 8px; border-left: 4px solid; background: #f8fafc; }
+        .strengths li { border-left-color: var(--success); }
+        .improvements li { border-left-color: var(--danger); }
+        .suggestions li { border-left-color: var(--accent); }
+        footer { background: var(--primary); color: white; text-align: center; padding: 1.5rem; margin-top: 2rem; font-size: 0.9rem; opacity: 0.9; }
+        @media (max-width: 768px) { header h1 { font-size: 1.4rem; } .card { padding: 20px; } .total-score .score-value { font-size: 3rem; } body { font-size: 0.9rem; } .table-wrap { overflow-x: auto; } }
+        @media print { body { background: white; } .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; } header { -webkit-print-color-adjust: exact; print-color-adjust: exact; } footer { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+    </style>
+</head>
+<body>
+    <header>
+        <div class=\"container\">
+            <h1>Valutazione Progetto: Assistente alla Redazione Atti Amministrativi</h1>
+            <p class=\"subtitle\">Gruppo 1 - Atti Amministrativi</p>
+            <div class=\"header-meta\">
+                <span class=\"header-badge\">Livorno</span>
+                <span class=\"header-badge\">Lab: 11 febbraio 2026</span>
+                <span class=\"header-badge\">Valutazione: 17 febbraio 2026</span>
+            </div>
+        </div>
+    </header>
+    <div class=\"container\">
+
+        <!-- Punteggio totale -->
+        <div class=\"card\">
+            <div class=\"total-score\">
+                <div class=\"score-value score-high-text\">9.0</div>
+                <div class=\"score-label\">Punteggio Totale / 10</div>
+                <p style=\"margin-top: 1rem; color: var(--text-light);\">Eccezionale per il tempo a disposizione - Progetto completo, concreto e immediatamente applicabile</p>
+            </div>
+        </div>
+
+        <!-- Tabella criteri -->
+        <div class=\"card\">
+            <h2>Dettaglio Criteri di Valutazione</h2>
+            <div class=\"table-wrap\">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Criterio</th>
+                            <th>Peso</th>
+                            <th>Voto</th>
+                            <th>Barra</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Completezza dell'analisi</td>
+                            <td>20%</td>
+                            <td>9.5</td>
+                            <td>
+                                <div class=\"score-bar\">
+                                    <div class=\"score-bar-fill score-high\" style=\"width: 95%;\">
+                                        <span>9.5</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Qualit&agrave; della soluzione</td>
+                            <td>20%</td>
+                            <td>9.0</td>
+                            <td>
+                                <div class=\"score-bar\">
+                                    <div class=\"score-bar-fill score-high\" style=\"width: 90%;\">
+                                        <span>9.0</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Innovativit&agrave; e uso dell'IA</td>
+                            <td>20%</td>
+                            <td>9.5</td>
+                            <td>
+                                <div class=\"score-bar\">
+                                    <div class=\"score-bar-fill score-high\" style=\"width: 95%;\">
+                                        <span>9.5</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Presentabilit&agrave; del report</td>
+                            <td>20%</td>
+                            <td>8.0</td>
+                            <td>
+                                <div class=\"score-bar\">
+                                    <div class=\"score-bar-fill score-high\" style=\"width: 80%;\">
+                                        <span>8.0</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Impatto potenziale sulla PA</td>
+                            <td>20%</td>
+                            <td>9.0</td>
+                            <td>
+                                <div class=\"score-bar\">
+                                    <div class=\"score-bar-fill score-high\" style=\"width: 90%;\">
+                                        <span>9.0</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class=\"total-row\">
+                            <td>Totale Pesato</td>
+                            <td>100%</td>
+                            <td><strong>9.0</strong></td>
+                            <td>
+                                <div class=\"score-bar\">
+                                    <div class=\"score-bar-fill score-high\" style=\"width: 90%;\">
+                                        <span>9.0</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Punti di forza -->
+        <div class=\"card\">
+            <h2>Punti di Forza</h2>
+            <ul class=\"point-list strengths\">
+                <li><strong>Uso esemplare e iterativo dell'IA:</strong> La conversazione documentata mostra un dialogo strutturato e progressivo con Gemini 2.5 Flash, partendo dall'analisi del caso d'uso, passando per domande specifiche e risposte dettagliate del gruppo, fino alla generazione di template concreti. Il gruppo ha anche corretto l'IA su un errore relativo al Canone Unico Patrimoniale, dimostrando spirito critico e competenza di dominio. Questo &egrave; l'esempio perfetto di come l'IA debba essere usata: come strumento da guidare e verificare, non da seguire passivamente.</li>
+                <li><strong>Deliverable immediatamente utilizzabili:</strong> Il progetto produce 4 template di atti amministrativi reali (determina di autorizzazione, determina di diniego, pareri CUP, sezione richiamati e pareri) che un Comune potrebbe adottare fin da subito come base di partenza. Non si tratta di elaborati teorici, ma di documenti operativi con la corretta struttura giuridica, i riferimenti normativi pertinenti (D.Lgs. 267/2000, D.Lgs. 42/2004, L. 160/2019) e i campi segnaposto ben definiti.</li>
+                <li><strong>Analisi del caso d'uso approfondita e contestualizzata:</strong> L'analisi copre tutti gli aspetti rilevanti: requisiti funzionali (aggiornamento normativo, template per tipologia, integrazione Sicraweb EVO, GDPR/AgID), approccio tecnologico (RAG open source + LLM commerciale), piano di adozione graduale su 12 mesi con uffici pilota e \"evangelisti\" interni, e monitoraggio con report periodici. La tabella pro/contro per ogni aspetto analizzato &egrave; uno strumento di decision-making concreto.</li>
+                <li><strong>Forte ancoraggio alla realt&agrave; operativa:</strong> Il gruppo cita strumenti reali (Sicraweb EVO di Maggioli), problemi concreti dei Comuni toscani (coerenza tra uffici, riferimenti normativi obsoleti), e affronta criticit&agrave; organizzative reali (resistenza al cambiamento, rischio di fiducia acritica nell'IA). La simulazione del rilascio autorizzazione pubblicitaria con 5 uffici coinvolti dimostra padronanza del processo amministrativo.</li>
+            </ul>
+        </div>
+
+        <!-- Aree di miglioramento -->
+        <div class=\"card\">
+            <h2>Aree di Miglioramento</h2>
+            <ul class=\"point-list improvements\">
+                <li><strong>Presentazione visiva del deliverable:</strong> A differenza di altri gruppi che hanno prodotto pagine HTML formattate, i deliverable sono in formato testo semplice (.txt e .md). Pur essendo il contenuto eccellente, una presentazione pi&ugrave; curata dal punto di vista visivo (ad esempio un documento HTML con i template formattati come atti veri e propri, con intestazione del Comune e layout istituzionale) avrebbe reso il lavoro ancora pi&ugrave; incisivo e pronto per una presentazione a dirigenti o decisori.</li>
+                <li><strong>Assenza di una stima economica:</strong> L'analisi &egrave; molto dettagliata su requisiti funzionali e approccio tecnologico, ma non include una stima dei costi di implementazione, delle risorse necessarie o dei tempi di sviluppo. Un ordine di grandezza economico, anche indicativo, avrebbe completato il quadro decisionale.</li>
+                <li><strong>Template parzialmente ridondanti:</strong> Il file <code>template_richiamati_pareri.txt</code> e il file <code>template_pareri_cup.txt</code> contengono sezioni gi&agrave; presenti integralmente nel template di autorizzazione e nella conversazione. Una struttura pi&ugrave; modulare, con sezioni componibili e non ripetute, avrebbe dimostrato maggiore organizzazione dei materiali prodotti.</li>
+            </ul>
+        </div>
+
+        <!-- Suggerimenti -->
+        <div class=\"card\">
+            <h2>Suggerimenti per lo Sviluppo Futuro</h2>
+            <ul class=\"point-list suggestions\">
+                <li><strong>Sviluppare un prototipo funzionale:</strong> Con i template gi&agrave; definiti, il passo successivo naturale sarebbe costruire un piccolo prototipo RAG che, dato un tipo di atto e alcuni parametri, generi automaticamente la bozza precompilata. Strumenti come LangChain o LlamaIndex con un LLM commerciale permetterebbero di realizzare una demo funzionante che renderebbe il progetto immediatamente dimostrativo.</li>
+                <li><strong>Creare un catalogo strutturato dei template:</strong> Organizzare i template in un formato strutturato (ad esempio JSON o XML) con metadati (tipo atto, uffici coinvolti, normative di riferimento, campi obbligatori), in modo che un sistema IA possa selezionare e popolare automaticamente il template corretto in base alla richiesta.</li>
+                <li><strong>Includere metriche di successo:</strong> Definire KPI concreti e misurabili per valutare l'efficacia dell'assistente IA una volta implementato: tempo medio di redazione di un atto prima e dopo, percentuale di errori normativi rilevati, tasso di adozione per ufficio, soddisfazione del personale. Questi indicatori sarebbero fondamentali per giustificare l'investimento in sede di approvazione del progetto.</li>
+            </ul>
+        </div>
+
+    </div>
+    <footer>
+        <div class=\"container\">
+            <p>Valutazione generata automaticamente - Progetto AI-PACT</p>
+            <p style=\"margin-top: 0.3rem; font-size: 0.8rem;\">17 febbraio 2026</p>
+        </div>
+    </footer>
+</body>
+</html>

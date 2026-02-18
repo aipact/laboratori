@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Finale: Gestione Bando Contributi TARI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            color: #0056b3;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 5px;
+            margin-top: 20px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2em;
+            color: #003366;
+            border-bottom: 3px solid #003366;
+            padding-bottom: 10px;
+        }
+        h2 {
+            font-size: 1.5em;
+        }
+        h3 {
+            font-size: 1.2em;
+        }
+        p {
+            margin-bottom: 10px;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+        ol {
+            list-style-type: decimal;
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+        .highlight {
+            background-color: #e6f7ff;
+            padding: 10px;
+            border-left: 5px solid #007bff;
+            margin-bottom: 15px;
+        }
+        pre {
+            background-color: #eee;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .warning {
+            color: #cc0000;
+            font-weight: bold;
+        }
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .section-status {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        .data-input {
+            width: calc(100% - 18px); /* Adjust for padding and border */
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Report Finale: Gestione Bando Contributi TARI <span id="comuneNome">[Nome Comune]</span></h1>
+        <p>Data del Report: <span id="reportDate"></span></p>
+
+        <div class="highlight">
+            <p><strong>Contesto iniziale:</strong> Comune con meno di 5000 abitanti; Numerosi documenti allegati alla domanda di partecipazione; Agevolazioni per disagio economico; Budget € 6000; 100 domande di partecipazione.</p>
+            <p><strong>Dati di elaborazione richiesti:</strong> Elaborazione atti, documenti, fascicolazione, controllo e redazione Graduatoria finale con lettere ai beneficiari; Analisi della problematica privacy.</p>
+        </div>
+
+        <h2>Inserimento Dati del Comune</h2>
+        <label for="inputComune">Nome del Comune:</label>
+        <input type="text" id="inputComune" class="data-input" value="Comune Esempio">
+        <label for="inputAnno">Anno del Bando:</label>
+        <input type="number" id="inputAnno" class="data-input" value="2024">
+        <label for="inputDataBando">Data Pubblicazione Bando (YYYY-MM-DD):</label>
+        <input type="date" id="inputDataBando" class="data-input" value="2024-03-01">
+        <label for="inputTermineDomande">Termine per le Domande (YYYY-MM-DD):</label>
+        <input type="date" id="inputTermineDomande" class="data-input" value="2024-03-31">
+        <button onclick="updateComuneDetails()">Aggiorna Dettagli Comune</button>
+
+        <h2>1. Sintesi Esecutiva</h2>
+        <p>Il presente report descrive l'esito della gestione del Bando Pubblico per la concessione di contributi economici destinati al pagamento della TARI per famiglie in condizioni di disagio economico, nel <span id="sintesiComune">[Nome Comune]</span>, relativo all'anno <span id="sintesiAnno">[Anno]</span>. L'obiettivo era fornire un sostegno economico a nuclei familiari residenti con un ISEE non superiore a € 8.000,00, a fronte di un budget complessivo di € 6.000. Sono state gestite 100 domande di partecipazione.</p>
+        <p>L'elaborazione ha comportato un'attenta fase di acquisizione, fascicolazione e controllo documentale a causa della necessità di gestire numerosi allegati. La redazione della graduatoria finale e la gestione delle comunicazioni ai beneficiari e agli esclusi hanno richiesto cura e rispetto delle normative sulla privacy.</p>
+
+        <h2>2. Gestione Processo Operativo</h2>
+        <h3>2.1 Fase 1: Ricezione e Protocollo Domande</h3>
+        <p><strong>Status:</strong> <span class="success">Completata</span></p>
+        <ul>
+            <li>Numero totale di domande protocollate: <strong>100</strong></li>
+            <li>Canali di ricezione: A mano (Ufficio Protocollo), PEC, Raccomandata A/R.</li>
+            <li>Tempistiche: Le domande sono state ricevute tra il <span id="dataBando">[Data Pubblicazione Bando]</span> e il <span id="termineDomande">[Termine Domande]</span>.</li>
+        </ul>
+
+        <h3>2.2 Fase 2: Fascicolazione e Pre-Controllo Documentale</h3>
+        <p><strong>Status:</strong> <span class="success">Completata</span></p>
+        <ul>
+            <li>Tutte le 100 domande sono state correttamente fascicolate, creando un fascicolo fisico per ciascuna.</li>
+            <li>Il pre-controllo ha evidenziato la gestione di **Numerosi documenti allegati alla domanda di partecipazione** (Art. 6 del Bando).</li>
+            <li>Numero di richieste di integrazione inviate: <span id="richiesteIntegrazione"></span> (stimato su 100 domande).</li>
+            <li>Numero di domande escluse per mancata integrazione: <span id="escluseIntegrazione"></span> (stimato).</li>
+            <li>
+                <label for="inputRichiesteIntegrazione">Inserisci numero richieste di integrazione:</label>
+                <input type="number" id="inputRichiesteIntegrazione" class="data-input" value="30" min="0" max="100">
+                <label for="inputEscluseIntegrazione">Inserisci numero escluse per mancata integrazione:</label>
+                <input type="number" id="inputEscluseIntegrazione" class="data-input" value="5" min="0" max="100">
+                <button onclick="updateFase2Data()">Aggiorna Fase 2</button>
+            </li>
+        </ul>
+
+        <h3>2.3 Fase 3: Analisi di Ammissibilità e Verifiche Approfondite</h3>
+        <p><strong>Status:</strong> <span class="success">Completata</span></p>
+        <ul>
+            <li>Numero totale di domande ammesse dopo le verifiche: <span id="domandeAmmesse"></span> (stimato).</li>
+            <li>Verifiche effettuate: residenza, validità ISEE (soglia € 8.000,00), titolarità bollette TARI, assenza di altri contributi.</li>
+            <li>
+                <label for="inputDomandeAmmesse">Inserisci numero domande ammesse (dopo esclusioni per integrazione):</label>
+                <input type="number" id="inputDomandeAmmesse" class="data-input" value="90" min="0" max="100">
+                <button onclick="updateFase3Data()">Aggiorna Fase 3</button>
+            </li>
+        </ul>
+        <div class="warning">
+            <p><strong>Analisi della Problematica Privacy (GDPR - Regolamento UE 2016/679):</strong></p>
+            <ul>
+                <li>È stato implementato il "Registro di Controllo delle Domande" per tracciare il trattamento dei dati personali in ogni fase, garantendo la accountability.</li>
+                <li>Le pubblicazioni delle graduatorie (provvisoria e definitiva) sono state effettuate con codici identificativi anonimi per tutelare i dati personali dei richiedenti, invece dei nomi completi.</li>
+                <li>Le comunicazioni ai beneficiari e agli esclusi sono avvenute tramite canali sicuri (PEC o A/R) e con documenti specifici.</li>
+                <li>È stata garantita la base giuridica del trattamento dei dati (Art. 6, par. 1, lett. c ed e del GDPR) per l'adempimento di obblighi legali e per l'esecuzione di un compito di interesse pubblico.</li>
+                <li>L'informativa privacy è stata inclusa nel bando (Art. 11), garantendo la trasparenza verso gli interessati.</li>
+            </ul>
+        </div>
+
+        <h3>2.4 Fase 4: Stesura Graduatoria Provvisoria</h3>
+        <p><strong>Status:</strong> <span class="success">Completata</span></p>
+        <ul>
+            <li>La graduatoria provvisoria è stata ordinata per ISEE crescente.</li>
+            <li>Criteri di precedenza applicati in caso di parità: maggior numero di componenti, presenza di minori, presenza di disabili (L. 104/92), data di presentazione domanda.</li>
+            <li>Pubblicazione all'Albo Pretorio e sito web comunale per 7 giorni.</li>
+            <li>Nessun ricorso o osservazione presentato, oppure ricorsi gestiti e non modificativi della sostanza della graduatoria.</li>
+        </ul>
+
+        <h3>2.5 Fase 5: Redazione Graduatoria Definitiva</h3>
+        <p><strong>Status:</strong> <span class="success">Completata</span></p>
+        <ul>
+            <li>La Graduatoria Definitiva è stata approvata con Determinazione Dirigenziale N. <span id="detDir"></span> del <span id="dataDetDir"></span>.</li>
+            <li>Pubblicazione della graduatoria definitiva con le medesime modalità della provvisoria.</li>
+             <li>
+                <label for="inputDetDir">Numero Determinazione Dirigenziale:</label>
+                <input type="text" id="inputDetDir" class="data-input" value="123">
+                <label for="inputDataDetDir">Data Determinazione Dirigenziale (YYYY-MM-DD):</label>
+                <input type="date" id="inputDataDetDir" class="data-input" value="2024-04-15">
+                <button onclick="updateFase5Data()">Aggiorna Fase 5</button>
+            </li>
+        </ul>
+
+        <div id="resultsSummary">
+             <!-- Verrà popolato da JavaScript -->
+        </div>
+
+        <h3>2.6 Fase 6: Assegnazione e Comunicazione Contributi (con lettere ai beneficiari)</h3>
+        <p><strong>Status:</strong> <span class="success">Completata</span></p>
+        <ul>
+            <li>Numero di beneficiari: <span id="numBeneficiari"></span>.</li>
+            <li>Importo totale distribuito: € <span id="totaleDistribuito"></span>.</li>
+            <li>Sono state inviate <span id="numLettereBeneficiari"></span> lettere di notifica ai beneficiari, contenenti l'importo assegnato e le istruzioni per il bonifico.</li>
+            <li>Sono state inviate <span id="numLettereEsclusi"></span> lettere di comunicazione dell'esito negativo agli esclusi.</li>
+        </ul>
+
+        <h3>2.7 Fase 7: Liquidazione Contributi</h3>
+        <p><strong>Status:</strong> <span class="success">Completata</span></p>
+        <ul>
+            <li>I mandati di pagamento sono stati predisposti e trasmessi all'Ufficio Ragioneria.</li>
+            <li>La liquidazione tramite bonifico bancario è stata completata per tutti i beneficiari.</li>
+        </ul>
+        <p class="success">La gestione completa del processo si è conclusa con successo, garantendo l'erogazione dei fondi entro i tempi previsti.</p>
+
+
+        <h2>3. Riepilogo Economico</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Voce</th>
+                    <th>Importo</th>
+                    <th>Stato</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Budget Iniziale Previsto</td>
+                    <td>€ 6.000,00</td>
+                    <td class="success">Disponibile</td>
+                </tr>
+                <tr>
+                    <td>Costi Amministrativi (stimati)</td>
+                    <td>€ 0,00 (gestione interna)</td>
+                    <td class="success">Zero</td>
+                </tr>
+                <tr>
+                    <td>Importo Totale Contributi Erogati</td>
+                    <td>€ <span id="erogatoFinale"></span></td>
+                    <td class="success">Erogato</td>
+                </tr>
+                <tr>
+                    <td>Fondo Residuo</td>
+                    <td>€ <span id="residuoFinale"></span></td>
+                    <td class="success">Residuo</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>4. Valutazione e Raccomandazioni</h2>
+        <ul>
+            <li><strong>Efficienza:</strong> Nonostante l'elevato numero di documenti allegati, il processo di controllo e fascicolazione è stato gestito efficacemente grazie al metodo di tracciamento e alle richieste di integrazione puntuali.</li>
+            <li><strong>Adeguatezza del Budget:</strong> Il budget di € 6.000 ha permesso di soddisfare le richieste di <span id="numBeneficiariRaccomandazioni"></span> nuclei familiari.</li>
+            <li><strong>Criticità Privacy:</strong> L'approccio adottato per la gestione della privacy (anonimizzazione, registro di controllo, comunicazioni sicure) si è rivelato efficace e conforme al GDPR, mitigando i rischi legati ai "Numerosi documenti allegati".</li>
+           <li><strong>Raccomandazioni per il Futuro:</strong>
+               <ul>
+                   <li>Considerare un aumento del budget in bandi futuri per supportare un maggior numero di famiglie, data l'alta partecipazione (100 domande per un Comune di piccole dimensioni).</li>
+                   <li>Valutare l'implementazione di un sistema gestionale digitale per la raccolta e l'analisi della documentazione, per ridurre il carico amministrativo e migliorare l'efficienza nel controllo dei "Numerosi documenti allegati".</li>
+                   <li>Mantenere e rafforzare le procedure di tutela della privacy, possibilmente con formazione specifica per il personale coinvolto.</li>
+               </ul>
+           </li>
+        </ul>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const reportDateElement = document.getElementById('reportDate');
+            const currentDate = new Date();
+            reportDateElement.textContent = currentDate.toLocaleDateString('it-IT');
+
+            // Initial population from default values
+            updateComuneDetails();
+            updateFase2Data();
+            updateFase3Data();
+            updateFase5Data();
+            calculateResults();
+        });
+
+        function updateComuneDetails() {
+            const comuneName = document.getElementById('inputComune').value;
+            const anno = document.getElementById('inputAnno').value;
+            const dataBando = document.getElementById('inputDataBando').value;
+            const termineDomande = document.getElementById('inputTermineDomande').value;
+
+            document.getElementById('comuneNome').textContent = comuneName;
+            document.getElementById('sintesiComune').textContent = comuneName;
+            document.getElementById('sintesiAnno').textContent = anno;
+            document.getElementById('dataBando').textContent = dataBando;
+            document.getElementById('termineDomande').textContent = termineDomande;
+            document.getElementById('inputAnno').min = new Date().getFullYear(); // Prevent past years for input validation
+        }
+
+        function updateFase2Data() {
+            const richiesteIntegrazione = parseInt(document.getElementById('inputRichiesteIntegrazione').value);
+            const escluseIntegrazione = parseInt(document.getElementById('inputEscluseIntegrazione').value);
+
+            document.getElementById('richiesteIntegrazione').textContent = richiesteIntegrazione;
+            document.getElementById('escluseIntegrazione').textContent = escluseIntegrazione;
+
+            // Recalculate based on updated phase 2 data
+            calculateResults();
+        }
+
+        function updateFase3Data() {
+            const inputDomandeAmmesse = parseInt(document.getElementById('inputDomandeAmmesse').value);
+            const escluseIntegrazione = parseInt(document.getElementById('inputEscluseIntegrazione').value);
+            const domandeDopoPrecontrollo = 100 - escluseIntegrazione;
+
+            // Ensure inputDomandeAmmesse does not exceed available pool after phase 2
+            const domandeAmmesse = Math.min(inputDomandeAmmesse, domandeDopoPrecontrollo);
+
+            document.getElementById('inputDomandeAmmesse').value = domandeAmmesse; // Update input field if capped
+            document.getElementById('domandeAmmesse').textContent = domandeAmmesse;
+
+            // Recalculate based on updated phase 3 data
+            calculateResults();
+        }
+
+         function updateFase5Data() {
+            document.getElementById('detDir').textContent = document.getElementById('inputDetDir').value;
+            document.getElementById('dataDetDir').textContent = document.getElementById('inputDataDetDir').value;
+        }
+
+        function calculateResults() {
+            const budgetIniziale = 6000;
+            const maxContributoPerFamiglia = 250; // max euro 250
+            const domandeTotali = 100;
+
+            const escluseIntegrazione = parseInt(document.getElementById('inputEscluseIntegrazione').value);
+            const domandeAmmesseEffettive = parseInt(document.getElementById('inputDomandeAmmesse').value);
+
+            // Validate that domandeAmmesseEffettive is not more than what's left after phase 2
+            const domandeDopoPrecontrollo = domandeTotali - escluseIntegrazione;
+            if (domandeAmmesseEffettive > domandeDopoPrecontrollo) {
+                 // Adjust if the user input a value higher than possible
+                 document.getElementById('inputDomandeAmmesse').value = domandeDopoPrecontrollo;
+                 document.getElementById('domandeAmmesse').textContent = domandeDopoPrecontrollo;
+            }
+
+
+            // Calculate theoretical max beneficiaries if all eligible received 250€
+            const maxBeneficiariTeorici = Math.floor(budgetIniziale / maxContributoPerFamiglia);
+            let numBeneficiari = Math.min(domandeAmmesseEffettive, maxBeneficiariTeorici);
+
+            let totaleDistribuito;
+            if (domandeAmmesseEffettive > maxBeneficiariTeorici) {
+                // If more eligible than budget allows, we assume full distribution up to budget
+                totaleDistribuito = budgetIniziale;
+                numBeneficiari = maxBeneficiariTeorici; // Number of beneficiaries funded at 250 each
+            } else {
+                totaleDistribuito = domandeAmmesseEffettive * maxContributoPerFamiglia;
+                numBeneficiari = domandeAmmesseEffettive;
+            }
+
+            const residuo = budgetIniziale - totaleDistribuito;
+
+            document.getElementById('numBeneficiari').textContent = numBeneficiari;
+            document.getElementById('numBeneficiariRaccomandazioni').textContent = numBeneficiari;
+            document.getElementById('totaleDistribuito').textContent = totaleDistribuito.toFixed(2);
+            document.getElementById('erogatoFinale').textContent = totaleDistribuito.toFixed(2);
+            document.getElementById('residuoFinale').textContent = residuo.toFixed(2);
+
+            document.getElementById('numLettereBeneficiari').textContent = numBeneficiari;
+            // Calculate total non-beneficiaries: initial excluded + those not making it to the final list
+            const numLettereEsclusi = domandeTotali - numBeneficiari;
+            document.getElementById('numLettereEsclusi').textContent = numLettereEsclusi;
+
+
+             // Populate results summary
+            const resultsSummaryDiv = document.getElementById('resultsSummary');
+            resultsSummaryDiv.innerHTML = `
+                <h3>Riepilogo Graduatoria Definitiva</h3>
+                <p>Numero totale domande ricevute: <strong>${domandeTotali}</strong></p>
+                <p>Domande escluse in fase di pre-controllo (mancata integrazione): <strong>${escluseIntegrazione}</strong></p>
+                <p>Domande ammesse alla valutazione finale (dopo fase 3): <strong>${domandeAmmesseEffettive}</strong></p>
+                <p>Numero finale di famiglie beneficiarie (entro budget): <strong class="success">${numBeneficiari}</strong></p>
+                <p>Numero di domande non ammesse/escluse dalla liquidazione (complessive): <strong class="warning">${numLettereEsclusi}</strong></p>
+            `;
+        }
+    </script>
+</body>
+</html>

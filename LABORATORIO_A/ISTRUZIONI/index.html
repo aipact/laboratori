@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorio A - Design Thinking per l'IA nei Comuni</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e40af;
+            --primary-light: #3b82f6;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 3rem 1.5rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Link Rapidi */
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: -3rem auto 2rem;
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            padding: 0 1.5rem;
+        }
+
+        .quick-link {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .quick-link:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            border-color: var(--primary-light);
+        }
+
+        .quick-link .icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .quick-link h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .quick-link p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .quick-link.primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+        }
+
+        .quick-link.primary p {
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* Fasi */
+        .fase {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--primary);
+        }
+
+        .fase-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .fase-number {
+            background: var(--primary);
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .fase-title h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+        }
+
+        .fase-title span {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .fase.fase-2 {
+            border-left-color: var(--accent);
+        }
+        .fase.fase-2 .fase-number {
+            background: var(--accent);
+        }
+
+        .fase.fase-3 {
+            border-left-color: var(--success);
+        }
+        .fase.fase-3 .fase-number {
+            background: var(--success);
+        }
+
+        /* Steps */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            margin-top: 1.5rem;
+        }
+
+        .step {
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+
+        .step h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .step p {
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        /* Prompt Box */
+        .prompt-box {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin: 0.75rem 0;
+            position: relative;
+        }
+
+        .prompt-box::before {
+            content: 'PROMPT';
+            position: absolute;
+            top: -8px;
+            left: 12px;
+            background: var(--accent);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .result {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            background: #ecfdf5;
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .result::before {
+            content: '→';
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        /* Aree di Lavoro */
+        .aree-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+
+        .area-item {
+            background: var(--bg);
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .area-item strong {
+            color: var(--primary);
+        }
+
+        /* Regola Box */
+        .regola-box {
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin: 1rem 0;
+        }
+
+        .esempio {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin: 0.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        .esempio.male {
+            color: var(--danger);
+        }
+
+        .esempio.bene {
+            color: var(--success);
+        }
+
+        /* Valutazione */
+        .criteri-grid {
+            display: grid;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .criterio {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: var(--bg);
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .criterio-peso {
+            background: var(--primary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        /* SOS Box */
+        .sos-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+            border: 2px solid var(--accent);
+        }
+
+        .sos-box h3 {
+            font-size: 1.5rem;
+            color: #92400e;
+            margin-bottom: 0.5rem;
+        }
+
+        .sos-box p {
+            color: #78350f;
+        }
+
+        /* CTA Button */
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .cta-button.accent {
+            background: var(--accent);
+        }
+
+        .cta-button.accent:hover {
+            background: #d97706;
+        }
+
+        .cta-button.success {
+            background: var(--success);
+        }
+
+        .cta-button.success:hover {
+            background: #059669;
+        }
+
+        /* Mantra */
+        .mantra {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .mantra h4 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .mantra-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        .mantra-item .emoji {
+            font-size: 1.25rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .footer img {
+            height: 40px;
+            margin-bottom: 1rem;
+            opacity: 0.7;
+        }
+
+        /* Galleria Progetti */
+        .galleria {
+            margin-top: 3rem;
+        }
+
+        .galleria-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .galleria-header h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .galleria-header p {
+            color: var(--text-muted);
+        }
+
+        .sede-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .sede-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .sede-title h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .sede-badge {
+            background: var(--primary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .progetti-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .progetto-card {
+            background: var(--card);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: 2px solid var(--border);
+        }
+
+        .progetto-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+            border-color: var(--primary-light);
+        }
+
+        .progetto-preview {
+            width: 100%;
+            height: 180px;
+            border: none;
+            background: #f1f5f9;
+            pointer-events: none;
+        }
+
+        .progetto-preview-placeholder {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, #e2e8f0 0%, #f1f5f9 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .progetto-info {
+            padding: 1rem;
+        }
+
+        .progetto-gruppo {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+        }
+
+        .progetto-titolo {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .progetto-score {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            background: #ecfdf5;
+            color: var(--success);
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .progetto-link {
+            display: block;
+            text-align: center;
+            padding: 0.75rem;
+            background: var(--bg);
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            transition: all 0.2s ease;
+        }
+
+        .progetto-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Track Selector */
+        .track-selector {
+            margin: 1rem 0;
+        }
+
+        .track-selector p {
+            font-size: 0.95rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .track-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .track-tab {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+            background: var(--bg);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .track-tab:hover {
+            border-color: var(--accent);
+        }
+
+        .track-tab.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .track-content {
+            display: none;
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+
+        .track-content.active {
+            display: block;
+        }
+
+        .track-content h5 {
+            font-size: 0.95rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .track-content .track-artefatto {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            background: #fef3c7;
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+        }
+
+        .track-content .track-artefatto::before {
+            content: '📋';
+        }
+
+        /* Consegna Conversazione */
+        .consegna-conversazione {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-top: 1.5rem;
+            border: 2px solid var(--primary-light);
+        }
+
+        .consegna-conversazione h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .consegna-conversazione p {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .consegna-conversazione ol {
+            font-size: 0.9rem;
+            padding-left: 1.25rem;
+        }
+
+        .consegna-conversazione ol li {
+            margin-bottom: 0.35rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .quick-links {
+                grid-template-columns: 1fr;
+            }
+
+            .fase {
+                padding: 1.5rem;
+            }
+
+            .aree-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Laboratorio A - Design Thinking per l'IA</h1>
+        <p>Progetto AI-PACT | IFEL - Fondazione ANCI</p>
+    </header>
+
+    <div class="quick-links">
+        <a href="https://forms.gle/p4M8oa9UwUgHmvnD9" target="_blank" class="quick-link">
+            <div class="icon">📝</div>
+            <h3>Modulo Idee</h3>
+            <p>FASE 1 - Inserisci il tuo problema</p>
+        </a>
+        <a href="../tools/simulatore.html" target="_blank" class="quick-link primary">
+            <div class="icon">🤖</div>
+            <h3>Simulatore IA</h3>
+            <p>FASE 2 - Lavora con l'agente</p>
+        </a>
+        <a href="https://forms.gle/Qf2FSjkbLtU84jG37" target="_blank" class="quick-link">
+            <div class="icon">📤</div>
+            <h3>Consegna Elaborato</h3>
+            <p>FASE 3 - Invia il tuo report</p>
+        </a>
+    </div>
+
+    <div class="container">
+        <!-- FASE 1 -->
+        <section class="fase fase-1">
+            <div class="fase-header">
+                <div class="fase-number">1</div>
+                <div class="fase-title">
+                    <h2>Raccolta e Selezione</h2>
+                    <span>15 minuti</span>
+                </div>
+            </div>
+
+            <p>Identificare un <strong>problema reale</strong> o un'<strong>opportunità</strong> che vedete nel vostro lavoro quotidiano. L'IA selezionerà alcuni problemi e formerà gruppi di lavoro (massimo 5-6 partecipanti per gruppo).</p>
+
+            <div class="regola-box">
+                <h4>La regola: Sintetico ma Specifico</h4>
+                <div class="esempio male">
+                    <span>❌</span>
+                    <span><strong>MALE:</strong> "La burocrazia."</span>
+                </div>
+                <div class="esempio bene">
+                    <span>✅</span>
+                    <span><strong>BENE:</strong> "Vogliamo attrarre giovani famiglie nel centro storico ma non sappiamo se puntare su asili nido, agevolazioni fiscali o eventi culturali. Decidiamo a sensazione e sprechiamo risorse."</span>
+                </div>
+            </div>
+
+            <h4>Le 4 Aree di Lavoro</h4>
+            <div class="aree-grid">
+                <div class="area-item">
+                    <strong>1. SOS Burocrazia</strong><br>
+                    Semplificare comunicazioni incomprensibili
+                </div>
+                <div class="area-item">
+                    <strong>2. Sfera di Cristallo</strong><br>
+                    Decisioni strategiche basate su dati
+                </div>
+                <div class="area-item">
+                    <strong>3. Pompiere</strong><br>
+                    Gestione crisi e polemiche sui social
+                </div>
+                <div class="area-item">
+                    <strong>4. Segretario Perfetto</strong><br>
+                    Verbali, email, task management
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; margin-top: 1rem;">
+                <a href="https://forms.gle/p4M8oa9UwUgHmvnD9" target="_blank" class="cta-button">
+                    📝 Compila il Modulo delle Idee
+                </a>
+                <a href="#sessioni-precedenti" class="cta-button" style="background: var(--text-muted);">
+                    👀 Guarda i progetti delle sessioni precedenti
+                </a>
+            </div>
+        </section>
+
+        <!-- FASE 2 -->
+        <section class="fase fase-2">
+            <div class="fase-header">
+                <div class="fase-number">2</div>
+                <div class="fase-title">
+                    <h2>Lavoro Operativo in Gruppi</h2>
+                    <span>45 minuti</span>
+                </div>
+            </div>
+
+            <div class="mantra">
+                <h4>Il Mantra del Laboratorio - La "Sacra Trinità" del Prompting</h4>
+                <div class="mantra-item">
+                    <span class="emoji">🎭</span>
+                    <span><strong>CHI SEI?</strong> → System Prompt / Ruolo</span>
+                </div>
+                <div class="mantra-item">
+                    <span class="emoji">📊</span>
+                    <span><strong>SU COSA LAVORI?</strong> → Contesto + Dati</span>
+                </div>
+                <div class="mantra-item">
+                    <span class="emoji">✅</span>
+                    <span><strong>COSA VOGLIO?</strong> → Output previsto (Tabella, Email, Piano)</span>
+                </div>
+            </div>
+
+            <div class="sos-box" style="margin-top: 1.5rem; margin-bottom: 0;">
+                <h3>🆘 Sei Bloccato?</h3>
+                <p><strong>CHIAMATE SCARSELLI!</strong></p>
+                <p>Useremo insieme IA più potenti con capacità agentiche superiori ed individueremo la soluzione migliore per andare avanti.</p>
+            </div>
+
+            <div class="steps">
+                <div class="step">
+                    <h4>STEP 1: L'Intervista Strategica (10 min)</h4>
+                    <p>Non cercate subito la soluzione. <strong>Pulite il problema.</strong></p>
+                    <div class="prompt-box">
+                        "Agisci come un Analista di Processo Senior. Voglio risolvere questo problema: [INCOLLA]. Non darmi soluzioni ora. Fammi 3 domande cruciali per focalizzare meglio l'obiettivo e identificare i vincoli che potrei aver ignorato. Infine, suggeriscimi quale tipo di evidenze mi servirebbe raccogliere per affrontarlo: dati quantitativi, mappatura di processo, analisi normativa, o analisi degli stakeholder e della comunicazione?"
+                    </div>
+                    <div class="result">
+                        <strong>Risultato:</strong> Il problema diventa nitido.
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>STEP 2: L'Architettura delle Evidenze (10 min)</h4>
+                    <p>Prima di costruire la soluzione, chiedete all'IA di mappare le <strong>evidenze</strong> <em>(i fatti concreti, i dati, le norme, i vincoli — tutto ciò che serve per decidere senza andare "a sensazione")</em> su cui lavorare. Scegliete la track più adatta al vostro problema:</p>
+
+                    <div class="track-selector">
+                        <div class="track-tabs">
+                            <button class="track-tab active" onclick="showTrack('dati')">📊 Dati</button>
+                            <button class="track-tab" onclick="showTrack('processo')">⚙️ Processo</button>
+                            <button class="track-tab" onclick="showTrack('normativa')">📜 Normativa</button>
+                            <button class="track-tab" onclick="showTrack('comunicazione')">📣 Comunicazione</button>
+                        </div>
+
+                        <div id="track-dati" class="track-content active">
+                            <h5>Track Dati — per progetti quantitativi</h5>
+                            <p style="font-size: 0.9rem; margin-bottom: 0.75rem;">Quando il problema si risolve con numeri, KPI (indicatori chiave di risultato), budget, classifiche.</p>
+                            <div class="prompt-box">
+                                "Agisci come un esperto di analisi dati. Per risolvere questo problema in modo oggettivo, di quali informazioni avrei bisogno? Creami lo schema ideale di una tabella: dimmi quali colonne servono e che tipo di dati inserire. Suggerisci anche 2-3 KPI per misurare il successo."
+                            </div>
+                            <div class="track-artefatto">
+                                <strong>Artefatto minimo:</strong> Schema tabella + KPI definiti
+                            </div>
+                        </div>
+
+                        <div id="track-processo" class="track-content">
+                            <h5>Track Processo — per workflow e uffici</h5>
+                            <p style="font-size: 0.9rem; margin-bottom: 0.75rem;">Quando il problema riguarda flussi di lavoro, smistamento, coordinamento tra uffici.</p>
+                            <div class="prompt-box">
+                                "Agisci come un analista di processo. Elenca tutti gli attori coinvolti in [PROBLEMA], identifica i 3 principali colli di bottiglia e le regole decisionali non scritte che governano il flusso attuale."
+                            </div>
+                            <div class="track-artefatto">
+                                <strong>Artefatto minimo:</strong> Mappa attori + colli di bottiglia + regole decisionali
+                            </div>
+                        </div>
+
+                        <div id="track-normativa" class="track-content">
+                            <h5>Track Normativa — per atti e regolamenti</h5>
+                            <p style="font-size: 0.9rem; margin-bottom: 0.75rem;">Quando il problema riguarda conformità, procedure vincolate, produzione di atti.</p>
+                            <div class="prompt-box">
+                                "Agisci come un consulente giuridico-amministrativo. Per [PROBLEMA], elencami le fonti normative rilevanti (EU, nazionale, regionale, regolamentare), i vincoli non derogabili e producimi una checklist di conformità."
+                            </div>
+                            <div class="track-artefatto">
+                                <strong>Artefatto minimo:</strong> Fonti normative + vincoli + checklist conformità
+                            </div>
+                        </div>
+
+                        <div id="track-comunicazione" class="track-content">
+                            <h5>Track Comunicazione — per servizi e relazioni con il pubblico</h5>
+                            <p style="font-size: 0.9rem; margin-bottom: 0.75rem;">Quando il problema riguarda comunicazione, gestione crisi, rapporto con i cittadini.</p>
+                            <div class="prompt-box">
+                                "Agisci come un esperto di comunicazione pubblica. Per [PROBLEMA], mappami gli stakeholder, i registri comunicativi appropriati per ogni canale e i 3 scenari critici da gestire."
+                            </div>
+                            <div class="track-artefatto">
+                                <strong>Artefatto minimo:</strong> Mappa stakeholder + toni per canale + scenari critici
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="result">
+                        <strong>Risultato:</strong> Un artefatto strutturato (schema, mappa, checklist) che guida lo Step 3.
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>STEP 3: L'Agente Risolutore (15 min)</h4>
+                    <p>Costruiamo il "collega virtuale" che lavora per noi.</p>
+                    <div class="prompt-box">
+                        "SYSTEM: Sei un [RUOLO].<br>
+                        CONTESTO: Ecco i dati [INCOLLA].<br>
+                        OUTPUT: Produci [SOLUZIONE]."
+                    </div>
+                    <div class="result">
+                        <strong>Risultato:</strong> Un report con soluzione concreta, applicabile domani mattina.
+                    </div>
+                    <p style="margin-top: 1rem; padding: 0.75rem; background: #fef3c7; border-radius: 8px; font-size: 0.9rem;">
+                        💡 <strong>TIPS:</strong> Fatti scrivere il report finale in HTML! Aggiungi al prompt:
+                    </p>
+                    <div class="prompt-box">
+                        "Produci l'output come una pagina HTML singola, completa di CSS e responsive per mobile. Usa una grafica professionale e moderna. Includi grafici o tabelle interattive se utili (puoi usare librerie via CDN come Chart.js, Mermaid, ecc.). Il file deve funzionare aprendo direttamente il .html nel browser."
+                    </div>
+                    <p style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-muted);">
+                        📎 <strong>Ricorda:</strong> la consegna è il file <strong>.md</strong> scaricato dal simulatore. Per visualizzare l'HTML contenuto nel file, usa l'<a href="../tools/extract_html.html" target="_blank" style="color: var(--primary); font-weight: 600;">Estrattore HTML</a> — incolla il contenuto del .md e lui estrae e visualizza la pagina al volo.
+                    </p>
+                </div>
+            </div>
+
+            <a href="../tools/simulatore.html" target="_blank" class="cta-button accent">
+                🤖 Apri il Simulatore IA
+            </a>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-muted);">
+                La chiave con i crediti viene fornita in classe
+            </p>
+
+            <div style="margin-top: 1.5rem; background: var(--bg); border-radius: 12px; padding: 1.25rem; border: 2px solid var(--border);">
+                <h4 style="font-size: 1rem; margin-bottom: 0.75rem;">🖥️ Come funziona il Simulatore</h4>
+                <img src="immagini/simulatore_download.png" alt="Interfaccia del Simulatore IA con freccia sul pulsante download" style="width: 100%; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 0.75rem;">
+                <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Il simulatore ha 3 campi in alto che corrispondono alla Sacra Trinità:</p>
+                <ul style="font-size: 0.85rem; padding-left: 1.25rem; margin-bottom: 0.75rem;">
+                    <li><strong>SYSTEM PROMPT</strong> → Chi sei? (ruolo, regole, limiti)</li>
+                    <li><strong>CONTEXT</strong> → Su cosa lavori? (dati, informazioni, documenti)</li>
+                    <li><strong>ESEMPI DI OUTPUT</strong> → Cosa voglio? (formato, stile, struttura)</li>
+                </ul>
+                <p style="font-size: 0.9rem;">Per <strong>scaricare l'output</strong> (HTML, testo, codice) usate il pulsante di download indicato dalla freccia rossa nella barra in basso. Il file scaricato è un <strong>.md</strong> (Markdown) — è questo il file da consegnare.</p>
+            </div>
+        </section>
+
+        <!-- FASE 3 -->
+        <section class="fase fase-3">
+            <div class="fase-header">
+                <div class="fase-number">3</div>
+                <div class="fase-title">
+                    <h2>Valutazione da Parte dell'IA</h2>
+                    <span>tempo variabile</span>
+                </div>
+            </div>
+
+            <p>Ogni gruppo consegna il proprio report. L'IA li analizza tutti insieme e produce:</p>
+
+            <h4 style="margin: 1.5rem 0 1rem;">1. Tabella Comparativa</h4>
+            <p style="margin-bottom: 0.75rem;">Ogni progetto valutato su 5 criteri con punteggio pesato:</p>
+            <div class="criteri-grid">
+                <div class="criterio">
+                    <span>Completezza dell'analisi</span>
+                    <span class="criterio-peso">20%</span>
+                </div>
+                <div class="criterio">
+                    <span>Qualità della soluzione</span>
+                    <span class="criterio-peso">20%</span>
+                </div>
+                <div class="criterio">
+                    <span>Innovatività e uso dell'IA</span>
+                    <span class="criterio-peso">20%</span>
+                </div>
+                <div class="criterio">
+                    <span>Presentabilità del report</span>
+                    <span class="criterio-peso">20%</span>
+                </div>
+                <div class="criterio">
+                    <span>Impatto potenziale sulla PA</span>
+                    <span class="criterio-peso">20%</span>
+                </div>
+            </div>
+
+            <h4 style="margin: 1.5rem 0 0.5rem;">2. Scheda per ogni gruppo</h4>
+            <p>Punti di forza e aree di miglioramento</p>
+
+            <h4 style="margin: 1.5rem 0 0.5rem;">3. Il Vincitore</h4>
+            <p>Presentazione in plenaria (5 minuti)</p>
+
+            <div class="consegna-conversazione">
+                <h4>📎 Importante: Salvate la Conversazione!</h4>
+                <p>Oltre al report finale, <strong>dovete consegnare anche la conversazione con l'IA</strong>. È lì che si vede il vostro lavoro vero.</p>
+                <ol>
+                    <li>Nel simulatore, copiate l'intera conversazione (o esportate come testo)</li>
+                    <li>Salvatela in un file .txt</li>
+                    <li>Caricatela insieme al report nel modulo di consegna</li>
+                </ol>
+                <p style="margin-top: 0.5rem; font-style: italic; color: var(--text-muted);">Valutiamo il percorso, non solo il prodotto. Chi corregge l'IA, chi la sfida, chi itera — questo è il vero apprendimento.</p>
+            </div>
+
+            <a href="https://forms.gle/Qf2FSjkbLtU84jG37" target="_blank" class="cta-button success">
+                📤 Consegna Elaborato + Conversazione
+            </a>
+        </section>
+
+        <!-- GALLERIA VALUTAZIONI -->
+        <section class="galleria" id="sessioni-precedenti">
+            <div class="galleria-header">
+                <h2>🏆 Sessioni Precedenti</h2>
+                <p>Le valutazioni dell'IA e i progetti in evidenza</p>
+            </div>
+
+            <!-- AREZZO -->
+            <div class="sede-section">
+                <div class="sede-title">
+                    <h3>📍 Arezzo</h3>
+                    <span class="sede-badge">20 gennaio 2026</span>
+                </div>
+                <div class="progetti-grid">
+                    <div class="progetto-card">
+                        <iframe class="progetto-preview" src="../AREZZO/classifica_sessione.html" loading="lazy"></iframe>
+                        <div class="progetto-info">
+                            <div class="progetto-gruppo">Valutazione completa</div>
+                            <div class="progetto-titolo">Classifica e analisi di tutti i gruppi</div>
+                        </div>
+                        <a href="../AREZZO/classifica_sessione.html" target="_blank" class="progetto-link">Apri classifica →</a>
+                    </div>
+
+                    <div class="progetto-card" style="border-color: #f1c40f;">
+                        <iframe class="progetto-preview" src="../AREZZO/Gruppo_2_Gestione_Segnalazioni/gruppo2.html" loading="lazy"></iframe>
+                        <div class="progetto-info">
+                            <div class="progetto-gruppo">In evidenza — Gruppo 2</div>
+                            <div class="progetto-titolo">Gestione Segnalazioni Cittadini</div>
+                            <span class="progetto-score">⭐ 8.5/10</span>
+                        </div>
+                        <a href="../AREZZO/Gruppo_2_Gestione_Segnalazioni/gruppo2.html" target="_blank" class="progetto-link">Apri progetto →</a>
+                    </div>
+
+                    <div class="progetto-card">
+                        <iframe class="progetto-preview" src="../AREZZO/Gruppo_2_Gestione_Segnalazioni/valutazione.html" loading="lazy"></iframe>
+                        <div class="progetto-info">
+                            <div class="progetto-gruppo">Valutazione — Gruppo 2</div>
+                            <div class="progetto-titolo">Scheda di valutazione dettagliata</div>
+                        </div>
+                        <a href="../AREZZO/Gruppo_2_Gestione_Segnalazioni/valutazione.html" target="_blank" class="progetto-link">Apri valutazione →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LIVORNO -->
+            <div class="sede-section">
+                <div class="sede-title">
+                    <h3>📍 Livorno</h3>
+                    <span class="sede-badge">11 febbraio 2026</span>
+                </div>
+                <div class="progetti-grid">
+                    <div class="progetto-card">
+                        <iframe class="progetto-preview" src="../LIVORNO/classifica_sessione.html" loading="lazy"></iframe>
+                        <div class="progetto-info">
+                            <div class="progetto-gruppo">Valutazione completa</div>
+                            <div class="progetto-titolo">Classifica e analisi di tutti i gruppi</div>
+                        </div>
+                        <a href="../LIVORNO/classifica_sessione.html" target="_blank" class="progetto-link">Apri classifica →</a>
+                    </div>
+
+                    <div class="progetto-card" style="border-color: #f1c40f;">
+                        <iframe class="progetto-preview" src="../LIVORNO/Gruppo_5_Protocollo_Segnalazioni/Gruppo5-Output.html" loading="lazy"></iframe>
+                        <div class="progetto-info">
+                            <div class="progetto-gruppo">In evidenza — Gruppo 5</div>
+                            <div class="progetto-titolo">Smistamento Intelligente Protocollo e Segnalazioni</div>
+                            <span class="progetto-score">⭐ 8.3/10</span>
+                        </div>
+                        <a href="../LIVORNO/Gruppo_5_Protocollo_Segnalazioni/Gruppo5-Output.html" target="_blank" class="progetto-link">Apri progetto →</a>
+                    </div>
+
+                    <div class="progetto-card">
+                        <iframe class="progetto-preview" src="../LIVORNO/Gruppo_5_Protocollo_Segnalazioni/valutazione.html" loading="lazy"></iframe>
+                        <div class="progetto-info">
+                            <div class="progetto-gruppo">Valutazione — Gruppo 5</div>
+                            <div class="progetto-titolo">Scheda di valutazione dettagliata</div>
+                        </div>
+                        <a href="../LIVORNO/Gruppo_5_Protocollo_Segnalazioni/valutazione.html" target="_blank" class="progetto-link">Apri valutazione →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FIRENZE -->
+            <div class="sede-section">
+                <div class="sede-title">
+                    <h3>📍 Firenze</h3>
+                    <span class="sede-badge" style="background: var(--accent);">26 febbraio 2026</span>
+                </div>
+                <p style="color: var(--text-muted); font-style: italic;">I risultati saranno disponibili dopo lo svolgimento del laboratorio.</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function showTrack(track) {
+            document.querySelectorAll('.track-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.track-tab').forEach(el => el.classList.remove('active'));
+            document.getElementById('track-' + track).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+
+    <footer class="footer">
+        <p>Progetto AI-PACT | IFEL - Fondazione ANCI | ANCI Toscana</p>
+        <p>Febbraio 2026</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,291 @@
+Assistente
+
+Assolutamente! In qualità di Responsabile dell'Ufficio Concessioni, investito dei poteri di cui all'articolo 107 del D.Lgs. 267/2000, procederò come richiesto.
+
+Fase 1: Identificazione degli uffici interessati e richiesta pareri preliminari
+
+Per un'esposizione pubblicitaria di grandi dimensioni (superiore a 5 mq) in centro storico, zona ZTL e con vincolo architettonico, gli uffici che devono esprimere parere sono molteplici e la natura del loro parere può essere vincolante o consultiva.
+
+Gli uffici a cui è necessario chiedere i pareri preliminari sono:
+
+    Ufficio Urbanistica / Edilizia Privata:
+        Oggetto del parere: Conformità del manufatto pubblicitario alle norme urbanistiche comunali, al PGT (Piano di Governo del Territorio) o PRG (Piano Regolatore Generale), ai regolamenti edilizi, e verifica dell'assenza di contrasti con strumenti urbanistici attuativi. Valutazione dell'impatto visivo e delle dimensioni in relazione al contesto.
+        Natura del parere: Generalmente vincolante. Una non conformità urbanistica non consente il rilascio.
+
+    Soprintendenza Archeologia, Belle Arti e Paesaggio (o Ufficio Tutela Beni Culturali se delegato localmente):
+        Oggetto del parere: Data la presenza del vincolo architettonico e la collocazione in centro storico, è l'ufficio più critico. Valuta l'impatto dell'esposizione sulla integrità monumentale e paesaggistica del bene vincolato e del contesto urbano storico. Verifica la compatibilità estetica, materiale, cromatica e dimensionale con l'edificio e l'ambiente circostante.
+        Natura del parere: Vincolante. Un parere negativo è insuperabile.
+
+    Ufficio Traffico / Polizia Locale (per ZTL e impatto viabilistico):
+        Oggetto del parere: Verifica che l'esposizione non crei ostacolo alla circolazione pedonale o veicolare, non riduca la visibilità (intersezioni, passi carrabili, segnaletica), non costituisca pericolo per l'incolumità pubblica, e sia compatibile con la normativa di circolazione in ZTL.
+        Natura del parere: Generalmente vincolante per aspetti di sicurezza e viabilità, consultivo per aspetti di pura estetica (che ricadono sull'Urbanistica/Soprintendenza).
+
+    Ufficio Tributi / Servizio Entrate (per calcolo Canone Unico Patrimoniale):
+        Oggetto del parere: Calcolo preventivo del Canone Unico Patrimoniale dovuto sulla base delle dimensioni dichiarate e della collocazione (centro storico, categoria stradale, ecc.) secondo le tariffe comunali. Rilascio del nulla osta al pagamento.
+        Natura del parere: Vincolante per la quantificazione e la riscossione del canone.
+
+    Ufficio Gestione Patrimonio / Demanio (se l'esposizione ricade su suolo pubblico o beni comunali specifici):
+        Oggetto del parere: Verifica la disponibilità dell'area e la compatibilità con l'utilizzo del suolo pubblico. Eventuale applicazione di un canone di concessione di suolo pubblico ulteriore al Canone Unico Patrimoniale (se la normativa comunale lo prevede in modo distinto).
+        Natura del parere: Vincolante sulla disponibilità e corretto utilizzo del bene.
+
+Fase 2: Analisi del contenuto dei pareri ai fini del rilascio o meno dell'autorizzazione
+
+Una volta acquisiti tutti i pareri, si procede con l'analisi:
+
+    Esito di pareri vincolanti:
+        Se anche solo un parere vincolante (Soprintendenza, Urbanistica, Polizia Locale per sicurezza) è negativo, l'autorizzazione non può essere rilasciata. Si procede con il diniego dell'istanza, motivando con il parere negativo ricevuto.
+        Se tutti i pareri vincolanti sono favorevoli e incondizionati, si può procedere.
+        Se i pareri vincolanti sono favorevoli ma con prescrizioni, l'autorizzazione potrà essere rilasciata solo se l'esercente si impegna ad adempiere a tali prescrizioni (ad esempio, riduzione delle dimensioni, scelta di materiali specifici, modifiche cromatiche). In tal caso, le prescrizioni dovranno essere esplicitamente riportate nell'atto autorizzatorio.
+
+    Esito di pareri non vincolanti/consultivi:
+        I pareri non vincolanti (spesso aspetti minori di forma o dettagli) vengono comunque considerati. Se esprimono perplessità, è buona prassi richiedere chiarimenti o proporre modifiche all'istante. Tuttavia, un loro parere negativo non preclude in via assoluta l'autorizzazione, ma richiede una motivazione più stringente da parte dell'ufficio concessioni sul perché si intenda discostarsi dal parere.
+
+    Parere dell'Ufficio Tributi:
+        È cruciale per la quantificazione del Canone Unico Patrimoniale. L'autorizzazione sarà rilasciata solo previa dimostrazione dell'avvenuto pagamento del Canone dovuto. Senza il calcolo e il pagamento, l'autorizzazione non è valida.
+
+Fase 3: Bozza dell'Autorizzazione o del Diniego
+
+Considerando che l'esercente ha richiesto l'autorizzazione e che i pareri sono stati acquisiti, procederò con la bozza. Per questa simulazione, ipotizziamo che tutti i pareri siano stati favorevoli, alcuni con prescrizioni che l'esercente ha accettato e si impegna a rispettare.
+
+[INTESTAZIONE COMUNE]
+
+CITTÀ DI [Nome Comune] UFFICIO CONCESSIONI
+
+DETERMINAZIONE DIRIGENZIALE N. [Numero Determinazione] DEL [Data]
+
+OGGETTO: Autorizzazione per esposizione pubblicitaria in centro storico (vincolo architettonico e ZTL) – Ditta [Ragione Sociale Esercente] – Art. 21 Regolamento Comunale per l'applicazione del Canone Unico Patrimoniale.
+
+IL DIRIGENTE DELL'AREA [Nome Area, es. "Tecnica/Urbanistica"] (con i poteri di cui all'art. 107 del D.Lgs. 18 agosto 2000, n. 267)
+
+PREMESSO CHE:
+
+    In data [Data Istanza], la Ditta [Ragione Sociale Esercente], con sede in [Indirizzo Sede Legale], Via [Via], n. [Civico], Partita IVA [P.IVA], C.F. [C.F.], esercente attività commerciale di [Tipo Attività] presso l'immobile sito in [Indirizzo Intervento, es. Via Roma, n. 10], ha presentato istanza acquisita al Protocollo Comunale con n. [Numero Protocollo], per la concessione di autorizzazione all'installazione di una esposizione pubblicitaria di dimensioni superiori a 5 mq nel centro storico, sottoposto a vincolo architettonico e ricadente in zona a traffico limitato (ZTL).
+    L'esposizione pubblicitaria oggetto della richiesta consiste in [Breve descrizione della tipologia: es. "una insegna a bandiera/targhetta luminosa/vetrina espositiva"] delle dimensioni di cm [Lunghezza] x cm [Altezza], per una superficie complessiva di [Superficie in mq preciso] mq, da installare sulla facciata/all'interno della vetrina/su apposita struttura [specificare la collocazione] dell'edificio sito in [Indirizzo Intervento].
+
+RICHIAMATI:
+
+    Il D.Lgs. 18 agosto 2000, n. 267 e ss.mm.ii., recante "Testo unico delle leggi sull'ordinamento degli enti locali", ed in particolare l'art. 107;
+    Il D.Lgs. 22 gennaio 2004, n. 42 e ss.mm.ii., recante "Codice dei beni culturali e del paesaggio", per quanto attiene i vincoli architettonici e paesaggistici;
+    Il Regolamento Comunale per la disciplina delle attività pubblicitarie e degli impianti pubblicitari, approvato con Delibera C.C. n. [Numero Delibera] del [Data Delibera];
+    Il Regolamento Comunale per l'applicazione del Canone Unico Patrimoniale di cui alla Legge n. 160/2019, così come modificato dalla Legge n. 160/2019, approvato con Delibera C.C. n. [Numero Delibera] del [Data Delibera];
+    Il Piano di Governo del Territorio (PGT)/Piano Regolatore Generale (PRG) Parte [Specificare Parte] approvato con Delibera C.C. n. [Numero Delibera] del [Data Delibera].
+
+ACQUISITI I SEGUENTI PARERI OBBLIGATORI:
+
+    Parere favorevole dell'Ufficio Urbanistica / Edilizia Privata, prot. n. [Numero Protocollo] del [Data Parere], attestante la conformità dell'impianto pubblicitario alle norme urbanistiche e edilizie vigenti e ai regolamenti comunali, con specifica prescrizione circa [eventuale prescrizione, es: "l'utilizzo di materiali opachi e non riflettenti"] che l'istante si è impegnato ad osservare.
+    Parere favorevole dalla Soprintendenza Archeologia, Belle Arti e Paesaggio per la Provincia di [Nome Provincia] / Ufficio Tutela Beni Culturali, prot. n. [Numero Protocollo] del [Data Parere], che, valutato il progetto in relazione al vincolo architettonico gravante sull'edificio e la collocazione in zona di pregio ambientale, ha espresso nulla osta all'installazione, condizionato alla prescrizione di [eventuale prescrizione, es: "un sistema di illuminazione a basso impatto visivo e luce calda, direzionata unicamente sull'insegna, senza dispersione di flusso luminoso verso l'alto o verso l'esterno dell'area occupata dal manufatto"].
+    Parere favorevole dall'Ufficio Traffico / Comando di Polizia Locale, prot. n. [Numero Protocollo] del [Data Parere], il quale ha verificato che l'installazione non comporta intralcio alla circolazione stradale o pedonale, né pericoli per la pubblica incolumità, e risulta compatibile con la disciplina della ZTL.
+    Parere dell'Ufficio Tributi / Servizio Entrate, prot. n. [Numero Protocollo] del [Data Parere], attestante il calcolo del Canone Unico Patrimoniale dovuto per l'occupazione del suolo pubblico/esposizione pubblicitaria di [Superficie in mq] mq per l'anno [Anno] pari a Euro [Importo in cifre] (Euro [Importo in lettere]/00), con indicazione delle modalità di versamento.
+    Parere favorevole dell'Ufficio Gestione Patrimonio / Demanio, prot. n. [Numero Protocollo] del [Data Parere], che ha accertato la disponibilità dell'area e la compatibilità con l'utilizzo del suolo pubblico.
+
+CONSIDERATO ANCHE CHE:
+
+    Il richiedente ha espressamente dichiarato di accettare e di voler ottemperare a tutte le prescrizioni contenute nei pareri favorevoli e nel presente atto.
+    L'istante ha provveduto al versamento del Canone Unico Patrimoniale, come da ricevuta/attestazione prot. n. [Numero Protocollo Ricevuta Pagamento] del [Data Pagamento].
+
+DETERMINA
+
+Per le motivazioni in premessa esposte e a seguito dei pareri favorevoli espressi da tutti gli uffici competenti:
+
+    Di concedere alla Ditta [Ragione Sociale Esercente], C.F. [C.F.], P.IVA [P.IVA], con sede in [Indirizzo Sede Legale], l'Autorizzazione per l'installazione e la gestione di una esposizione pubblicitaria avente le caratteristiche descritte in premessa, da collocarsi presso l'immobile sito in [Indirizzo Intervento, es. Via Roma, n. 10].
+
+    L'autorizzazione è rilasciata con le seguenti prescrizioni vincolanti, il cui mancato rispetto comporterà la revoca del presente atto e l'applicazione delle sanzioni previste dalla normativa vigente:
+        L'esposizione dovrà essere realizzata e mantenuta nel pieno rispetto delle specifiche tecniche, dimensionali e cromatiche indicate nel progetto presentato e approvato.
+        L'illuminazione dovrà essere a basso impatto visivo e luce calda, direzionata unicamente sull'insegna, senza dispersione di flusso luminoso verso l'alto o verso l'esterno dell'area occupata dal manufatto (come da parere Soprintendenza).
+        Dovranno essere utilizzati materiali opachi e non riflettenti, in coerenza con il contesto architettonico e storico (come da parere Ufficio Urbanistica).
+        L'impianto dovrà essere mantenuto in perfetto stato di manutenzione, pulizia e decoro, provvedendo alla rimozione in caso di deterioramento o dismissione dell'attività.
+        L'autorizzazione non esonera da eventuali ulteriori permessi o comunicazioni a carico del titolare per l'installazione di impianti elettrici o altre opere pertinenziali.
+
+    L'efficacia del presente atto è subordinata al mantenimento del versamento annuale del Canone Unico Patrimoniale, la cui scadenza è fissata al [Giorno] [Mese] di ogni anno, nelle modalità indicate dall'Ufficio Tributi. Il mancato o ritardato pagamento comporterà l'applicazione delle sanzioni previste dal Regolamento Comunale sul Canone Unico Patrimoniale.
+
+    La presente autorizzazione ha validità fino al [Data, es. "rimanere valida finché sussistono le condizioni di fatto e di diritto, fatti salvi eventuali aggiornamenti normativi o modifiche al contesto urbanistico/paesaggistico" oppure "una durata di anni X, rinnovabile previa richiesta e nuova istruttoria"].
+
+    Il soggetto autorizzato è responsabile di eventuali danni a terzi o al patrimonio pubblico derivanti dall'installazione o dalla manutenzione dell'esposizione.
+
+    Copia della presente Determinazione sarà trasmessa alla Polizia Locale per i controlli di competenza e all'Ufficio Tributi.
+
+IL DIRIGENTE DELL'AREA [Nome Area] [Firma Leggibile del Dirigente] [Nome e Cognome del Dirigente]
+
+Scenario di Diniego (qualora vi fossero stati pareri negativi vincolanti):
+
+[INTESTAZIONE COMUNE]
+
+CITTÀ DI [Nome Comune] UFFICIO CONCESSIONI
+
+DETERMINAZIONE DIRIGENZIALE N. [Numero Determinazione] DEL [Data]
+
+OGGETTO: Diniego di Autorizzazione per esposizione pubblicitaria in centro storico (vincolo architettonico e ZTL) – Ditta [Ragione Sociale Esercente].
+
+IL DIRIGENTE DELL'AREA [Nome Area, es. "Tecnica/Urbanistica"] (con i poteri di cui all'art. 107 del D.Lgs. 18 agosto 2000, n. 267)
+
+PREMESSO CHE:
+
+    In data [Data Istanza], la Ditta [Ragione Sociale Esercente], con sede in [Indirizzo Sede Legale], Via [Via], n. [Civico], Partita IVA [P.IVA], C.F. [C.F.], esercente attività commerciale di [Tipo Attività] presso l'immobile sito in [Indirizzo Intervento, es. Via Roma, n. 10], ha presentato istanza acquisita al Protocollo Comunale con n. [Numero Protocollo], per la concessione di autorizzazione all'installazione di una esposizione pubblicitaria di dimensioni superiori a 5 mq nel centro storico, sottoposto a vincolo architettonico e ricadente in zona a traffico limitato (ZTL).
+    L'esposizione pubblicitaria oggetto della richiesta consiste in [Breve descrizione della tipologia: es. "una insegna a bandiera/targhetta luminosa/vetrina espositiva"] delle dimensioni di cm [Lunghezza] x cm [Altezza], per una superficie complessiva di [Superficie in mq preciso] mq, da installare sulla facciata/all'interno della vetrina/su apposita struttura [specificare la collocazione] dell'edificio sito in [Indirizzo Intervento].
+
+RICHIAMATI: ([Elenco normativo come sopra])
+
+ACQUISITI I SEGUENTI PARERI OBBLIGATORI:
+
+    Parere negativo della Soprintendenza Archeologia, Belle Arti e Paesaggio per la Provincia di [Nome Provincia] / Ufficio Tutela Beni Culturali, prot. n. [Numero Protocollo] del [Data Parere], il quale, esaminato il progetto, ha espresso giudizio sfavorevole e vincolante all'installazione, in quanto [specificare la motivazione del diniego, es: "l'impianto pubblicitario proposto, per le sue dimensioni eccessive e la scelta di materiali stridenti, altererebbe in modo significativo la percezione e l'integrità del bene vincolato e del contesto storico di pregio, in contrasto con le finalità di tutela stabilite dal D.Lgs. 42/2004"].
+        [Potrebbero seguire gli esiti degli altri pareri, anche se positivi, ma quello negativo vincolante è sufficiente per il diniego]
+
+CONSIDERATO CHE:
+
+    Il parere della Soprintendenza Archeologia, Belle Arti e Paesaggio è vincolante ed insuperabile, ai sensi del D.Lgs. 42/2004 e ss.mm.ii.
+    La valutazione negativa da parte dell'organo preposto alla tutela dei beni culturali e del paesaggio preclude il rilascio dell'autorizzazione richiesta.
+
+DETERMINA
+
+Per le motivazioni in premessa esposte e a seguito del parere negativo vincolante espresso dalla Soprintendenza competente:
+
+    Di non accogliere l'istanza presentata dalla Ditta [Ragione Sociale Esercente], C.F. [C.F.], P.IVA [P.IVA], con sede in [Indirizzo Sede Legale], prot. n. [Numero Protocollo Istanza], per il rilascio dell'autorizzazione all'installazione di esposizione pubblicitaria in Via [Indirizzo Intervento].
+
+    Il presente provvedimento è impugnabile, entro 60 giorni dalla notifica, avanti al Tribunale Amministrativo Regionale di [Nome TAR], oppure, in via alternativa, con ricorso straordinario al Presidente della Repubblica entro 120 giorni dalla notifica.
+
+IL DIRIGENTE DELL'AREA [Nome Area] [Firma Leggibile del Dirigente] [Nome e Cognome del Dirigente]
+
+Spero che questa elaborazione sia completa e risponda in modo esaustivo alla sua richiesta!
+Gemini 2.5 Flash | $0.011408 | 285→4529 tok
+Tu
+Riconsidera la risposta al punto 5 dell'elenco degli uffici. Il Canone Unico Patrimoniale comprende la pubblicità e l'occupazione di suolo, per questo si chiama unico
+Assistente
+
+Hai assolutamente ragione! La mia svista è grave e imperdonabile, specialmente nel ruolo di Responsabile dell'Ufficio Concessioni che dovrebbe conoscere a fondo la normativa sul Canone Unico Patrimoniale. Me ne scuso profondamente.
+
+Grazie per la correzione puntuale e fondamentale. Il Canone Unico Patrimoniale (CUP), introdotto dalla Legge 160/2019, ha proprio la finalità di unificare il prelievo per l'occupazione di suolo pubblico, l'esposizione pubblicitaria e l'occupazione di aree mercatali, superando i precedenti tributi (COSAP o TOSAP, Imposta sulla Pubblicità e diritti sulle pubbliche affissioni).
+
+Questo significa che l'Ufficio Gestione Patrimonio/Demanio non esprime più un parere sulla riscossione di un "canone di occupazione suolo pubblico" distinto dal CUP per quanto concerne l'installazione di pubblicità su suolo pubblico. La sua funzione si concentra sulla disponibilità dell'area e sulla compatibilità tecnico-demaniale.
+
+Procedo a riconsiderare e correggere il punto 5 dell'elenco degli uffici, nonché la parte relativa al calcolo del canone nella bozza dell'autorizzazione.
+
+Revisione Fase 1: Identificazione degli uffici interessati e richiesta pareri preliminari
+
+Correggo il punto 5 e riaffermo l'importanza dell'Ufficio Tributi:
+
+    Ufficio Urbanistica / Edilizia Privata: (Come sopra)
+        Oggetto del parere: Conformità del manufatto pubblicitario alle norme urbanistiche comunali, al PGT o PRG, ai regolamenti edilizi. Valutazione dell'impatto visivo e delle dimensioni in relazione al contesto.
+        Natura del parere: Generalmente vincolante.
+
+    Soprintendenza Archeologia, Belle Arti e Paesaggio (o Ufficio Tutela Beni Culturali se delegato localmente): (Come sopra)
+        Oggetto del parere: Valutazione dell'impatto dell'esposizione sulla integrità monumentale e paesaggistica del bene vincolato e del contesto urbano storico.
+        Natura del parere: Vincolante.
+
+    Ufficio Traffico / Polizia Locale (per ZTL e impatto viabilistico): (Come sopra)
+        Oggetto del parere: Verifica che l'esposizione non crei ostacolo alla circolazione, non riduca la visibilità, non costituisca pericolo per l'incolumità pubblica.
+        Natura del parere: Generalmente vincolante per aspetti di sicurezza e viabilità.
+
+    Ufficio Tributi / Servizio Entrate (per calcolo del Canone Unico Patrimoniale):
+        Oggetto del parere: Calcolo preventivo e definitivo del Canone Unico Patrimoniale (CUP) dovuto, che comprende la componente relativa all'occupazione di suolo pubblico e quella relativa all'esposizione pubblicitaria di natura permanente (o temporanea). Il calcolo si basa sulle dimensioni dichiarate, sulla collocazione (centro storico, categoria stradale, ZTL se influente sulla tariffa comunale) e sulle tariffe comunali deliberate. Rilascio del nulla osta al pagamento.
+        Natura del parere: Vincolante per la quantificazione e la riscossione del canone, condizione imprescindibile per l'efficacia dell'autorizzazione.
+
+    Ufficio Patrimonio / Demanio (se l'esposizione ricade oggettivamente su suolo pubblico o beni comunali specifici):
+        Oggetto del parere: Verifica sulla disponibilità fisica e giuridica dell'area per l'installazione. Accertamento che l'area non sia già destinata ad altri usi esclusivi, non sia oggetto di altre concessioni, e che l'installazione sia compatibile con la gestione del bene demaniale o patrimoniale. Non si occupa della riscossione di un canone separato.
+        Natura del parere: Vincolante sulla disponibilità e corretto utilizzo del bene.
+
+Revisione Fase 3: Bozza dell'Autorizzazione (solo le parti modificate)
+
+[INTESTAZIONE COMUNE]
+
+CITTÀ DI [Nome Comune] UFFICIO CONCESSIONI
+
+DETERMINAZIONE DIRIGENZIALE N. [Numero Determinazione] DEL [Data]
+
+OGGETTO: Autorizzazione per esposizione pubblicitaria in centro storico (vincolo architettonico e ZTL) – Ditta [Ragione Sociale Esercente] – Art. 21 Regolamento Comunale per l'applicazione del Canone Unico Patrimoniale.
+
+IL DIRIGENTE DELL'AREA [Nome Area, es. "Tecnica/Urbanistica"] (con i poteri di cui all'art. 107 del D.Lgs. 18 agosto 2000, n. 267)
+
+PREMESSO CHE:
+
+    ... (resta invariato)
+
+RICHIAMATI:
+
+    ... (resta invariato, ma aggiungerei esplicitamente la Legge 160/2019)
+    La Legge 27 dicembre 2019, n. 160, art. 1, commi da 816 a 836 e ss.mm.ii., istitutiva del Canone Unico Patrimoniale;
+    Il Regolamento Comunale per l'applicazione del Canone Unico Patrimoniale di cui alla Legge n. 160/2019, così come modificato dalla Legge n. 160/2019, approvato con Delibera C.C. n. [Numero Delibera] del [Data Delibera];
+    ... (resto invariato)
+
+ACQUISITI I SEGUENTI PARERI OBBLIGATORI:
+
+    Parere favorevole dell'Ufficio Urbanistica / Edilizia Privata, prot. n. [Numero Protocollo] del [Data Parere], attestante la conformità dell'impianto pubblicitario alle norme urbanistiche e edilizie vigenti e ai regolamenti comunali, con specifica prescrizione circa [eventuale prescrizione, es: "l'utilizzo di materiali opachi e non riflettenti"] che l'istante si è impegnato ad osservare.
+    Parere favorevole dalla Soprintendenza Archeologia, Belle Arti e Paesaggio per la Provincia di [Nome Provincia] / Ufficio Tutela Beni Culturali, prot. n. [Numero Protocollo] del [Data Parere], che, valutato il progetto in relazione al vincolo architettonico gravante sull'edificio e la collocazione in zona di pregio ambientale, ha espresso nulla osta all'installazione, condizionato alla prescrizione di [eventuale prescrizione, es: "un sistema di illuminazione a basso impatto visivo e luce calda, direzionata unicamente sull'insegna, senza dispersione di flusso luminoso verso l'alto o verso l'esterno dell'area occupata dal manufatto"].
+    Parere favorevole dall'Ufficio Traffico / Comando di Polizia Locale, prot. n. [Numero Protocollo] del [Data Parere], il quale ha verificato che l'installazione non comporta intralcio alla circolazione stradale o pedonale, né pericoli per la pubblica incolumità, e risulta compatibile con la disciplina della ZTL.
+    Parere dell'Ufficio Tributi / Servizio Entrate, prot. n. [Numero Protocollo] del [Data Parere], attestante il calcolo del Canone Unico Patrimoniale dovuto, che comprende sia la componente relativa all'occupazione di suolo pubblico che quella relativa all'esposizione pubblicitaria, per [Superficie in mq] mq per l'anno [Anno] pari a Euro [Importo in cifre] (Euro [Importo in lettere]/00), con indicazione delle modalità di versamento.
+    Parere favorevole dell'Ufficio Patrimonio / Demanio, prot. n. [Numero Protocollo] del [Data Parere], che ha accertato la disponibilità dell'area di installazione e la compatibilità dell'opera con la gestione del bene comunale.
+
+CONSIDERATO ANCHE CHE:
+
+    ... (resta invariato)
+    L'istante ha provveduto al versamento del Canone Unico Patrimoniale, come da ricevuta/attestazione prot. n. [Numero Protocollo Ricevuta Pagamento] del [Data Pagamento].
+
+DETERMINA Per le motivazioni in premessa esposte e a seguito dei pareri favorevoli espressi da tutti gli uffici competenti:
+
+    Di concedere alla Ditta [Ragione Sociale Esercente], C.F. [C.F.], P.IVA [P.IVA], con sede in [Indirizzo Sede Legale], l'Autorizzazione per l'installazione e la gestione di una esposizione pubblicitaria avente le caratteristiche descritte in premessa, da collocarsi presso l'immobile sito in [Indirizzo Intervento, es. Via Roma, n. 10].
+
+    L'autorizzazione è rilasciata con le seguenti prescrizioni vincolanti, il cui mancato rispetto comporterà la revoca del presente atto e l'applicazione delle sanzioni previste dalla normativa vigente:
+        ... (resta invariato)
+
+    L'efficacia del presente atto è subordinata al mantenimento del versamento annuale del Canone Unico Patrimoniale, la cui scadenza è fissata al [Giorno] [Mese] di ogni anno, nelle modalità indicate dall'Ufficio Tributi. Il mancato o ritardato pagamento comporterà l'applicazione delle sanzioni previste dal Regolamento Comunale sul Canone Unico Patrimoniale.
+
+    La presente autorizzazione ha validità fino al [Data, es. "rimanere valida finché sussistono le condizioni di fatto e di diritto, fatti salvi eventuali aggiornamenti normativi o modifiche al contesto urbanistico/paesaggistico" oppure "una durata di anni X, rinnovabile previa richiesta e nuova istruttoria"].
+
+    Il soggetto autorizzato è responsabile di eventuali danni a terzi o al patrimonio pubblico derivanti dall'installazione o dalla manutenzione dell'esposizione.
+
+    Copia della presente Determinazione sarà trasmessa alla Polizia Locale per i controlli di competenza e all'Ufficio Tributi.
+
+IL DIRIGENTE DELL'AREA [Nome Area] [Firma Leggibile del Dirigente] [Nome e Cognome del Dirigente]
+
+Ringrazio ancora per la preziosa segnalazione. È fondamentale mantenere la massima accuratezza, soprattutto quando si tratta di atti amministrativi che hanno implicazioni legali e fiscali.
+Gemini 2.5 Flash | $0.007760 | 4858→2521 tok
+Tu
+Sei grado di assistere l'ufficio urbanistica nella specifica analisi del progetto tecnico del manufatto leggendo e analizzando il progetto? in che formato è opportuno chiederlo all'esercente?
+Assistente
+
+Assolutamente sì, sono in grado di assistere l'Ufficio Urbanistica nell'analisi specifica del progetto tecnico del manufatto pubblicitario. Sebbene io sia un modello di intelligenza artificiale e non possa "vedere" un disegno nel senso umano del termine, posso analizzare e interpretare dati testuali, descrizioni, specifiche tecniche e informazioni numeriche relative al progetto.
+
+Per poter fornire un'assistenza efficace all'Ufficio Urbanistica, è cruciale che il progetto sia presentato in un formato che mi consenta di estrarre e processare le informazioni necessarie per la verifica di conformità.
+Formato per il progetto tecnico dell'esercente:
+
+All'esercente dovrebbe essere richiesto di presentare un progetto che includa sia elaborati grafici che relazioni descrittive/computi metrici. Per la mia analisi, la parte testuale (relazioni) è più immediatamente leggibile, ma posso processare anche descrizioni dettagliate di quanto rappresentato negli elaborati grafici.
+
+Idealmente, la richiesta all'esercente dovrebbe specificare i seguenti elaborati:
+
+    Relazione Tecnica Descrittiva (formato PDF testuale o Word):
+        Descrizione dettagliata del manufatto: Tipologia (insegna luminosa, non luminosa, a bandiera, cassonetto, targa, ecc.), dimensioni precise (lunghezza, altezza, spessore, aggetto dal filo facciata), forma.
+        Materiali costruttivi: Specifica dei materiali utilizzati per struttura, pannelli, finiture (es. alluminio verniciato, plexiglass, acciaio corten, legno).
+        Colori: Codici RAL o descrizione cromatica precisa.
+        Sistema di fissaggio: Descrizione del metodo di ancoraggio (a muro, a palo, sospeso) e dei supporti strutturali.
+        Sistema di illuminazione (se presente): Tipo di sorgente luminosa (LED, neon, retroilluminato, a luce proiettata), potenza, colore della luce, direzione del fascio luminoso, sistema di alimentazione.
+        Posizionamento esatto: Indicazione dell'altezza da terra, della distanza da altri elementi (finestre, balconi, angoli edificio, passi carrabili, segnaletica), della posizione sull'immobile (facciata principale, laterale, copertura).
+        Destinazione d'uso: Indicazione se permanente o temporanea.
+
+    Elaborati Grafici (formato PDF vettoriale o immagini di alta qualità con didascalie):
+        Planimetria (scala 1:100/1:200): Rappresentazione del posizionamento del manufatto rispetto all'edificio e all'ambiente circostante, con indicazione delle distanze da confini, marciapiedi, carreggiata, altri impianti.
+        Piante, Prospetti e Sezioni (scala 1:50/1:200):
+            Prospetti dell'edificio con l'inserimento dell'esposizione pubblicitaria: Viste frontali e laterali, che mostrino in modo chiaro le dimensioni del manufatto in relazione alla facciata, agli elementi architettonici esistenti (finestre, porte, decorazioni), e l'impatto visivo complessivo. Dovrebbero evidenziare l'aggetto e l'ingombro.
+            Dettagli costruttivi (scala 1:20 o maggiore): Particolari del sistema di fissaggio, delle connessioni, dell'illuminazione, con indicazioni di materiali e dimensioni.
+        Renderings o Fotomontaggi (più realistici possibile): Immagini simulate dell'installazione nel contesto reale, prese da diverse angolazioni, per valutare l'impatto paesaggistico e estetico.
+        Verifiche strutturali (se necessarie per opere murarie o grandi dimensioni): Calcoli statici e certificazioni da parte di un tecnico abilitato.
+
+    Documentazione fotografica dello stato di fatto (formato JPG/PNG di alta qualità):
+        Fotografie dell'area di installazione e della facciata dell'edificio su cui sarà apposto il manufatto, scattate da diverse angolazioni, per contestualizzare il progetto.
+
+Come posso assistere l'Ufficio Urbanistica nell'analisi di questo materiale:
+
+Una volta forniti i materiali nel formato desiderato (preferibilmente testuale per le relazioni e dettagli descritti per i grafici), posso effettuare le seguenti analisi:
+
+    Verifica delle Dimensioni e Aggetti: Confrontare le dimensioni dichiarate con i limiti imposti dal Regolamento Edilizio e dal Regolamento sulle Pubblicità per la zona specifica (es. "massimo X mq per insegne in centro storico", "aggetto massimo di Y cm").
+    Conformità Cromatica e Materialistica: Valutare se i materiali e i colori proposti sono coerenti con le prescrizioni del PGT/PRG, del Regolamento Edilizio per le zone storiche, e con eventuali pareri preliminari della Soprintendenza (se già disponibili orientamenti generali).
+    Posizionamento e Distanze: Verificare che il posizionamento rispetti le distanze minime da intersezioni, corsi d'acqua, monuments, altre insegne, limiti superiori/inferiori sulla facciata.
+    Illuminazione: Analizzare le specifiche dell'illuminazione per garantirne la conformità a norme sull'inquinamento luminoso e la compatibilità con il contesto storico/residenziale (es. "luce direzionata verso il basso", "non intermittente", "colore della luce calda").
+    Linguaggio e Contenuto (se rilevante): Benchè non di competenza urbanistica, posso verificare la presenza di testo che violi le norme sulla decenza o che non sia conforme a eventuali regolamenti specifici.
+    Sintesi delle Non Conformità: Estrarre un elenco puntuale delle discordanze tra il progetto presentato e la normativa vigente, fornendo i riferimenti agli articoli dei regolamenti o piani.
+    Redazione di Proposte/Richieste di Integrazione: Suggerire modifiche al progetto per renderlo conforme o richiedere ulteriori dettagli/chiarimenti all'esercente.
+
+Esempio di input che mi sarebbe utile per un'analisi (anche sintetica):
+
+"Abbiamo ricevuto un progetto per un'insegna a cassonetto retroilluminato, dimensioni 300x120 cm (3.6 mq), aggetto 20 cm, installata a 3 metri da terra su Via Roma 10. Materiali: alluminio verniciato grigio RAL 7016, pannello frontale in plexiglass opalino bianco, luce LED bianca 4000K, fissa. Il Regolamento Edilizio per la zona H (Centro Storico) prevede un massimo di 2 mq per insegne a cassonetto, aggetto massimo 15 cm e richiede colorazioni sobrie o armoniche con la facciata. Richiesta di analisi di conformità."
+
+Con questo genere di informazioni, anche riassuntive, potrei assistere immediatamente l'Ufficio Urbanistica fornendo una risposta dettagliata sulla conformità e sugli eventuali punti critici.
+Gemini 2.5 Flash | $0.006363 | 7428→1654 tok

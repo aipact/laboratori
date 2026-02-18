@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-PACT | Laboratori IA per i Comuni</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e40af;
+            --primary-light: #3b82f6;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --purple: #7c3aed;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 50%, var(--purple) 100%);
+            color: white;
+            padding: 4rem 1.5rem;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+
+        /* Laboratori Grid */
+        .labs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: -4rem auto 3rem;
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            padding: 0 1.5rem;
+        }
+
+        .lab-card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lab-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.18);
+        }
+
+        .lab-card.lab-a {
+            border-color: var(--primary-light);
+        }
+
+        .lab-card.lab-b {
+            border-color: var(--purple);
+        }
+
+        .lab-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .lab-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            flex-shrink: 0;
+        }
+
+        .lab-a .lab-icon {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        }
+
+        .lab-b .lab-icon {
+            background: linear-gradient(135deg, var(--purple) 0%, #a78bfa 100%);
+        }
+
+        .lab-header h2 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            line-height: 1.3;
+        }
+
+        .lab-header span {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .lab-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .lab-card ul {
+            list-style: none;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .lab-card li {
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .lab-card li::before {
+            content: '→';
+            color: var(--primary-light);
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .lab-b li::before {
+            color: var(--purple);
+        }
+
+        .lab-button {
+            display: block;
+            text-align: center;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .lab-a .lab-button {
+            background: var(--primary);
+            color: white;
+        }
+
+        .lab-a .lab-button:hover {
+            background: var(--primary-light);
+        }
+
+        .lab-b .lab-button {
+            background: var(--purple);
+            color: white;
+        }
+
+        .lab-b .lab-button:hover {
+            background: #8b5cf6;
+        }
+
+        .lab-button.disabled {
+            background: #e2e8f0;
+            color: var(--text-muted);
+            cursor: not-allowed;
+        }
+
+        /* Calendario */
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-title h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-title p {
+            color: var(--text-muted);
+        }
+
+        .calendar {
+            background: var(--card);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 3rem;
+        }
+
+        .calendar-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .calendar-header > div {
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .calendar-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .calendar-row:last-child {
+            border-bottom: none;
+        }
+
+        .calendar-row > div {
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .calendar-row .sede {
+            font-weight: 700;
+            background: #f8fafc;
+        }
+
+        .calendar-row .done {
+            color: var(--success);
+        }
+
+        .calendar-row .upcoming {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Docenti */
+        .docenti-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .docente-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .docente-card h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .docente-card .role {
+            font-size: 0.8rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .docente-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--text);
+            color: white;
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+
+        .footer-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            opacity: 0.8;
+        }
+
+        .footer p {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+
+            .labs-grid {
+                grid-template-columns: 1fr;
+                margin-top: -3rem;
+            }
+
+            .calendar-header,
+            .calendar-row {
+                grid-template-columns: 1fr;
+            }
+
+            .calendar-header > div,
+            .calendar-row > div {
+                border-bottom: 1px solid #e2e8f0;
+            }
+
+            .calendar-row .sede {
+                background: var(--primary);
+                color: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero">
+        <div class="hero-badge">IFEL - Fondazione ANCI | ANCI Toscana</div>
+        <h1>Intelligenza Artificiale</h1>
+        <p>Competenze, governance e problem solving per l'IA nei Comuni</p>
+        <p style="margin-top: 1rem; font-weight: 600; opacity: 0.95;">L'Azione Territoriale AI-PACT</p>
+    </header>
+
+    <div class="labs-grid">
+        <div class="lab-card lab-a">
+            <div class="lab-header">
+                <div class="lab-icon">🎯</div>
+                <h2>LABORATORIO A<span>Marco Scarselli</span></h2>
+            </div>
+            <h3>Design Thinking e Problem Solving per l'IA</h3>
+            <ul>
+                <li>Mappatura di sfide comunali</li>
+                <li>Architettura dei dati necessari</li>
+                <li>Costruzione di agenti risolutori</li>
+                <li>Report con soluzione applicabile</li>
+            </ul>
+            <a href="LABORATORIO_A/ISTRUZIONI/" class="lab-button">Accedi al Laboratorio A</a>
+        </div>
+
+        <div class="lab-card lab-b">
+            <div class="lab-header">
+                <div class="lab-icon">📋</div>
+                <h2>LABORATORIO B<span>Elisa Filippi</span></h2>
+            </div>
+            <h3>Piano d'Azione per l'IA Comunale</h3>
+            <ul>
+                <li>Metodologia URBACT</li>
+                <li>Coinvolgimento stakeholder</li>
+                <li>Strategie di finanziamento</li>
+                <li>KPI e valutazione impatto</li>
+            </ul>
+            <a href="LABORATORIO_B/ISTRUZIONI/" class="lab-button disabled">Prossimamente</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="section-title">
+            <h2>Calendario</h2>
+            <p>Le tappe del percorso formativo</p>
+        </div>
+
+        <div class="calendar">
+            <div class="calendar-header">
+                <div>Sede</div>
+                <div>Webinar</div>
+                <div>Laboratori</div>
+            </div>
+            <div class="calendar-row">
+                <div class="sede">Arezzo</div>
+                <div class="done">✓ 15 gennaio 2026</div>
+                <div class="done">✓ 20 gennaio 2026</div>
+            </div>
+            <div class="calendar-row">
+                <div class="sede">Livorno</div>
+                <div class="done">✓ 30 gennaio 2026</div>
+                <div class="done">✓ 11 febbraio 2026</div>
+            </div>
+            <div class="calendar-row">
+                <div class="sede">Firenze</div>
+                <div class="upcoming">19 febbraio 2026</div>
+                <div class="upcoming">26 febbraio 2026</div>
+            </div>
+        </div>
+
+        <div class="section-title">
+            <h2>Docenti e Relatori</h2>
+        </div>
+
+        <div class="docenti-grid">
+            <div class="docente-card">
+                <h4>Marco Scarselli</h4>
+                <div class="role">Laboratorio A - Design Thinking</div>
+                <p>Esperto di innovazione e sviluppo di soluzioni AI per la Pubblica Amministrazione. Con un background che unisce sviluppo software e metodologia della ricerca, guida la creazione di piattaforme data-driven per l'apprendimento e la valutazione automatizzata. In precedenza CTO di una startup focalizzata su Big e Open Data, ha partecipato a progetti di R&D cofinanziati e ha ricevuto riconoscimenti per l'innovazione tra cui il "Fiorino d'Oro" (Comune di Firenze) e la "Tuscan Big Data Challenge" (CNR).</p>
+            </div>
+            <div class="docente-card">
+                <h4>Elisa Filippi</h4>
+                <div class="role">Laboratorio B - Piano d'Azione</div>
+                <p>Ricercatrice PhD candidate presso la Facoltà di Ingegneria Civile e Ambientale dell'Università Sapienza di Roma. Da oltre quindici anni si occupa di innovazione urbana a livello nazionale ed europeo. È Lead Expert del programma URBACT e Innovative Action Expert dell'iniziativa Urbana Europea, con un focus su tecnologie spaziali e intelligenza artificiale applicate alle politiche urbane. Formatrice accreditata presso il Centro di Terapia Strategica (CTS), dove ha conseguito un Master in Problem Solving Strategico, collabora stabilmente con enti nazionali come IFEL.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-logos">
+            <span>AI-PACT</span>
+            <span>•</span>
+            <span>IFEL</span>
+            <span>•</span>
+            <span>ANCI Toscana</span>
+        </div>
+        <p>Progetto finanziato dall'Unione Europea - NextGenerationEU</p>
+    </footer>
+</body>
+</html>

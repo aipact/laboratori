@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relazione Motivata – Verifica di Assoggettabilità a VAS</title>
+
+<style>
+:root {
+  --primary: #1f4e79;
+  --secondary: #f4f6f8;
+  --accent: #c0392b;
+  --text: #2c3e50;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  color: var(--text);
+  background: var(--secondary);
+  line-height: 1.6;
+}
+
+header {
+  background: var(--primary);
+  color: #fff;
+  padding: 1.5rem;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+header p {
+  margin: .5rem 0 0;
+  font-size: .95rem;
+}
+
+.container {
+  display: flex;
+  max-width: 1200px;
+  margin: auto;
+}
+
+nav {
+  width: 260px;
+  background: #fff;
+  border-right: 1px solid #ddd;
+  padding: 1rem;
+}
+
+nav h2 {
+  font-size: 1.1rem;
+  margin-top: 0;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+nav li {
+  margin-bottom: .5rem;
+}
+
+nav a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+  display: block; /* Importante per padding e sfondo */
+  padding: 0.2rem 0.5rem; /* Aggiunto padding per l'highlight */
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+main {
+  flex: 1;
+  padding: 2rem;
+  background: #fff;
+}
+
+section {
+  margin-bottom: 2.5rem;
+  padding-top: 60px; /* Aggiunto per evitare che l'header fisso copra l'anchor */
+  margin-top: -60px; /* Counter-margin per il padding-top */
+}
+
+section h2 {
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: .4rem;
+  cursor: pointer;
+}
+
+section.collapsed .content {
+ display: none;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: .6rem;
+  text-align: left;
+}
+
+table th {
+  background: #e8eef3;
+}
+
+.footer {
+  text-align: center;
+  font-size: .9rem;
+  color: #555;
+  padding: 1.5rem;
+}
+
+.actions {
+  margin-bottom: 1.5rem;
+}
+
+button {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: .6rem 1rem;
+  cursor: pointer;
+  margin-right: .5rem;
+  border-radius: 4px;
+}
+
+button:hover {
+  background: #163a5a;
+}
+
+/* Modifiche CSS specifiche per il comportamento del menu */
+html {
+  scroll-behavior: smooth; /* Abilita lo smooth scrolling */
+}
+
+nav a.active {
+  background: var(--primary);
+  color: #fff;
+  border-radius: 4px;
+  text-decoration: none; /* Rimuove sottolineatura da attivo */
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .container {
+    flex-direction: column;
+  }
+
+  nav {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+    position: sticky; /* Rende la nav sticky anche su mobile se vuoi */
+    top: 0;
+    z-index: 100;
+  }
+  header {
+    position: sticky; /* Header sticky per un migliore ancoraggio */
+    top: 0;
+    z-index: 101;
+  }
+}
+
+/* Print */
+@media print {
+  nav, .actions {
+    display: none;
+  }
+  body {
+    background: #fff;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Relazione Motivata</h1>
+  <p>Verifica di Assoggettabilità a Valutazione Ambientale Strategica (VAS)</p>
+</header>
+
+<div class="container">
+
+<nav>
+  <h2>Indice</h2>
+  <ul>
+    <li><a href="#s1" class="nav-link">1. Inquadramento amministrativo</a></li>
+    <li><a href="#s2" class="nav-link">2. Quadro normativo</a></li>
+    <li><a href="#s3" class="nav-link">3. Inquadramento del piano</a></li>
+    <li><a href="#s4" class="nav-link">4. Analisi criteri ambientali</a></li>
+    <li><a href="#s5" class="nav-link">5. Valutazione di Incidenza (VINCA)</a></li>
+    <li><a href="#s6" class="nav-link">6. Consultazioni Enti</a></li>
+    <li><a href="#s7" class="nav-link">7. Motivazioni della Decisione</a></li>
+    <li><a href="#s8" class="nav-link">8. Prescrizioni e Monitoraggio</a></li>
+    <li><a href="#s9" class="nav-link">9. Conclusione</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<div class="actions">
+  <button onclick="window.print()">Stampa</button>
+  <button onclick="toggleAll()">Apri/Chiudi sezioni</button>
+</div>
+
+<section id="s1">
+  <h2 onclick="toggleSection(this)">1. Inquadramento Amministrativo</h2>
+  <div class="content">
+    <p><strong>Autorità Procedente:</strong> Comune / Unione dei Comuni del Pratomagno</p>
+    <p><strong>Autorità Competente:</strong> Autorità VAS individuata ai sensi art. 12 L.R. 10/2010</p>
+    <p><strong>Oggetto:</strong> Verifica di assoggettabilità a VAS per [denominazione piano]</p>
+    <p><strong>Ambito territoriale:</strong> Unione dei Comuni del Pratomagno</p>
+  </div>
+</section>
+
+<section id="s2">
+  <h2 onclick="toggleSection(this)">2. Quadro Normativo</h2>
+  <div class="content">
+    <ul>
+      <li>Direttiva 2001/42/CE</li>
+      <li>D.Lgs. 152/2006 – Parte II</li>
+      <li>L.R. Toscana 10/2010 e s.m.i.</li>
+      <li>L.R. 65/2014</li>
+      <li>D.P.R. 357/1997 – VINCA</li>
+      <li>PIT/PPR Regione Toscana</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s3">
+  <h2 onclick="toggleSection(this)">3. Inquadramento del Piano</h2>
+  <div class="content">
+    <p>Il piano presenta carattere di limitata estensione territoriale e non introduce effetti ambientali significativi, risultando coerente con la pianificazione sovraordinata.</p>
+  </div>
+</section>
+
+<section id="s4">
+  <h2 onclick="toggleSection(this)">4. Analisi dei Criteri Ambientali</h2>
+  <div class="content">
+    <table>
+      <tr><th>Componente</th><th>Valutazione</th></tr>
+      <tr><td>Aria e clima</td><td>Impatti trascurabili</td></tr>
+      <tr><td>Suolo</td><td>Nessuna nuova impermeabilizzazione</td></tr>
+      <tr><td>Acque</td><td>Nessuna interferenza</td></tr>
+      <tr><td>Paesaggio</td><td>Coerenza PIT-PPR</td></tr>
+      <tr><td>Biodiversità</td><td>Nessuna incidenza</td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="s5">
+  <h2 onclick="toggleSection(this)">5. Valutazione di Incidenza (VINCA)</h2>
+  <div class="content">
+    <p>Non risultano interferenze con siti Natura 2000. Non è necessaria la procedura di VINCA.</p>
+  </div>
+</section>
+
+<section id="s6">
+  <h2 onclick="toggleSection(this)">6. Consultazioni Enti</h2>
+  <div class="content">
+    <table>
+      <tr><th>Ente</th><th>Esito</th><th>Termine</th></tr>
+      <tr><td>ARPAT</td><td>Parere favorevole</td><td>45 gg</td></tr>
+      <tr><td>Regione Toscana</td><td>Nessuna osservazione</td><td>45 gg</td></tr>
+      <tr><td>Autorità di Bacino</td><td>Compatibilità</td><td>45 gg</td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="s7">
+  <h2 onclick="toggleSection(this)">7. Motivazioni della Decisione</h2>
+  <div class="content">
+    <p>Non emergono impatti ambientali significativi tali da richiedere l’assoggettamento a VAS completa.</p>
+  </div>
+</section>
+
+<section id="s8">
+  <h2 onclick="toggleSection(this)">8. Prescrizioni e Monitoraggio</h2>
+  <div class="content">
+    <p>Rispetto della normativa ambientale vigente e monitoraggio in fase attuativa.</p>
+  </div>
+</section>
+
+<section id="s9">
+  <h2 onclick="toggleSection(this)">9. Conclusione</h2>
+  <div class="content">
+    <p>Il piano NON è assoggettato a VAS ai sensi della normativa vigente.</p>
+    <p><strong>Responsabile Settore VAS</strong><br>Nome e Cognome</p>
+  </div>
+</section>
+
+</main>
+</div>
+
+<div class="footer">
+  Comune Toscano – Settore Valutazione Ambientale Strategica
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const sections = document.querySelectorAll("main section");
+  const navLinks = document.querySelectorAll(".nav-link");
+
+  // Funzione per rimuovere la classe 'active' da tutti i link del menu
+  function removeActiveClass() {
+    navLinks.forEach(link => link.classList.remove("active"));
+  }
+
+  // Intercepta i click sui link del menu per gestire l'highlight e lo scroll
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault(); // Previeni il comportamento predefinito del link
+      const targetId = link.getAttribute('href');
+      const targetSection = document.querySelector(targetId);
+
+      if (targetSection) {
+        // Scrolla alla sezione target
+        window.scrollTo({
+          top: targetSection.offsetTop - (
+            document.querySelector('header') ? document.querySelector('header').offsetHeight : 0 /* Altezza header per offset */
+          ),
+          behavior: 'smooth'
+        });
+
+        // Aggiorna la classe 'active' immediatamente dopo il click
+        removeActiveClass();
+        link.classList.add("active");
+
+        // Aggiorna l'URL senza ricaricare la pagina
+        history.pushState(null, '', targetId);
+      }
+    });
+
+    // Se la pagina viene caricata con un hash nell'URL, attiva il link corrispondente
+    if (window.location.hash === link.getAttribute('href')) {
+        link.classList.add('active');
+    }
+  });
+
+
+  // Observer per aggiornare l'highlight durante lo scroll
+  const observer = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute("id");
+          const correspondingLink = document.querySelector(`.nav-link[href="#${id}"]`);
+
+          if (correspondingLink) {
+            removeActiveClass(); // Rimuovi da tutti prima di aggiungere
+            correspondingLink.classList.add("active");
+             // Aggiorna l'URL della barra degli indirizzi
+            history.replaceState(null, '', '#' + id);
+          }
+        }
+      });
+    },
+    {
+      // rootMargin modificato per un rilevamento più reattivo
+      // Rileva quando il 20% superiore della sezione entra nel viewport
+      // e il 80% inferiore esce
+      rootMargin: "-20% 0px -80% 0px",
+      threshold: 0
+    }
+  );
+
+  sections.forEach(section => observer.observe(section));
+
+  // Funzione per gestire lo stato attivo del link all'avvio su hash
+  if (window.location.hash) {
+      const initialTarget = document.querySelector(`.nav-link[href="${window.location.hash}"]`);
+      if (initialTarget) {
+          removeActiveClass();
+          initialTarget.classList.add('active');
+          // Scrolla alla sezione dopo che l'Observer ha avuto il tempo di inizializzare
+          setTimeout(() => {
+              window.scrollTo({
+                  top: document.querySelector(window.location.hash).offsetTop - (
+                      document.querySelector('header') ? document.querySelector('header').offsetHeight : 0
+                  ),
+                  behavior: 'smooth'
+              });
+          }, 100);
+      }
+  }
+
+});
+
+// funzioni già presenti
+function toggleSection(header) {
+  header.parentElement.classList.toggle("collapsed");
+}
+
+function toggleAll() {
+  document.querySelectorAll("section").forEach(sec => {
+    sec.classList.toggle("collapsed");
+  });
+}
+</script>
+</body>
+</html>

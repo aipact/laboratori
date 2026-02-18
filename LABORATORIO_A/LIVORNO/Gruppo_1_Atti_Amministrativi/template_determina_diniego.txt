@@ -1,0 +1,32 @@
+DETERMINAZIONE DIRIGENZIALE N. [Numero Determinazione] DEL [Data]
+
+OGGETTO: Diniego di Autorizzazione per esposizione pubblicitaria in centro storico (vincolo architettonico e ZTL) – Ditta [Ragione Sociale Esercente].
+
+IL DIRIGENTE DELL'AREA [Nome Area, es. "Tecnica/Urbanistica"] (con i poteri di cui all'art. 107 del D.Lgs. 18 agosto 2000, n. 267)
+
+PREMESSO CHE:
+
+    In data [Data Istanza], la Ditta [Ragione Sociale Esercente], con sede in [Indirizzo Sede Legale], Via [Via], n. [Civico], Partita IVA [P.IVA], C.F. [C.F.], esercente attività commerciale di [Tipo Attività] presso l'immobile sito in [Indirizzo Intervento, es. Via Roma, n. 10], ha presentato istanza acquisita al Protocollo Comunale con n. [Numero Protocollo], per la concessione di autorizzazione all'installazione di una esposizione pubblicitaria di dimensioni superiori a 5 mq nel centro storico, sottoposto a vincolo architettonico e ricadente in zona a traffico limitato (ZTL).
+    L'esposizione pubblicitaria oggetto della richiesta consiste in [Breve descrizione della tipologia: es. "una insegna a bandiera/targhetta luminosa/vetrina espositiva"] delle dimensioni di cm [Lunghezza] x cm [Altezza], per una superficie complessiva di [Superficie in mq preciso] mq, da installare sulla facciata/all'interno della vetrina/su apposita struttura [specificare la collocazione] dell'edificio sito in [Indirizzo Intervento].
+
+RICHIAMATI: ([Elenco normativo come sopra])
+
+ACQUISITI I SEGUENTI PARERI OBBLIGATORI:
+
+    Parere negativo della Soprintendenza Archeologia, Belle Arti e Paesaggio per la Provincia di [Nome Provincia] / Ufficio Tutela Beni Culturali, prot. n. [Numero Protocollo] del [Data Parere], il quale, esaminato il progetto, ha espresso giudizio sfavorevole e vincolante all'installazione, in quanto [specificare la motivazione del diniego, es: "l'impianto pubblicitario proposto, per le sue dimensioni eccessive e la scelta di materiali stridenti, altererebbe in modo significativo la percezione e l'integrità del bene vincolato e del contesto storico di pregio, in contrasto con le finalità di tutela stabilite dal D.Lgs. 42/2004"].
+        [Potrebbero seguire gli esiti degli altri pareri, anche se positivi, ma quello negativo vincolante è sufficiente per il diniego]
+
+CONSIDERATO CHE:
+
+    Il parere della Soprintendenza Archeologia, Belle Arti e Paesaggio è vincolante ed insuperabile, ai sensi del D.Lgs. 42/2004 e ss.mm.ii.
+    La valutazione negativa da parte dell'organo preposto alla tutela dei beni culturali e del paesaggio preclude il rilascio dell'autorizzazione richiesta.
+
+DETERMINA
+
+Per le motivazioni in premessa esposte e a seguito del parere negativo vincolante espresso dalla Soprintendenza competente:
+
+    Di non accogliere l'istanza presentata dalla Ditta [Ragione Sociale Esercente], C.F. [C.F.], P.IVA [P.IVA], con sede in [Indirizzo Sede Legale], prot. n. [Numero Protocollo Istanza], per il rilascio dell'autorizzazione all'installazione di esposizione pubblicitaria in Via [Indirizzo Intervento].
+
+    Il presente provvedimento è impugnabile, entro 60 giorni dalla notifica, avanti al Tribunale Amministrativo Regionale di [Nome TAR], oppure, in via alternativa, con ricorso straordinario al Presidente della Repubblica entro 120 giorni dalla notifica.
+
+IL DIRIGENTE

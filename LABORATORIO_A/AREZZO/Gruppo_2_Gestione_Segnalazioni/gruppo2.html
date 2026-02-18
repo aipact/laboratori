@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisi Processo: Gestione Segnalazioni Cittadino</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --bg: #f4f7f6;
+            --card-bg: #ffffff;
+            --text: #333;
+            --border: #e0e0e0;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #c0392b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--bg);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 { margin: 0; font-size: 1.8rem; }
+        .subtitle { opacity: 0.8; font-size: 0.9rem; margin-top: 5px; }
+        .badge { background: var(--accent); padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+        }
+
+        h2 { border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-top: 0; color: var(--primary); }
+        h3 { color: var(--primary); margin-top: 20px; }
+
+        /* Requirements List */
+        .req-list { list-style: none; padding: 0; }
+        .req-item { 
+            background: #fafafa; 
+            border-left: 4px solid var(--accent); 
+            margin-bottom: 10px; 
+            padding: 15px; 
+            border-radius: 0 4px 4px 0;
+        }
+        .req-id { font-weight: bold; color: var(--accent); margin-right: 10px; }
+        .req-title { font-weight: bold; display: block; margin-bottom: 5px;}
+
+        /* Mockup Section */
+        .mockup-container {
+            border: 2px solid #333;
+            border-radius: 5px;
+            background: #eee;
+            padding: 10px;
+            font-family: sans-serif;
+        }
+        .mockup-header { background: #333; color: white; padding: 10px; display: flex; justify-content: space-between; }
+        .mockup-body { display: flex; gap: 15px; margin-top: 15px; height: 400px; }
+        .panel { flex: 1; background: white; padding: 15px; border-radius: 4px; border: 1px solid #ccc; overflow-y: auto; }
+        .panel-title { font-weight: bold; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px; color: #555; text-transform: uppercase; font-size: 0.8rem; }
+        
+        .chat-bubble { background: #e1f5fe; padding: 10px; border-radius: 10px; margin-bottom: 10px; font-size: 0.9rem; }
+        .internal-note { background: #fff3cd; padding: 10px; border-radius: 4px; margin-bottom: 10px; border-left: 3px solid var(--warning); font-size: 0.85rem; }
+        
+        .ai-draft-area { 
+            width: 100%; height: 200px; border: 1px solid #ccc; padding: 10px; font-family: inherit; resize: none; background: #f9f9f9;
+        }
+        
+        .alert-box {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            border: 1px solid #f5c6cb;
+            display: none; /* Hidden by default */
+        }
+
+        .btn-group { margin-top: 15px; display: flex; gap: 10px; }
+        .btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-primary { background: var(--success); color: white; }
+        .btn-secondary { background: #95a5a6; color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+
+        .controls { margin-top: 20px; text-align: center; }
+        
+        /* Print Styles */
+        @media print {
+            body { background: white; }
+            .card { box-shadow: none; border: 1px solid #ccc; }
+            button { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <div>
+            <h1>Analisi Processo Segnalazioni</h1>
+            <div class="subtitle">Ingestion Multicanale | Smistamento AI | Sintesi e Review</div>
+        </div>
+        <span class="badge">STATO: BOZZA ANALISI</span>
+    </div>
+</header>
+
+<div class="container">
+
+    <section class="card">
+        <h2>1. Sintesi Esecutiva</h2>
+        <p>L'obiettivo è automatizzare la gestione delle segnalazioni cittadine (Email, WhatsApp, Web) riducendo il carico di smistamento e sintesi, mantenendo però una rigorosa validazione umana finale.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+            <div style="border-left: 4px solid var(--accent); padding-left: 15px;">
+                <strong>Input Multicanale</strong><br>
+                Normalizzazione di testi liberi e strutturati in un unico "Ticket Standard".
+            </div>
+            <div style="border-left: 4px solid var(--success); padding-left: 15px;">
+                <strong>Matrice di Competenza</strong><br>
+                Routing automatico basato su una mappa Ufficio/Problema predefinita.
+            </div>
+            <div style="border-left: 4px solid var(--warning); padding-left: 15px;">
+                <strong>Human-in-the-loop</strong><br>
+                L'AI propone e controlla, l'operatore umano valida legalmente la risposta.
+            </div>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>2. Flusso Logico (To-Be)</h2>
+        <p>Il seguente diagramma illustra l'architettura del processo, dall'ingestion alla risposta finale.</p>
+        <div class="mermaid">
+            graph TD
+            subgraph "1. INPUT & NORMALIZZAZIONE"
+                A[Email] --> D{Normalizzatore AI}
+                B[WhatsApp] --> D
+                C[Portale Web] --> D
+                D --> E[Ticket Unico]
+            end
+        
+            subgraph "2. SMISTAMENTO"
+                E --> F{AI Classifier}
+                F -- Analisi Semantica --> G[Matrice Competenze]
+                G --> H[Assegnazione Ufficio]
+            end
+        
+            subgraph "3. LAVORAZIONE"
+                H --> I[Ufficio A]
+                H --> J[Ufficio B]
+                I -- Note Tecniche --> K[Backend]
+                J -- Note Tecniche --> K
+            end
+        
+            subgraph "4. OUTPUT (Human Loop)"
+                K --> M{AI Composer}
+                M -- Check Logico --> N{Contraddizioni?}
+                N -- SI --> O[ALERT OPERATORE]
+                N -- NO --> P[Bozza Risposta]
+                O --> Q[Dashboard Operatore]
+                P --> Q
+                Q -- VALIDAZIONE --> R((Invio Cittadino))
+            end
+            
+            style O fill:#f39c12,stroke:#333,stroke-width:2px
+            style Q fill:#27ae60,color:white,stroke:#333,stroke-width:2px
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>3. Mockup Interfaccia Operatore (Fase 4)</h2>
+        <p>Ecco come l'operatore visualizzerà la dashboard di chiusura pratica. Prova a simulare uno scenario di conflitto.</p>
+        
+        <div class="controls">
+            <button class="btn btn-secondary" onclick="loadScenario('normal')">Carica Scenario Normale</button>
+            <button class="btn btn-danger" onclick="loadScenario('conflict')">Carica Scenario Conflitto</button>
+        </div>
+        <br>
+
+        <div class="mockup-container">
+            <div class="mockup-header">
+                <span>Ticket #4029 - Buca Via Roma</span>
+                <span>Stato: <strong>In attesa di Review</strong></span>
+            </div>
+            <div class="mockup-body">
+                <div class="panel" style="background: #fdfdfd;">
+                    <div class="panel-title">Input Originale & Risposte Uffici</div>
+                    <div class="chat-bubble">
+                        <strong>Cittadino (WhatsApp):</strong> "C'è una voragine in Via Roma davanti al civico 10, è pericolosa!"
+                    </div>
+                    <hr>
+                    <div id="office-responses">
+                        </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-title">Bozza Risposta AI & Validazione</div>
+                    
+                    <div id="conflict-alert" class="alert-box">
+                        <strong>⚠️ CONTRADDIZIONE RILEVATA</strong><br>
+                        L'Ufficio Manutenzioni indica lavori immediati, la Polizia indica strada chiusa/evento. Verificare tempistiche.
+                    </div>
+
+                    <label style="font-size: 0.8rem; color: #666;">Bozza modificabile:</label>
+                    <textarea id="ai-response-text" class="ai-draft-area"></textarea>
+                    
+                    <div class="btn-group">
+                        <button class="btn btn-primary">Approva e Invia</button>
+                        <button class="btn btn-secondary">Rimanda agli Uffici</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>4. Requisiti Funzionali Principali (Estratto)</h2>
+        <ul class="req-list">
+            <li class="req-item">
+                <span class="req-title"><span class="req-id">FR-002</span>AI Entity Extraction</span>
+                Il sistema deve estrarre *Chi, Dove, Cosa* da testo libero (email/chat) e chiedere automaticamente i dati mancanti al cittadino.
+            </li>
+            <li class="req-item">
+                <span class="req-title"><span class="req-id">FR-012</span>AI Logic Check (Anti-Contraddizione)</span>
+                Prima di generare la bozza, l'AI confronta le risposte interne. Se l'Ufficio A dice "Bianco" e il B dice "Nero", il sistema blocca l'automazione e allerta l'uomo.
+            </li>
+            <li class="req-item">
+                <span class="req-title"><span class="req-id">FR-014</span>Dashboard Split-Screen</span>
+                L'operatore non deve fare copia-incolla. Deve vedere a sinistra i dati grezzi e a destra la proposta finita, agendo solo come validatore.
+            </li>
+        </ul>
+    </section>
+
+</div>
+
+<script>
+    // Inizializzazione Mermaid
+    mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+
+    // Logica del Mockup
+    function loadScenario(type) {
+        const responsesDiv = document.getElementById('office-responses');
+        const alertBox = document.getElementById('conflict-alert');
+        const textArea = document.getElementById('ai-response-text');
+
+        if (type === 'normal') {
+            responsesDiv.innerHTML = `
+                <div class="internal-note">
+                    <strong>Uff. Manutenzione:</strong> "Squadra inviata, buca coperta provvisoriamente. Asfalto definitivo lunedì."
+                </div>
+                <div class="internal-note">
+                    <strong>Polizia Locale:</strong> "Nessun problema viabilità segnalato."
+                </div>
+            `;
+            alertBox.style.display = 'none';
+            textArea.value = "Gentile Cittadino, la informiamo che la sua segnalazione è stata presa in carico. L'Ufficio Manutenzione è intervenuto per una messa in sicurezza provvisoria; l'asfaltatura definitiva è programmata per il prossimo lunedì. Cordiali saluti, Il Comune.";
+        } else if (type === 'conflict') {
+            responsesDiv.innerHTML = `
+                <div class="internal-note">
+                    <strong>Uff. Manutenzione:</strong> "Interverremo Lunedì mattina con i mezzi pesanti per asfaltare."
+                </div>
+                <div class="internal-note" style="border-left-color: var(--danger);">
+                    <strong>Polizia Locale:</strong> "Attenzione: Via Roma è sotto sequestro/chiusa per fiera patronale fino a Mercoledì. Divieto transito mezzi pesanti."
+                </div>
+            `;
+            alertBox.style.display = 'block';
+            textArea.value = "ATTENZIONE: BOZZA GENERATA CON CONFLITTI.\n\nGentile Cittadino, abbiamo ricevuto la segnalazione. I lavori sono previsti, tuttavia potrebbero subire ritardi a causa delle restrizioni di traffico attualmente vigenti su Via Roma per la fiera patronale. Vi aggiorneremo al termine dell'evento.";
+        }
+    }
+
+    // Carica scenario default
+    window.onload = function() {
+        loadScenario('normal');
+    };
+</script>
+
+</body>
+</html>

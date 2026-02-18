@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estrattore HTML da Chat</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+        }
+        .subtitle {
+            color: rgba(255,255,255,0.8);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .drop-zone {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            text-align: center;
+            border: 3px dashed #ccc;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .drop-zone:hover, .drop-zone.dragover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        .drop-zone.dragover {
+            transform: scale(1.02);
+        }
+        .drop-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        .drop-text {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        .drop-hint {
+            color: #999;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        .alert {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            color: #856404;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+        .alert.error {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        .alert.visible { display: block; }
+        .results {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 2rem;
+            display: none;
+        }
+        .results.visible { display: block; }
+        .results h2 {
+            color: #333;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .file-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .file-info {
+            flex: 1;
+        }
+        .file-name {
+            font-weight: 600;
+            color: #333;
+        }
+        .file-size {
+            color: #666;
+            font-size: 0.85rem;
+        }
+        .file-type {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+        .file-type.html { background: #e3f2fd; color: #1565c0; }
+        .file-type.template { background: #fff3e0; color: #e65100; }
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        .btn-primary:hover { background: #5a6fd6; }
+        .btn-secondary {
+            background: #e9ecef;
+            color: #495057;
+            margin-right: 0.5rem;
+        }
+        .btn-secondary:hover { background: #dee2e6; }
+        .preview-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            padding: 2rem;
+        }
+        .preview-modal.visible { display: flex; }
+        .preview-content {
+            background: white;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 1000px;
+            margin: auto;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .preview-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .preview-body {
+            flex: 1;
+            overflow: auto;
+            padding: 1rem;
+        }
+        .preview-body iframe {
+            width: 100%;
+            height: 500px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+        .stats {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .stat-card {
+            flex: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-value { font-size: 2rem; font-weight: bold; }
+        .stat-label { font-size: 0.85rem; opacity: 0.9; }
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+        .download-all {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Estrattore HTML da Chat</h1>
+        <p class="subtitle">Trascina file .md, .txt o .odt per estrarre documenti HTML</p>
+
+        <div class="drop-zone" id="dropZone">
+            <div class="drop-icon">📄</div>
+            <div class="drop-text">Trascina qui i file o clicca per selezionare</div>
+            <div class="drop-hint">Supporta .md, .txt, .odt (max 2MB per file)</div>
+            <input type="file" id="fileInput" multiple accept=".md,.txt,.odt" style="display:none">
+        </div>
+
+        <div class="alert" id="alertBox"></div>
+
+        <div class="results" id="results">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="statTotal">0</div>
+                    <div class="stat-label">File Analizzati</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statExtracted">0</div>
+                    <div class="stat-label">HTML Estratti</div>
+                </div>
+            </div>
+
+            <h2>Documenti Estratti</h2>
+            <div id="fileList"></div>
+
+            <div class="download-all" id="downloadAll" style="display:none">
+                <button class="btn btn-primary" onclick="downloadAllAsZip()">
+                    Scarica Tutti (.zip)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="preview-modal" id="previewModal">
+        <div class="preview-content">
+            <div class="preview-header">
+                <strong id="previewTitle">Anteprima</strong>
+                <button class="close-btn" onclick="closePreview()">&times;</button>
+            </div>
+            <div class="preview-body">
+                <!-- iframe con sandbox per sicurezza XSS -->
+                <iframe id="previewFrame" sandbox="allow-same-origin"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script>
+        // Configurazione
+        const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+        const MAX_CONTENT_LENGTH = 500000; // 500KB per regex processing
+
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const results = document.getElementById('results');
+        const fileList = document.getElementById('fileList');
+        const alertBox = document.getElementById('alertBox');
+
+        let extractedFiles = [];
+        let jsZipAvailable = typeof window.JSZip !== 'undefined';
+
+        // Verifica JSZip al caricamento
+        window.addEventListener('load', () => {
+            if (!jsZipAvailable) {
+                // Retry dopo un momento (CDN potrebbe essere lento)
+                setTimeout(() => {
+                    jsZipAvailable = typeof window.JSZip !== 'undefined';
+                    if (!jsZipAvailable) {
+                        showAlert('Attenzione: libreria JSZip non caricata. Estrazione ODT e download ZIP non disponibili (richiede connessione internet).', 'warning');
+                    }
+                }, 2000);
+            }
+        });
+
+        function showAlert(message, type = 'warning') {
+            alertBox.textContent = message;
+            alertBox.className = 'alert visible' + (type === 'error' ? ' error' : '');
+        }
+
+        function hideAlert() {
+            alertBox.className = 'alert';
+        }
+
+        // Drag & Drop handlers
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        async function handleFiles(files) {
+            hideAlert();
+            extractedFiles = [];
+            let totalFiles = 0;
+            let skippedFiles = [];
+
+            for (const file of files) {
+                // Validazione dimensione file
+                if (file.size > MAX_FILE_SIZE) {
+                    skippedFiles.push(`${file.name} (troppo grande: ${formatSize(file.size)})`);
+                    continue;
+                }
+
+                totalFiles++;
+                let content = '';
+
+                try {
+                    if (file.name.endsWith('.odt')) {
+                        content = await extractODTContent(file);
+                    } else {
+                        content = await file.text();
+                    }
+
+                    // Limita contenuto per evitare problemi regex
+                    if (content.length > MAX_CONTENT_LENGTH) {
+                        content = content.substring(0, MAX_CONTENT_LENGTH);
+                        console.warn(`File ${file.name} troncato per elaborazione`);
+                    }
+
+                    const extracted = extractHTML(content, file.name);
+                    extractedFiles.push(...extracted);
+                } catch (error) {
+                    console.error(`Errore elaborazione ${file.name}:`, error);
+                    skippedFiles.push(`${file.name} (errore: ${error.message})`);
+                }
+            }
+
+            if (skippedFiles.length > 0) {
+                showAlert(`File saltati: ${skippedFiles.join(', ')}`, 'warning');
+            }
+
+            displayResults(totalFiles);
+        }
+
+        async function extractODTContent(file) {
+            // Verifica disponibilità JSZip
+            if (!window.JSZip) {
+                throw new Error('JSZip non disponibile - serve connessione internet');
+            }
+
+            try {
+                const zip = await window.JSZip.loadAsync(file);
+                const contentFile = zip.file('content.xml');
+
+                if (!contentFile) {
+                    throw new Error('File ODT non valido (content.xml mancante)');
+                }
+
+                const contentXml = await contentFile.async('string');
+
+                // Parse XML and extract text
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(contentXml, 'text/xml');
+
+                // Check for parse errors
+                const parseError = doc.querySelector('parsererror');
+                if (parseError) {
+                    throw new Error('Errore parsing XML');
+                }
+
+                // Get all text content
+                let text = '';
+                const walker = document.createTreeWalker(
+                    doc.documentElement,
+                    NodeFilter.SHOW_TEXT,
+                    null,
+                    false
+                );
+                while (walker.nextNode()) {
+                    text += walker.currentNode.textContent + '\n';
+                }
+                return text;
+            } catch (error) {
+                throw new Error(`Estrazione ODT fallita: ${error.message}`);
+            }
+        }
+
+        function extractHTML(content, sourceFile) {
+            const results = [];
+
+            // Pattern 1: Complete HTML documents (<!DOCTYPE or <html)
+            // Uso pattern non-greedy con limite ragionevole
+            const htmlDocPattern = /(<!DOCTYPE html>[\s\S]{0,200000}?<\/html>|<html[\s\S]{0,200000}?<\/html>)/gi;
+            let match;
+            let docCount = 0;
+
+            while ((match = htmlDocPattern.exec(content)) !== null) {
+                docCount++;
+                const html = match[1];
+                const title = extractTitle(html) || `documento_${docCount}`;
+                results.push({
+                    name: `${sanitizeFilename(title)}.html`,
+                    content: html,
+                    type: 'html',
+                    source: sourceFile
+                });
+
+                // Limita numero di match per evitare loop infiniti
+                if (docCount >= 10) break;
+            }
+
+            // Pattern 2: Significant HTML blocks (with style or script)
+            if (docCount === 0) {
+                // Pattern con limite esplicito per evitare catastrophic backtracking
+                const blockPattern = /(<(?:div|section|article|main)[^>]*>[\s\S]{500,50000}?<\/(?:div|section|article|main)>)/gi;
+                let blockCount = 0;
+
+                while ((match = blockPattern.exec(content)) !== null) {
+                    blockCount++;
+                    const html = match[1];
+                    const wrappedHtml = `<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estratto ${blockCount}</title>
+</head>
+<body>
+${html}
+</body>
+</html>`;
+                    results.push({
+                        name: `estratto_${blockCount}.html`,
+                        content: wrappedHtml,
+                        type: 'html',
+                        source: sourceFile
+                    });
+
+                    if (blockCount >= 5) break;
+                }
+            }
+
+            // Pattern 3: Administrative templates (con limiti)
+            const templatePatterns = [
+                { regex: /(DETERMINAZIONE\s+(?:DIRIGENZIALE|N\.)[\s\S]{200,10000}?)(?=\n\n\n|\n---|\n===|$)/gi, prefix: 'template_determina' },
+                { regex: /(DELIBERA(?:ZIONE)?\s+(?:DI\s+)?(?:GIUNTA|CONSIGLIO)[\s\S]{200,10000}?)(?=\n\n\n|\n---|\n===|$)/gi, prefix: 'template_delibera' },
+                { regex: /(PARERE[\s\S]{100,5000}?(?:FAVOREVOLE|SFAVOREVOLE|CONDIZIONATO)[\s\S]{50,2000}?)(?=\n\n\n|\n---|\n===|$)/gi, prefix: 'template_parere' }
+            ];
+
+            for (const pattern of templatePatterns) {
+                let templateCount = 0;
+                while ((match = pattern.regex.exec(content)) !== null) {
+                    templateCount++;
+                    results.push({
+                        name: `${pattern.prefix}_${templateCount}.txt`,
+                        content: match[1].trim(),
+                        type: 'template',
+                        source: sourceFile
+                    });
+
+                    if (templateCount >= 5) break;
+                }
+            }
+
+            return results;
+        }
+
+        function extractTitle(html) {
+            const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
+            if (titleMatch) return titleMatch[1].trim();
+
+            const h1Match = html.match(/<h1[^>]*>([^<]+)<\/h1>/i);
+            if (h1Match) return h1Match[1].trim();
+
+            return null;
+        }
+
+        function sanitizeFilename(name) {
+            return name
+                .toLowerCase()
+                .replace(/[^a-z0-9àèéìòù]+/gi, '_')
+                .replace(/^_+|_+$/g, '')
+                .substring(0, 50);
+        }
+
+        function displayResults(totalFiles) {
+            document.getElementById('statTotal').textContent = totalFiles;
+            document.getElementById('statExtracted').textContent = extractedFiles.length;
+
+            if (extractedFiles.length === 0) {
+                fileList.innerHTML = '<div class="no-results">Nessun documento HTML trovato nei file caricati.</div>';
+                document.getElementById('downloadAll').style.display = 'none';
+            } else {
+                fileList.innerHTML = extractedFiles.map((file, index) => `
+                    <div class="file-card">
+                        <div class="file-info">
+                            <span class="file-name">${escapeHtml(file.name)}</span>
+                            <span class="file-type ${file.type}">${file.type.toUpperCase()}</span>
+                            <div class="file-size">Da: ${escapeHtml(file.source)} - ${formatSize(file.content.length)}</div>
+                        </div>
+                        <div>
+                            ${file.type === 'html' ? `<button class="btn btn-secondary" onclick="previewFile(${index})">Anteprima</button>` : ''}
+                            <button class="btn btn-primary" onclick="downloadFile(${index})">Scarica</button>
+                        </div>
+                    </div>
+                `).join('');
+                document.getElementById('downloadAll').style.display = window.JSZip ? 'block' : 'none';
+            }
+
+            results.classList.add('visible');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+
+        function previewFile(index) {
+            const file = extractedFiles[index];
+            document.getElementById('previewTitle').textContent = file.name;
+            const iframe = document.getElementById('previewFrame');
+            // iframe ha sandbox="allow-same-origin" - blocca script ma permette rendering
+            iframe.srcdoc = file.content;
+            document.getElementById('previewModal').classList.add('visible');
+        }
+
+        function closePreview() {
+            document.getElementById('previewModal').classList.remove('visible');
+            // Pulisci iframe
+            document.getElementById('previewFrame').srcdoc = '';
+        }
+
+        function downloadFile(index) {
+            const file = extractedFiles[index];
+            const mimeType = file.type === 'html' ? 'text/html' : 'text/plain';
+            const blob = new Blob([file.content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = file.name;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        async function downloadAllAsZip() {
+            if (!window.JSZip) {
+                showAlert('Download ZIP non disponibile (JSZip non caricato)', 'error');
+                return;
+            }
+
+            try {
+                const zip = new window.JSZip();
+
+                extractedFiles.forEach(file => {
+                    zip.file(file.name, file.content);
+                });
+
+                const blob = await zip.generateAsync({ type: 'blob' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'html_estratti.zip';
+                a.click();
+                URL.revokeObjectURL(url);
+            } catch (error) {
+                showAlert(`Errore creazione ZIP: ${error.message}`, 'error');
+            }
+        }
+
+        // Close modal on escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closePreview();
+        });
+
+        // Close modal on backdrop click
+        document.getElementById('previewModal').addEventListener('click', (e) => {
+            if (e.target.id === 'previewModal') closePreview();
+        });
+    </script>
+</body>
+</html>

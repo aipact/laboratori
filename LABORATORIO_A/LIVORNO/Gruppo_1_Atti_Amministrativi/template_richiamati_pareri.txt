@@ -1,0 +1,50 @@
+[INTESTAZIONE COMUNE]
+
+CITTÀ DI [Nome Comune] UFFICIO CONCESSIONI
+
+DETERMINAZIONE DIRIGENZIALE N. [Numero Determinazione] DEL [Data]
+
+OGGETTO: Autorizzazione per esposizione pubblicitaria in centro storico (vincolo architettonico e ZTL) – Ditta [Ragione Sociale Esercente] – Art. 21 Regolamento Comunale per l'applicazione del Canone Unico Patrimoniale.
+
+IL DIRIGENTE DELL'AREA [Nome Area, es. "Tecnica/Urbanistica"] (con i poteri di cui all'art. 107 del D.Lgs. 18 agosto 2000, n. 267)
+
+PREMESSO CHE:
+
+    ... (resta invariato)
+
+RICHIAMATI:
+
+    ... (resta invariato, ma aggiungerei esplicitamente la Legge 160/2019)
+    La Legge 27 dicembre 2019, n. 160, art. 1, commi da 816 a 836 e ss.mm.ii., istitutiva del Canone Unico Patrimoniale;
+    Il Regolamento Comunale per l'applicazione del Canone Unico Patrimoniale di cui alla Legge n. 160/2019, così come modificato dalla Legge n. 160/2019, approvato con Delibera C.C. n. [Numero Delibera] del [Data Delibera];
+    ... (resto invariato)
+
+ACQUISITI I SEGUENTI PARERI OBBLIGATORI:
+
+    Parere favorevole dell'Ufficio Urbanistica / Edilizia Privata, prot. n. [Numero Protocollo] del [Data Parere], attestante la conformità dell'impianto pubblicitario alle norme urbanistiche e edilizie vigenti e ai regolamenti comunali, con specifica prescrizione circa [eventuale prescrizione, es: "l'utilizzo di materiali opachi e non riflettenti"] che l'istante si è impegnato ad osservare.
+    Parere favorevole dalla Soprintendenza Archeologia, Belle Arti e Paesaggio per la Provincia di [Nome Provincia] / Ufficio Tutela Beni Culturali, prot. n. [Numero Protocollo] del [Data Parere], che, valutato il progetto in relazione al vincolo architettonico gravante sull'edificio e la collocazione in zona di pregio ambientale, ha espresso nulla osta all'installazione, condizionato alla prescrizione di [eventuale prescrizione, es: "un sistema di illuminazione a basso impatto visivo e luce calda, direzionata unicamente sull'insegna, senza dispersione di flusso luminoso verso l'alto o verso l'esterno dell'area occupata dal manufatto"].
+    Parere favorevole dall'Ufficio Traffico / Comando di Polizia Locale, prot. n. [Numero Protocollo] del [Data Parere], il quale ha verificato che l'installazione non comporta intralcio alla circolazione stradale o pedonale, né pericoli per la pubblica incolumità, e risulta compatibile con la disciplina della ZTL.
+    Parere dell'Ufficio Tributi / Servizio Entrate, prot. n. [Numero Protocollo] del [Data Parere], attestante il calcolo del Canone Unico Patrimoniale dovuto, che comprende sia la componente relativa all'occupazione di suolo pubblico che quella relativa all'esposizione pubblicitaria, per [Superficie in mq] mq per l'anno [Anno] pari a Euro [Importo in cifre] (Euro [Importo in lettere]/00), con indicazione delle modalità di versamento.
+    Parere favorevole dell'Ufficio Patrimonio / Demanio, prot. n. [Numero Protocollo] del [Data Parere], che ha accertato la disponibilità dell'area di installazione e la compatibilità dell'opera con la gestione del bene comunale.
+
+CONSIDERATO ANCHE CHE:
+
+    ... (resta invariato)
+    L'istante ha provveduto al versamento del Canone Unico Patrimoniale, come da ricevuta/attestazione prot. n. [Numero Protocollo Ricevuta Pagamento] del [Data Pagamento].
+
+DETERMINA Per le motivazioni in premessa esposte e a seguito dei pareri favorevoli espressi da tutti gli uffici competenti:
+
+    Di concedere alla Ditta [Ragione Sociale Esercente], C.F. [C.F.], P.IVA [P.IVA], con sede in [Indirizzo Sede Legale], l'Autorizzazione per l'installazione e la gestione di una esposizione pubblicitaria avente le caratteristiche descritte in premessa, da collocarsi presso l'immobile sito in [Indirizzo Intervento, es. Via Roma, n. 10].
+
+    L'autorizzazione è rilasciata con le seguenti prescrizioni vincolanti, il cui mancato rispetto comporterà la revoca del presente atto e l'applicazione delle sanzioni previste dalla normativa vigente:
+        ... (resta invariato)
+
+    L'efficacia del presente atto è subordinata al mantenimento del versamento annuale del Canone Unico Patrimoniale, la cui scadenza è fissata al [Giorno] [Mese] di ogni anno, nelle modalità indicate dall'Ufficio Tributi. Il mancato o ritardato pagamento comporterà l'applicazione delle sanzioni previste dal Regolamento Comunale sul Canone Unico Patrimoniale.
+
+    La presente autorizzazione ha validità fino al [Data, es. "rimanere valida finché sussistono le condizioni di fatto e di diritto, fatti salvi eventuali aggiornamenti normativi o modifiche al contesto urbanistico/paesaggistico" oppure "una durata di anni X, rinnovabile previa richiesta e nuova istruttoria"].
+
+    Il soggetto autorizzato è responsabile di eventuali danni a terzi o al patrimonio pubblico derivanti dall'installazione o dalla manutenzione dell'esposizione.
+
+    Copia della presente Determinazione sarà trasmessa alla Polizia Locale per i controlli di competenza e all'Ufficio Tributi.
+
+IL DIRIGENTE DELL'AREA [Nome Area] [Firma

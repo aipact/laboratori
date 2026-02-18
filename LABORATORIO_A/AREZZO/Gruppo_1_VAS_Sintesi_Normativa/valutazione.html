@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valutazione - Gruppo 1 VAS Sintesi Normativa | AI-PACT</title>
+    <style>
+        :root { --primary: #1a3a5c; --primary-light: #2c5f8a; --accent: #e67e22; --success: #27ae60; --warning: #f39c12; --danger: #e74c3c; --bg: #f0f4f8; --card-bg: #ffffff; --text: #2c3e50; --text-light: #7f8c8d; --border: #e1e8ed; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.7; color: var(--text); background: var(--bg); }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+        header { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; padding: 2.5rem 0; margin-bottom: 2rem; }
+        header h1 { font-size: 1.8rem; font-weight: 700; }
+        header .subtitle { opacity: 0.85; font-size: 1rem; margin-top: 0.3rem; }
+        .header-meta { display: flex; gap: 1rem; margin-top: 0.8rem; flex-wrap: wrap; }
+        .header-badge { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 8px; font-size: 0.85rem; }
+        .card { background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); padding: 30px; margin-bottom: 25px; border: 1px solid var(--border); }
+        .card h2 { font-size: 1.3rem; font-weight: 600; color: var(--primary); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border); }
+        .total-score { text-align: center; padding: 2rem; }
+        .total-score .score-value { font-size: 4rem; font-weight: 800; line-height: 1; }
+        .total-score .score-label { font-size: 1rem; color: var(--text-light); margin-top: 0.5rem; }
+        .score-high-text { color: var(--success); }
+        .score-mid-text { color: var(--warning); }
+        .score-low-text { color: var(--danger); }
+        table { width: 100%; border-collapse: collapse; }
+        thead th { background: var(--primary); color: white; padding: 12px 15px; text-align: left; font-weight: 600; }
+        tbody td { padding: 12px 15px; border-bottom: 1px solid var(--border); }
+        tbody tr:nth-child(even) { background: #f8fafc; }
+        .total-row { font-weight: 700; background: #edf2f7 !important; }
+        .score-bar { background: #e8ecf1; border-radius: 10px; height: 24px; position: relative; overflow: hidden; min-width: 100px; }
+        .score-bar-fill { height: 100%; border-radius: 10px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; }
+        .score-bar-fill span { font-size: 0.75rem; font-weight: 700; color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+        .score-high { background: linear-gradient(90deg, #2ecc71, #27ae60); }
+        .score-mid { background: linear-gradient(90deg, #f39c12, #e67e22); }
+        .score-low { background: linear-gradient(90deg, #e74c3c, #c0392b); }
+        .point-list { list-style: none; padding: 0; }
+        .point-list li { padding: 10px 15px; margin-bottom: 8px; border-radius: 8px; border-left: 4px solid; background: #f8fafc; }
+        .strengths li { border-left-color: var(--success); }
+        .improvements li { border-left-color: var(--danger); }
+        .suggestions li { border-left-color: var(--accent); }
+        footer { background: var(--primary); color: white; text-align: center; padding: 1.5rem; margin-top: 2rem; font-size: 0.9rem; opacity: 0.9; }
+        @media (max-width: 768px) { header h1 { font-size: 1.4rem; } .card { padding: 20px; } .total-score .score-value { font-size: 3rem; } body { font-size: 0.9rem; } .table-wrap { overflow-x: auto; } }
+        @media print { body { background: white; } .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; } header { -webkit-print-color-adjust: exact; print-color-adjust: exact; } footer { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Valutazione Progetto: VAS Sintesi Normativa</h1>
+            <p class="subtitle">Gruppo 1 - Sintesi normativa e gestione scadenziari procedurali</p>
+            <div class="header-meta">
+                <span class="header-badge">Arezzo</span>
+                <span class="header-badge">Lab: Laboratorio A</span>
+                <span class="header-badge">Valutazione: 17 febbraio 2026</span>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <div class="card">
+            <div class="total-score">
+                <div class="score-value score-mid-text">7.1</div>
+                <div class="score-label">Punteggio Totale / 10</div>
+            </div>
+        </div>
+        <div class="card">
+            <h2>Dettaglio Criteri di Valutazione</h2>
+            <div class="table-wrap"><table><thead><tr><th>Criterio</th><th>Peso</th><th>Voto</th><th>Barra</th></tr></thead><tbody>
+                <tr><td>Completezza dell'analisi</td><td>20%</td><td>7.0</td><td><div class="score-bar"><div class="score-bar-fill score-mid" style="width: 70%;"><span>7.0</span></div></div></td></tr>
+                <tr><td>Qualit&agrave; della soluzione</td><td>20%</td><td>7.5</td><td><div class="score-bar"><div class="score-bar-fill score-mid" style="width: 75%;"><span>7.5</span></div></div></td></tr>
+                <tr><td>Innovativit&agrave; e uso dell'IA</td><td>20%</td><td>6.5</td><td><div class="score-bar"><div class="score-bar-fill score-mid" style="width: 65%;"><span>6.5</span></div></div></td></tr>
+                <tr><td>Presentabilit&agrave; del report</td><td>20%</td><td>7.5</td><td><div class="score-bar"><div class="score-bar-fill score-mid" style="width: 75%;"><span>7.5</span></div></div></td></tr>
+                <tr><td>Impatto potenziale sulla PA</td><td>20%</td><td>7.0</td><td><div class="score-bar"><div class="score-bar-fill score-mid" style="width: 70%;"><span>7.0</span></div></div></td></tr>
+                <tr class="total-row"><td>Totale Pesato</td><td>100%</td><td colspan="2"><strong>7.1 / 10</strong></td></tr>
+            </tbody></table></div>
+        </div>
+        <div class="card">
+            <h2>Punti di Forza</h2>
+            <ul class="point-list strengths">
+                <li><strong>Struttura tecnica del deliverable solida:</strong> Il documento HTML presenta navigazione laterale con scroll fluido, sezioni collassabili, IntersectionObserver per l'evidenziazione del menu attivo e supporto per la stampa.</li>
+                <li><strong>Scelta del tema altamente pertinente:</strong> La Verifica di Assoggettabilit&agrave; a VAS &egrave; un procedimento reale e complesso della PA, in cui la sintesi normativa e l'automazione dei riferimenti legislativi possono ridurre tempi e margini di errore.</li>
+                <li><strong>Riferimenti normativi corretti e ben organizzati:</strong> Il quadro normativo citato (Direttiva 2001/42/CE, D.Lgs. 152/2006, L.R. 10/2010, L.R. 65/2014, D.P.R. 357/1997, PIT/PPR) &egrave; accurato e pertinente.</li>
+                <li><strong>Design responsive e print-friendly:</strong> L'attenzione alla fruibilit&agrave; su dispositivi diversi e alla possibilit&agrave; di stampare il documento dimostra una visione pratica dell'output.</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h2>Aree di Miglioramento</h2>
+            <ul class="point-list improvements">
+                <li><strong>Contenuti troppo generici e con segnaposto:</strong> Molte sezioni contengono testo placeholder. Il documento appare pi&ugrave; un template vuoto che un esempio concreto di output generato con l'IA.</li>
+                <li><strong>Uso dell'IA poco evidente nel prodotto finale:</strong> Non emerge chiaramente come l'IA sia stata utilizzata nel processo. L'obiettivo dichiarato nel README non si riflette nel deliverable.</li>
+                <li><strong>Assenza di interattivit&agrave; sostanziale:</strong> Manca qualsiasi componente che dimostri l'uso dell'IA: nessun campo di input per inserire norme, nessun esempio di sintesi automatica, nessuno scadenziario generato.</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h2>Suggerimenti per Sviluppi Futuri</h2>
+            <ul class="point-list suggestions">
+                <li><strong>Compilare il template con un caso reale:</strong> Popolare tutte le sezioni con contenuto specifico avrebbe reso il deliverable molto pi&ugrave; convincente.</li>
+                <li><strong>Aggiungere uno scadenziario interattivo:</strong> Integrare una timeline o un calendario con le tappe del procedimento VAS darebbe concretezza alla proposta.</li>
+                <li><strong>Mostrare il processo di generazione IA:</strong> Inserire una sezione dedicata che illustri come l'IA potrebbe generare la sintesi normativa rafforzerebbe il valore innovativo del progetto.</li>
+            </ul>
+        </div>
+    </div>
+    <footer><div class="container"><p>Valutazione generata automaticamente - Progetto AI-PACT</p><p style="margin-top: 0.3rem; font-size: 0.8rem;">17 febbraio 2026</p></div></footer>
+</body>
+</html>
