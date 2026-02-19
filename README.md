@@ -108,6 +108,7 @@ laboratori/
 
 ### Strumenti
 - [Extract HTML Tool](https://aipact.github.io/laboratori/LABORATORIO_A/tools/extract_html.html)
+- [Token Show](https://aipact.github.io/laboratori/LABORATORIO_A/tools/token_show.html)
 
 ---
 
