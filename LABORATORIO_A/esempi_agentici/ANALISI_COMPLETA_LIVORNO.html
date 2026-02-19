@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisi Strategica Territoriale - Provincia di Livorno</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --primary-light: #2c5282;
+            --accent: #3182ce;
+            --accent-light: #63b3ed;
+            --success: #38a169;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+            --gray-100: #f7fafc;
+            --gray-200: #edf2f7;
+            --gray-300: #e2e8f0;
+            --gray-600: #718096;
+            --gray-800: #2d3748;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--gray-100);
+            color: var(--gray-800);
+            line-height: 1.6;
+        }
+
+        .nav-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .nav-header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-tabs button {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .nav-tabs button:hover,
+        .nav-tabs button.active {
+            background: rgba(255,255,255,0.25);
+            border-color: white;
+        }
+
+        .section {
+            display: none;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Dashboard Styles */
+        .hero {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .kpi-box {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+            border-left: 4px solid var(--accent);
+        }
+
+        .kpi-box.negative {
+            border-left-color: var(--danger);
+        }
+
+        .kpi-box.positive {
+            border-left-color: var(--success);
+        }
+
+        .kpi-box .value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .kpi-box .label {
+            font-size: 0.85rem;
+            color: var(--gray-600);
+            margin-top: 0.25rem;
+        }
+
+        .kpi-box .change {
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .kpi-box .change.negative {
+            background: #fed7d7;
+            color: var(--danger);
+        }
+
+        .kpi-box .change.positive {
+            background: #c6f6d5;
+            color: var(--success);
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .chart-card h3 {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        .chart-comment {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--gray-100);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: var(--gray-600);
+        }
+
+        .chart-source {
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--gray-600);
+        }
+
+        .chart-source a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .chart-source a:hover {
+            text-decoration: underline;
+        }
+
+        /* Sintesi Styles */
+        .sintesi-section {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .tesi-box {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .tesi-box h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 0.5rem;
+        }
+
+        .evidenze-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .evidenza-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .evidenza-card h4 {
+            color: var(--primary);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .evidenza-card .number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .rischi-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .rischi-table th,
+        .rischi-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .rischi-table th {
+            background: var(--primary);
+            color: white;
+        }
+
+        .rischi-table tr:hover {
+            background: var(--gray-100);
+        }
+
+        .priorita-list {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .priorita-list h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .priorita-list ol {
+            padding-left: 1.5rem;
+        }
+
+        .priorita-list li {
+            margin-bottom: 1rem;
+            padding-left: 0.5rem;
+        }
+
+        .priorita-list li strong {
+            color: var(--primary);
+        }
+
+        .cta-box {
+            background: var(--success);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .cta-box h3 {
+            margin-bottom: 1rem;
+        }
+
+        /* Report Styles */
+        .report-section {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .toc {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .toc h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .toc ul {
+            list-style: none;
+        }
+
+        .toc ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc ul li a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .toc ul li a:hover {
+            text-decoration: underline;
+        }
+
+        .report-chapter {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .report-chapter h2 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent);
+        }
+
+        .report-chapter h3 {
+            color: var(--primary-light);
+            font-size: 1.2rem;
+            margin: 1.5rem 0 0.75rem 0;
+        }
+
+        .report-chapter h4 {
+            color: var(--gray-800);
+            font-size: 1rem;
+            margin: 1rem 0 0.5rem 0;
+        }
+
+        .report-chapter p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        .report-chapter ul,
+        .report-chapter ol {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        .report-chapter li {
+            margin-bottom: 0.5rem;
+        }
+
+        .report-chapter blockquote {
+            background: var(--gray-100);
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            margin: 1rem 0;
+            font-style: italic;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 0.75rem;
+            border: 1px solid var(--gray-300);
+            text-align: left;
+        }
+
+        .data-table th {
+            background: var(--gray-200);
+            font-weight: 600;
+        }
+
+        .data-table tr:nth-child(even) {
+            background: var(--gray-100);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box h4 {
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .fonti-section {
+            background: var(--gray-100);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+
+        .fonti-section h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .fonti-section ol {
+            padding-left: 1.5rem;
+        }
+
+        .fonti-section li {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .fonti-section a {
+            color: var(--accent);
+            word-break: break-all;
+        }
+
+        /* Print Styles */
+        @media print {
+            .nav-header {
+                position: relative;
+                background: var(--primary) !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .nav-tabs {
+                display: none;
+            }
+
+            .section {
+                display: block !important;
+                page-break-before: always;
+            }
+
+            .chart-card,
+            .report-chapter {
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-header {
+                padding: 1rem;
+            }
+
+            .nav-header h1 {
+                font-size: 1.2rem;
+            }
+
+            .section {
+                padding: 1rem;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .kpi-box .value {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <div class="nav-header">
+        <h1>Analisi Strategica Territoriale - Provincia di Livorno</h1>
+        <div class="nav-tabs">
+            <button class="active" onclick="showSection('dashboard')">Dashboard</button>
+            <button onclick="showSection('sintesi')">Sintesi Esecutiva</button>
+            <button onclick="showSection('report')">Report Completo</button>
+            <button onclick="window.print()">Stampa</button>
+        </div>
+    </div>
+
+    <!-- Sezione Dashboard -->
+    <div id="dashboard-section" class="section active">
+        <div class="hero">
+            <h2>Provincia di Livorno</h2>
+            <p>Analisi strategica multidimensionale: demografia, economia, infrastrutture</p>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Dati aggiornati al 2024 | Centro Ricerche Analisi Territoriali</p>
+        </div>
+
+        <!-- KPI Grid -->
+        <div class="kpi-grid">
+            <div class="kpi-box negative">
+                <div class="value">325.749</div>
+                <div class="label">Popolazione Residente (2024)</div>
+                <div class="change negative">-2,14% dal 2018</div>
+            </div>
+            <div class="kpi-box negative">
+                <div class="value">-2.542</div>
+                <div class="label">Saldo Naturale (2024)</div>
+                <div class="change negative">Nati 1.712 - Morti 4.254</div>
+            </div>
+            <div class="kpi-box positive">
+                <div class="value">+2.114</div>
+                <div class="label">Saldo Migratorio (2024)</div>
+                <div class="change positive">Compensa parzialmente il calo</div>
+            </div>
+            <div class="kpi-box">
+                <div class="value">29,4 Mln t</div>
+                <div class="label">Traffico Porto (2024)</div>
+                <div class="change negative">-3,0% vs 2023</div>
+            </div>
+            <div class="kpi-box positive">
+                <div class="value">663.000</div>
+                <div class="label">Container TEU (2024)</div>
+                <div class="change negative">-0,9% vs 2023</div>
+            </div>
+            <div class="kpi-box">
+                <div class="value">246,3</div>
+                <div class="label">Indice di Vecchiaia</div>
+                <div class="change negative">246 anziani ogni 100 giovani</div>
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="charts-grid">
+            <!-- Trend Demografico -->
+            <div class="chart-card">
+                <h3>Trend Demografico 2018-2024</h3>
+                <div class="chart-container">
+                    <canvas id="popChart"></canvas>
+                </div>
+                <div class="chart-comment">
+                    La provincia di Livorno registra un costante declino demografico: -7.138 abitanti in 6 anni (-2,14%). Il calo si e' attenuato negli ultimi anni grazie al miglioramento del saldo migratorio.
+                </div>
+                <div class="chart-source">
+                    Fonte: <a href="https://www.tuttitalia.it/toscana/provincia-di-livorno/statistiche/popolazione-andamento-demografico/" target="_blank">Tuttitalia - Elaborazione dati ISTAT</a>
+                </div>
+            </div>
+
+            <!-- Saldo Naturale vs Migratorio -->
+            <div class="chart-card">
+                <h3>Saldo Naturale vs Migratorio (2018-2024)</h3>
+                <div class="chart-container">
+                    <canvas id="saldiChart"></canvas>
+                </div>
+                <div class="chart-comment">
+                    Il saldo naturale e' strutturalmente negativo (-2.500/-3.000 unita'/anno). Dal 2022 il saldo migratorio e' cresciuto significativamente (oltre +2.000), compensando parzialmente il deficit naturale.
+                </div>
+                <div class="chart-source">
+                    Fonte: <a href="https://www.tuttitalia.it/toscana/provincia-di-livorno/statistiche/popolazione-andamento-demografico/" target="_blank">Tuttitalia - Elaborazione dati ISTAT</a>
+                </div>
+            </div>
+
+            <!-- Struttura Eta -->
+            <div class="chart-card">
+                <h3>Struttura per Eta della Popolazione (2023)</h3>
+                <div class="chart-container">
+                    <canvas id="etaChart"></canvas>
+                </div>
+                <div class="chart-comment">
+                    Struttura demografica regressiva: solo l'11% della popolazione ha meno di 15 anni, mentre il 35,5% supera i 60 anni. L'eta' media provinciale (49,1 anni) e' tra le piu' alte della Toscana.
+                </div>
+                <div class="chart-source">
+                    Fonte: <a href="https://www.tuttitalia.it/toscana/provincia-di-livorno/statistiche/popolazione-eta-sesso-stato-civile-2023/" target="_blank">Tuttitalia - ISTAT 2023</a>
+                </div>
+            </div>
+
+            <!-- Traffico Porto -->
+            <div class="chart-card">
+                <h3>Traffico Porto di Livorno - Principali Voci (2024)</h3>
+                <div class="chart-container">
+                    <canvas id="portoChart"></canvas>
+                </div>
+                <div class="chart-comment">
+                    Il porto di Livorno e' il principale hub logistico della provincia. Nel 2024 calo delle rinfuse liquide (-25%) per chiusura raffineria ENI, ma crescita dei traghetti (+8,1%) con record di 3,3 milioni di passeggeri.
+                </div>
+                <div class="chart-source">
+                    Fonte: <a href="https://www.portialtotirreno.it/wp-content/uploads/2024/02/LIVORNO_Allegato_Statistico_2023.pdf" target="_blank">Autorita' Portuale Alto Tirreno</a>
+                </div>
+            </div>
+
+            <!-- Economia del Mare -->
+            <div class="chart-card">
+                <h3>Composizione Economia - Peso Blue Economy</h3>
+                <div class="chart-container">
+                    <canvas id="blueEconomyChart"></canvas>
+                </div>
+                <div class="chart-comment">
+                    L'economia del mare genera oltre il 40% del valore aggiunto provinciale (circa 6 miliardi di euro tra effetti diretti e indiretti). Livorno e' la 3a provincia italiana per incidenza di imprese "blu".
+                </div>
+                <div class="chart-source">
+                    Fonte: <a href="https://www.lg.camcom.gov.it/notizie/economia-mare-prodotti-6-miliardi-euro-ricchezza-grosseto-livorno" target="_blank">Camera di Commercio Maremma e Tirreno - Rapporto 2024</a>
+                </div>
+            </div>
+
+            <!-- Esposizione Export USA -->
+            <div class="chart-card">
+                <h3>Imprese Esposte su Export USA (Toscana)</h3>
+                <div class="chart-container">
+                    <canvas id="exportChart"></canvas>
+                </div>
+                <div class="chart-comment">
+                    Livorno conta 116 unita' locali di imprese esposte verso il mercato USA (5% del totale regionale), con 1.264 addetti. Il rischio dazi potrebbe impattare su logistica portuale e settori connessi.
+                </div>
+                <div class="chart-source">
+                    Fonte: <a href="https://www.irpet.it/wp-content/uploads/2025/06/Rapporto-annuale-IRPET-27.06.2025.pdf" target="_blank">IRPET - Rapporto Annuale 2025</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sezione Sintesi Esecutiva -->
+    <div id="sintesi-section" class="section">
+        <div class="sintesi-section">
+            <h2 style="color: var(--primary); font-size: 1.8rem; margin-bottom: 1.5rem;">Sintesi Esecutiva</h2>
+
+            <!-- Tesi Centrale -->
+            <div class="tesi-box">
+                <h3>Tesi Centrale</h3>
+                <p style="font-size: 1.1rem; margin-bottom: 1rem;">
+                    <strong>La provincia di Livorno affronta una transizione demografica critica che minaccia la sostenibilita' del suo modello economico basato sulla Blue Economy.</strong>
+                </p>
+                <p>
+                    Il calo demografico strutturale (-2,14% in 6 anni) combinato con l'invecchiamento della popolazione (indice di vecchiaia 246,3) rischia di compromettere la disponibilita' di forza lavoro qualificata per i settori chiave: portualita', cantieristica navale e logistica. L'immigrazione, pur in crescita, compensa solo parzialmente il deficit naturale e non garantisce il ricambio generazionale nelle competenze specialistiche richieste dall'economia marittima.
+                </p>
+            </div>
+
+            <!-- Tre Evidenze Chiave -->
+            <h3 style="color: var(--primary); margin-bottom: 1rem;">Tre Evidenze Chiave</h3>
+            <div class="evidenze-grid">
+                <div class="evidenza-card">
+                    <h4>Evidenza Demografica</h4>
+                    <div class="number">-7.138</div>
+                    <p>Abitanti persi dal 2018 al 2024. Il saldo naturale negativo (-2.500/anno) supera costantemente il saldo migratorio positivo (+2.100/anno).</p>
+                </div>
+                <div class="evidenza-card">
+                    <h4>Evidenza Economica</h4>
+                    <div class="number">40%+</div>
+                    <p>Quota del valore aggiunto provinciale generata dall'economia del mare. Concentrazione strategica ma anche vulnerabilita' sistemica.</p>
+                </div>
+                <div class="evidenza-card">
+                    <h4>Evidenza Infrastrutturale</h4>
+                    <div class="number">-3,0%</div>
+                    <p>Calo del traffico merci portuale nel 2024. La chiusura della raffineria ENI ha impattato sulle rinfuse liquide (-25%).</p>
+                </div>
+            </div>
+
+            <!-- Scenari di Rischio -->
+            <h3 style="color: var(--primary); margin: 1.5rem 0 1rem 0;">Scenari di Rischio</h3>
+            <table class="rischi-table">
+                <thead>
+                    <tr>
+                        <th>Scenario</th>
+                        <th>Probabilita'</th>
+                        <th>Impatto</th>
+                        <th>Descrizione</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Crisi demografica acuta</strong></td>
+                        <td style="color: var(--danger);">Alta</td>
+                        <td style="color: var(--danger);">Alto</td>
+                        <td>Proseguimento del trend demografico negativo con carenza di manodopera specializzata nei settori marittimi e portuali entro 5-10 anni.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Shock da dazi USA</strong></td>
+                        <td style="color: var(--warning);">Media</td>
+                        <td style="color: var(--warning);">Medio</td>
+                        <td>Dazi al 20% potrebbero impattare su 116 unita' locali (1.264 addetti) esposte sul mercato americano, con ricadute sulla filiera logistica.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Transizione energetica non gestita</strong></td>
+                        <td style="color: var(--warning);">Media</td>
+                        <td style="color: var(--danger);">Alto</td>
+                        <td>La chiusura della raffineria ENI anticipa una transizione che richiede riqualificazione dell'area e delle competenze industriali.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Priorita' Strategiche -->
+            <div class="priorita-list">
+                <h3>Priorita' Strategiche</h3>
+                <ol>
+                    <li>
+                        <strong>Politiche di attrazione demografica</strong><br>
+                        Incentivi fiscali e abitativi per giovani famiglie e lavoratori qualificati nel settore marittimo. KPI: +500 nuovi residenti under-40/anno.
+                    </li>
+                    <li>
+                        <strong>Riqualificazione area ex-raffineria</strong><br>
+                        Conversione del sito industriale in polo logistico green o hub per energie rinnovabili offshore. KPI: 200+ nuovi posti di lavoro entro 3 anni.
+                    </li>
+                    <li>
+                        <strong>Potenziamento formazione marittima</strong><br>
+                        Rafforzamento ITS e partnership con Accademia Navale per formare figure specializzate (meccanici navali, operatori portuali 4.0). KPI: +30% diplomati ITS/anno.
+                    </li>
+                    <li>
+                        <strong>Diversificazione economica controllata</strong><br>
+                        Sviluppo turismo nautico e crocieristico di qualita', mantenendo l'identita' marittima. KPI: +10% presenze turistiche qualificate/anno.
+                    </li>
+                </ol>
+            </div>
+
+            <!-- Call to Action -->
+            <div class="cta-box">
+                <h3>Call to Action</h3>
+                <p style="font-size: 1.1rem; margin-bottom: 1rem;">
+                    <strong>Timeline Esecutivo per Stakeholder</strong>
+                </p>
+                <p>
+                    <strong>Entro 6 mesi:</strong> Avvio tavolo interistituzionale Regione-Comune-Autorita' Portuale per piano demografico integrato.<br>
+                    <strong>Entro 12 mesi:</strong> Definizione masterplan riqualificazione area ex-raffineria con fondi PNRR.<br>
+                    <strong>Entro 24 mesi:</strong> Operativita' primo polo formativo marittimo 4.0 integrato con porto.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sezione Report Completo -->
+    <div id="report-section" class="section">
+        <div class="report-section">
+            <!-- Indice -->
+            <div class="toc" id="indice">
+                <h3>Indice</h3>
+                <ul>
+                    <li><a href="#cap1">1. Introduzione e Metodologia</a></li>
+                    <li><a href="#cap2">2. Diagnosi Integrata</a>
+                        <ul>
+                            <li><a href="#cap2-1">2.1 Dimensione Demografica</a></li>
+                            <li><a href="#cap2-2">2.2 Dimensione Economica</a></li>
+                            <li><a href="#cap2-3">2.3 Dimensione Urbanistica e Infrastrutturale</a></li>
+                            <li><a href="#cap2-4">2.4 Correlazioni Cross-Dimensionali</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#cap3">3. Scenari di Rischio Data-Driven</a></li>
+                    <li><a href="#cap4">4. Raccomandazioni Strategiche</a></li>
+                    <li><a href="#cap5">5. Conclusioni</a></li>
+                    <li><a href="#cap6">6. Fonti e Bibliografia</a></li>
+                </ul>
+            </div>
+
+            <!-- Capitolo 1 -->
+            <div class="report-chapter" id="cap1">
+                <h2>1. Introduzione e Metodologia</h2>
+
+                <h3>1.1 Contesto Territoriale</h3>
+                <p>
+                    La provincia di Livorno, con i suoi 325.749 abitanti (dato 2024), rappresenta la quinta provincia toscana per popolazione e la settima per superficie. Il territorio si estende lungo la costa tirrenica, includendo l'Arcipelago Toscano, e si caratterizza per una forte vocazione marittima che ne ha plasmato l'identita' economica e sociale.
+                </p>
+                <p>
+                    Il capoluogo ospita uno dei principali porti commerciali italiani e del Mediterraneo, cuore pulsante di un'economia che ha costruito la propria prosperita' attorno alle attivita' marittime, dalla cantieristica alla logistica, dalla raffinazione petrolifera (oggi in transizione) al turismo costiero.
+                </p>
+
+                <h3>1.2 Approccio Multidisciplinare</h3>
+                <p>
+                    La presente analisi adotta un approccio integrato che combina tre prospettive disciplinari complementari:
+                </p>
+                <ul>
+                    <li><strong>Prospettiva Socio-Demografica:</strong> analisi delle dinamiche di popolazione, struttura per eta', flussi migratori e indicatori di invecchiamento;</li>
+                    <li><strong>Prospettiva Economica:</strong> valutazione della struttura produttiva, specializzazioni settoriali, esposizione ai mercati internazionali e vulnerabilita';</li>
+                    <li><strong>Prospettiva Urbanistica-Infrastrutturale:</strong> mappatura delle dotazioni infrastrutturali, connettivita' e accessibilita' del territorio.</li>
+                </ul>
+
+                <h3>1.3 Gerarchia delle Fonti</h3>
+                <p>
+                    I dati utilizzati seguono una rigorosa gerarchia di attendibilita':
+                </p>
+                <ol>
+                    <li><strong>Fonti istituzionali primarie:</strong> ISTAT (censimento permanente, bilanci demografici), IRPET (rapporti economici regionali), Autorita' Portuale Alto Tirreno;</li>
+                    <li><strong>Fonti istituzionali secondarie:</strong> Camera di Commercio Maremma e Tirreno, Regione Toscana, Unioncamere;</li>
+                    <li><strong>Elaborazioni su dati ufficiali:</strong> Tuttitalia.it, Centro Studi Tagliacarne.</li>
+                </ol>
+            </div>
+
+            <!-- Capitolo 2 -->
+            <div class="report-chapter" id="cap2">
+                <h2>2. Diagnosi Integrata</h2>
+
+                <h3 id="cap2-1">2.1 Dimensione Demografica</h3>
+
+                <h4>2.1.1 Trend di Popolazione 2018-2024</h4>
+                <p>
+                    La provincia di Livorno sta attraversando una fase di declino demografico strutturale. Dal 2018 al 2024, la popolazione residente e' diminuita di 7.138 unita', passando da 332.887 a 325.749 abitanti, con una contrazione complessiva del 2,14%.
+                </p>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Anno</th>
+                            <th>Popolazione</th>
+                            <th>Variazione</th>
+                            <th>Var. %</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>2018</td><td>332.887</td><td>-3.328</td><td>-0,99%</td></tr>
+                        <tr><td>2019</td><td>331.877</td><td>-1.010</td><td>-0,30%</td></tr>
+                        <tr><td>2020</td><td>328.996</td><td>-2.881</td><td>-0,87%</td></tr>
+                        <tr><td>2021</td><td>327.262</td><td>-1.734</td><td>-0,53%</td></tr>
+                        <tr><td>2022</td><td>326.605</td><td>-657</td><td>-0,20%</td></tr>
+                        <tr><td>2023</td><td>326.315</td><td>-290</td><td>-0,09%</td></tr>
+                        <tr><td>2024</td><td>325.749</td><td>-566</td><td>-0,17%</td></tr>
+                    </tbody>
+                </table>
+
+                <h4>2.1.2 Dinamiche Naturali e Migratorie</h4>
+                <p>
+                    Il calo demografico e' determinato da un persistente saldo naturale negativo, solo parzialmente compensato dal saldo migratorio positivo.
+                </p>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Anno</th>
+                            <th>Nascite</th>
+                            <th>Decessi</th>
+                            <th>Saldo Naturale</th>
+                            <th>Saldo Migratorio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>2018</td><td>2.137</td><td>4.225</td><td>-2.088</td><td>+705</td></tr>
+                        <tr><td>2019</td><td>1.949</td><td>4.209</td><td>-2.260</td><td>+951</td></tr>
+                        <tr><td>2020</td><td>1.825</td><td>4.529</td><td>-2.704</td><td>+422</td></tr>
+                        <tr><td>2021</td><td>1.850</td><td>4.484</td><td>-2.634</td><td>+692</td></tr>
+                        <tr><td>2022</td><td>1.821</td><td>4.862</td><td>-3.041</td><td>+2.639</td></tr>
+                        <tr><td>2023</td><td>1.711</td><td>4.247</td><td>-2.536</td><td>+2.212</td></tr>
+                        <tr><td>2024</td><td>1.712</td><td>4.254</td><td>-2.542</td><td>+2.114</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="highlight-box">
+                    <h4>Dato Chiave</h4>
+                    <p>Dal 2022 il saldo migratorio e' cresciuto significativamente (da +692 a +2.639), raggiungendo livelli che compensano quasi interamente il deficit naturale. Questo trend, se confermato, potrebbe stabilizzare la popolazione nei prossimi anni.</p>
+                </div>
+
+                <h4>2.1.3 Struttura per Eta'</h4>
+                <p>
+                    La provincia presenta una struttura demografica marcatamente regressiva, con un forte squilibrio tra popolazione giovane e anziana.
+                </p>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Fascia d'Eta'</th>
+                            <th>Popolazione</th>
+                            <th>%</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>0-14 anni</td><td>36.006</td><td>11,0%</td></tr>
+                        <tr><td>15-29 anni</td><td>42.251</td><td>12,9%</td></tr>
+                        <tr><td>30-44 anni</td><td>51.719</td><td>15,8%</td></tr>
+                        <tr><td>45-59 anni</td><td>80.861</td><td>24,8%</td></tr>
+                        <tr><td>60-74 anni</td><td>65.202</td><td>20,0%</td></tr>
+                        <tr><td>75+ anni</td><td>50.566</td><td>15,5%</td></tr>
+                    </tbody>
+                </table>
+
+                <p>
+                    L'indice di vecchiaia (246,3 anziani over-65 ogni 100 giovani under-15) colloca Livorno tra le province piu' invecchiate della Toscana, insieme a Grosseto e Massa-Carrara. L'eta' media provinciale (49,1 anni) supera quella regionale e nazionale.
+                </p>
+
+                <h3 id="cap2-2">2.2 Dimensione Economica</h3>
+
+                <h4>2.2.1 Struttura Produttiva e Blue Economy</h4>
+                <p>
+                    L'economia livornese si caratterizza per una forte specializzazione marittima. Secondo il Rapporto 2024 dell'Economia del Mare della Camera di Commercio Maremma e Tirreno:
+                </p>
+                <ul>
+                    <li>L'economia del mare genera oltre <strong>6 miliardi di euro</strong> di valore aggiunto (effetti diretti e indiretti) per le province di Livorno e Grosseto;</li>
+                    <li>Questo costituisce oltre il <strong>40% del valore aggiunto complessivo</strong> delle due province;</li>
+                    <li>Livorno e' la <strong>terza provincia italiana</strong> per incidenza delle imprese "blu" sul tessuto imprenditoriale;</li>
+                    <li>A fine 2023 operavano <strong>4.343 imprese del mare</strong> nella sola provincia di Livorno;</li>
+                    <li>Nel 2022 le imprese dell'economia del mare occupavano oltre <strong>30.000 persone</strong>.</li>
+                </ul>
+
+                <h4>2.2.2 Settori Chiave</h4>
+                <p>
+                    I pilastri dell'economia provinciale sono:
+                </p>
+                <ol>
+                    <li><strong>Portualita' e logistica:</strong> Il porto di Livorno e' il principale hub dell'Alto Tirreno, con 29,4 milioni di tonnellate movimentate nel 2024 e 663.000 TEU di container;</li>
+                    <li><strong>Cantieristica navale:</strong> Presenza di eccellenze come Benetti (gruppo Azimut-Benetti), con il piu' grande impianto di refit del Mediterraneo (200.000 mq);</li>
+                    <li><strong>Industria chimica:</strong> Settore in transizione dopo la chiusura della raffineria ENI;</li>
+                    <li><strong>Turismo costiero e crocieristico:</strong> Record nel 2024 con 3,3 milioni di passeggeri traghetti.</li>
+                </ol>
+
+                <h4>2.2.3 Performance Portuale 2024</h4>
+                <p>
+                    Il porto di Livorno ha registrato nel 2024 una flessione complessiva del 3%, con dinamiche differenziate per segmento:
+                </p>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Segmento</th>
+                            <th>Dato 2024</th>
+                            <th>Var. %</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Merci totali</td><td>29,4 mln tonnellate</td><td>-3,0%</td></tr>
+                        <tr><td>Container (TEU)</td><td>663.000</td><td>-0,9%</td></tr>
+                        <tr><td>Container pieni</td><td>446.822 TEU</td><td>+1,9%</td></tr>
+                        <tr><td>Rinfuse liquide</td><td>4,7 mln tonnellate</td><td>-25,0%</td></tr>
+                        <tr><td>Mezzi rotabili</td><td>485.190 unita'</td><td>+3,8%</td></tr>
+                        <tr><td>Prodotti forestali</td><td>1,97 mln tonnellate</td><td>+7,5%</td></tr>
+                        <tr><td>Passeggeri traghetti</td><td>3,309 milioni</td><td>+8,1%</td></tr>
+                    </tbody>
+                </table>
+
+                <h4>2.2.4 Esposizione ai Rischi Commerciali</h4>
+                <p>
+                    Secondo il Rapporto IRPET 2025, la provincia di Livorno presenta una esposizione moderata ma significativa verso il mercato statunitense:
+                </p>
+                <ul>
+                    <li><strong>116 unita' locali</strong> di imprese toscane esposte su export USA hanno sede nella provincia;</li>
+                    <li>Queste impiegano <strong>1.264 addetti</strong>, pari al 5% del totale regionale;</li>
+                    <li>L'esposizione e' concentrata nei settori logistico-portuali e nella subfornitura meccanica.</li>
+                </ul>
+
+                <h3 id="cap2-3">2.3 Dimensione Urbanistica e Infrastrutturale</h3>
+
+                <h4>2.3.1 Infrastrutture Portuali</h4>
+                <p>
+                    Il sistema portuale dell'Alto Tirreno (Livorno, Piombino, Portoferraio) ha movimentato nel 2024 complessivamente 39,2 milioni di tonnellate di merci (+1,7% vs 2023). Livorno rappresenta il cuore del sistema con:
+                </p>
+                <ul>
+                    <li>Terminal container con capacita' di oltre 700.000 TEU/anno;</li>
+                    <li>Collegamento ferroviario diretto con l'interporto di Guasticce;</li>
+                    <li>Banchine dedicate al traffico Ro-Ro e automotive;</li>
+                    <li>Terminal crociere e passeggeri traghetti.</li>
+                </ul>
+
+                <h4>2.3.2 Connettivita' Digitale</h4>
+                <p>
+                    La provincia beneficia delle iniziative nazionali per la banda ultra-larga:
+                </p>
+                <ul>
+                    <li>Copertura FTTH attiva nel capoluogo e nei principali centri;</li>
+                    <li>Rete 5G in fase di espansione;</li>
+                    <li>Progetto BUL (Banda Ultra Larga) in corso nelle aree bianche.</li>
+                </ul>
+
+                <h4>2.3.3 Rete Viaria e Ferroviaria</h4>
+                <p>
+                    La provincia e' servita da:
+                </p>
+                <ul>
+                    <li>Autostrada A12 (Genova-Roma) con svincoli dedicati al porto;</li>
+                    <li>SGC FI-PI-LI per il collegamento con Firenze;</li>
+                    <li>Linea ferroviaria tirrenica (Roma-Pisa-Genova);</li>
+                    <li>Raccordi ferroviari portuali per il trasporto merci.</li>
+                </ul>
+
+                <h3 id="cap2-4">2.4 Correlazioni Cross-Dimensionali</h3>
+
+                <div class="highlight-box">
+                    <h4>Correlazione Chiave: Demografia-Economia</h4>
+                    <p>L'invecchiamento della popolazione (eta' media 49,1 anni) rischia di compromettere la disponibilita' di forza lavoro qualificata per i settori marittimi, che richiedono competenze tecniche specialistiche (meccanici navali, operatori portuali, tecnici cantieristici). Il problema e' amplificato dal fatto che il saldo migratorio, pur positivo, potrebbe non garantire il ricambio nelle professionalita' richieste.</p>
+                </div>
+
+                <p>
+                    <strong>Correlazione Economia-Infrastrutture:</strong> La dipendenza dalla Blue Economy (40%+ del VA) rende il territorio vulnerabile a shock infrastrutturali. La chiusura della raffineria ENI (-25% rinfuse liquide) dimostra come cambiamenti nell'assetto produttivo si traducano immediatamente in impatti sul sistema logistico.
+                </p>
+
+                <p>
+                    <strong>Correlazione Demografia-Servizi:</strong> L'elevato indice di vecchiaia (246,3) implica una crescente pressione sui servizi sanitari e assistenziali, con potenziale competizione per risorse pubbliche che potrebbero altrimenti essere destinate a politiche di sviluppo economico.
+                </p>
+            </div>
+
+            <!-- Capitolo 3 -->
+            <div class="report-chapter" id="cap3">
+                <h2>3. Scenari di Rischio Data-Driven</h2>
+
+                <h3>3.1 Scenario 1: Crisi Demografica Strutturale</h3>
+                <table class="data-table">
+                    <tr><td><strong>Probabilita'</strong></td><td>Alta (70-80%)</td></tr>
+                    <tr><td><strong>Orizzonte</strong></td><td>5-10 anni</td></tr>
+                    <tr><td><strong>Trigger</strong></td><td>Proseguimento trend attuale: -500/-1.000 abitanti/anno</td></tr>
+                    <tr><td><strong>Impatto stimato</strong></td><td>
+                        <ul>
+                            <li>Popolazione sotto 320.000 entro 2030</li>
+                            <li>Carenza di 2.000-3.000 lavoratori qualificati nei settori marittimi</li>
+                            <li>Pressione fiscale crescente pro-capite per servizi anziani</li>
+                        </ul>
+                    </td></tr>
+                    <tr><td><strong>Mitigazione</strong></td><td>Politiche di attrazione residenziale mirate, incentivi fiscali, housing sociale per giovani lavoratori</td></tr>
+                </table>
+
+                <h3>3.2 Scenario 2: Shock Commerciale da Dazi USA</h3>
+                <table class="data-table">
+                    <tr><td><strong>Probabilita'</strong></td><td>Media (40-60%)</td></tr>
+                    <tr><td><strong>Orizzonte</strong></td><td>12-24 mesi</td></tr>
+                    <tr><td><strong>Trigger</strong></td><td>Implementazione dazi 10-20% su export toscano verso USA</td></tr>
+                    <tr><td><strong>Impatto stimato</strong></td><td>
+                        <ul>
+                            <li>116 unita' locali (1.264 addetti) direttamente esposte</li>
+                            <li>Riduzione MOL 5-25% per la maggioranza delle imprese esposte</li>
+                            <li>Effetti indiretti su logistica portuale e servizi connessi</li>
+                        </ul>
+                    </td></tr>
+                    <tr><td><strong>Mitigazione</strong></td><td>Diversificazione mercati export, supporto alla rilocalizzazione produttiva, fondi regionali per riconversione</td></tr>
+                </table>
+
+                <h3>3.3 Scenario 3: Transizione Energetica Non Gestita</h3>
+                <table class="data-table">
+                    <tr><td><strong>Probabilita'</strong></td><td>Media-Alta (50-70%)</td></tr>
+                    <tr><td><strong>Orizzonte</strong></td><td>3-7 anni</td></tr>
+                    <tr><td><strong>Trigger</strong></td><td>Mancata riqualificazione area ex-raffineria, assenza piano industriale alternativo</td></tr>
+                    <tr><td><strong>Impatto stimato</strong></td><td>
+                        <ul>
+                            <li>Perdita permanente 500+ posti di lavoro diretti</li>
+                            <li>Degrado area industriale con costi di bonifica</li>
+                            <li>Riduzione attrattivita' del sistema portuale</li>
+                        </ul>
+                    </td></tr>
+                    <tr><td><strong>Mitigazione</strong></td><td>Piano di riqualificazione con fondi PNRR, conversione in polo energie rinnovabili offshore, hub logistico green</td></tr>
+                </table>
+            </div>
+
+            <!-- Capitolo 4 -->
+            <div class="report-chapter" id="cap4">
+                <h2>4. Raccomandazioni Strategiche</h2>
+
+                <h3>4.1 Priorita' 1: Piano Demografico Integrato</h3>
+                <table class="data-table">
+                    <tr><td><strong>Obiettivo</strong></td><td>Stabilizzare la popolazione sopra 325.000 abitanti entro il 2030</td></tr>
+                    <tr><td><strong>Azioni chiave</strong></td><td>
+                        <ul>
+                            <li>Incentivi fiscali comunali per nuovi residenti under-40</li>
+                            <li>Programma housing sociale per lavoratori settori strategici</li>
+                            <li>Campagna di marketing territoriale "Livorno, citta' del mare"</li>
+                            <li>Accordi con universita' per tirocini e placement</li>
+                        </ul>
+                    </td></tr>
+                    <tr><td><strong>KPI</strong></td><td>+500 nuovi residenti under-40/anno; saldo migratorio >+2.500/anno</td></tr>
+                    <tr><td><strong>Governance</strong></td><td>Cabina di regia Comune-Regione-Camera di Commercio</td></tr>
+                </table>
+
+                <h3>4.2 Priorita' 2: Riqualificazione Area Ex-Raffineria</h3>
+                <table class="data-table">
+                    <tr><td><strong>Obiettivo</strong></td><td>Convertire area industriale dismessa in polo produttivo green</td></tr>
+                    <tr><td><strong>Azioni chiave</strong></td><td>
+                        <ul>
+                            <li>Accordo di programma ENI-MISE-Regione per bonifica</li>
+                            <li>Bando per manifestazione di interesse investitori</li>
+                            <li>Progettazione hub energie rinnovabili offshore</li>
+                            <li>Integrazione con sistema portuale per logistica green</li>
+                        </ul>
+                    </td></tr>
+                    <tr><td><strong>KPI</strong></td><td>Avvio bonifica entro 18 mesi; 200+ nuovi posti lavoro entro 36 mesi</td></tr>
+                    <tr><td><strong>Governance</strong></td><td>Commissario straordinario con poteri speciali</td></tr>
+                </table>
+
+                <h3>4.3 Priorita' 3: Academy delle Competenze Marittime</h3>
+                <table class="data-table">
+                    <tr><td><strong>Obiettivo</strong></td><td>Formare 300+ tecnici specializzati/anno per settori Blue Economy</td></tr>
+                    <tr><td><strong>Azioni chiave</strong></td><td>
+                        <ul>
+                            <li>Potenziamento ITS con specializzazione marittima 4.0</li>
+                            <li>Partnership con Accademia Navale per formazione duale</li>
+                            <li>Laboratori pratici presso cantieri navali (Benetti, Rossi)</li>
+                            <li>Certificazioni internazionali per operatori portuali</li>
+                        </ul>
+                    </td></tr>
+                    <tr><td><strong>KPI</strong></td><td>+30% diplomati ITS/anno; 80% placement entro 6 mesi</td></tr>
+                    <tr><td><strong>Governance</strong></td><td>Fondazione ITS con partecipazione Confindustria e Autorita' Portuale</td></tr>
+                </table>
+
+                <h3>4.4 Priorita' 4: Diversificazione Turismo di Qualita'</h3>
+                <table class="data-table">
+                    <tr><td><strong>Obiettivo</strong></td><td>Incrementare presenze turistiche qualificate +10%/anno</td></tr>
+                    <tr><td><strong>Azioni chiave</strong></td><td>
+                        <ul>
+                            <li>Sviluppo offerta nautica diportistica e charter</li>
+                            <li>Potenziamento terminal crociere con servizi premium</li>
+                            <li>Valorizzazione Arcipelago Toscano con turismo sostenibile</li>
+                            <li>Integrazione con circuiti enogastronomici Costa degli Etruschi</li>
+                        </ul>
+                    </td></tr>
+                    <tr><td><strong>KPI</strong></td><td>+10% presenze qualificate/anno; spesa media +15%</td></tr>
+                    <tr><td><strong>Governance</strong></td><td>DMO provinciale con coordinamento Parco Arcipelago</td></tr>
+                </table>
+            </div>
+
+            <!-- Capitolo 5 -->
+            <div class="report-chapter" id="cap5">
+                <h2>5. Conclusioni</h2>
+
+                <h3>5.1 Scenari Alternativi</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Scenario</th>
+                            <th>Condizioni</th>
+                            <th>Esito 2030</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>A - Inerziale</strong></td>
+                            <td>Nessun intervento strutturale; proseguimento trend attuali</td>
+                            <td>Popolazione 318.000; crisi ricambio generazionale settori marittimi; declino relativo</td>
+                        </tr>
+                        <tr>
+                            <td><strong>B - Reattivo</strong></td>
+                            <td>Interventi parziali; focus su emergenze</td>
+                            <td>Popolazione 322.000; stabilizzazione precaria; vulnerabilita' persistenti</td>
+                        </tr>
+                        <tr>
+                            <td><strong>C - Proattivo</strong></td>
+                            <td>Implementazione integrale raccomandazioni strategiche</td>
+                            <td>Popolazione 328.000+; rilancio Blue Economy 4.0; attrattivita' recuperata</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>5.2 Call to Action per le Istituzioni</h3>
+                <p>
+                    La provincia di Livorno si trova a un bivio. Il declino demografico, se non contrastato con politiche mirate e integrate, rischia di innescare un circolo vizioso: meno popolazione significa meno forza lavoro, che si traduce in minore attrattivita' per le imprese, quindi meno opportunita' occupazionali e ulteriore emigrazione.
+                </p>
+                <p>
+                    La forte specializzazione nella Blue Economy rappresenta al contempo un'opportunita' e una vulnerabilita'. L'opportunita' risiede nel fatto che i settori marittimi sono in crescita a livello globale (shipping, energie rinnovabili offshore, turismo nautico). La vulnerabilita' deriva dalla concentrazione che amplifica gli effetti di eventuali shock settoriali.
+                </p>
+
+                <blockquote>
+                    La strategia vincente consiste nel rafforzare l'identita' marittima della provincia, modernizzandola in chiave 4.0 e green, mentre si implementano politiche demografiche aggressive per garantire il capitale umano necessario a sostenere questa transizione.
+                </blockquote>
+
+                <h3>5.3 Riflessione Finale</h3>
+                <p>
+                    Livorno ha costruito la propria identita' sul mare. Il porto, i cantieri, la logistica marittima non sono solo settori economici: sono il DNA del territorio. La sfida dei prossimi anni sara' preservare questa identita' adattandola alle nuove sfide: la transizione energetica, la digitalizzazione della logistica, l'invecchiamento demografico.
+                </p>
+                <p>
+                    Le risorse ci sono: il PNRR offre opportunita' di investimento senza precedenti; la posizione geografica resta strategica; le competenze marittime accumulate in secoli di storia rappresentano un patrimonio inestimabile. Cio' che serve e' una visione condivisa e la volonta' politica di implementarla.
+                </p>
+            </div>
+
+            <!-- Capitolo 6 - Fonti -->
+            <div class="report-chapter" id="cap6">
+                <h2>6. Fonti e Bibliografia</h2>
+
+                <div class="fonti-section">
+                    <h3>Fonti Istituzionali Primarie</h3>
+                    <ol>
+                        <li>ISTAT - Censimento Permanente della Popolazione, dati 2018-2024</li>
+                        <li>ISTAT - Bilanci demografici comunali e provinciali</li>
+                        <li>IRPET - Rapporto Annuale sull'Economia Toscana 2025</li>
+                        <li>IRPET - L'Area Livornese nella Transizione Demografica (2023)</li>
+                        <li>Autorita' di Sistema Portuale del Mar Tirreno Settentrionale - Statistiche 2024</li>
+                        <li>Regione Toscana - Dati turismo e presenze 2024</li>
+                    </ol>
+                </div>
+
+                <div class="fonti-section">
+                    <h3>Fonti Web Secondarie</h3>
+                    <ol>
+                        <li>Tuttitalia.it - Statistiche demografiche provincia di Livorno: <a href="https://www.tuttitalia.it/toscana/provincia-di-livorno/statistiche/" target="_blank">https://www.tuttitalia.it/toscana/provincia-di-livorno/statistiche/</a></li>
+                        <li>Camera di Commercio Maremma e Tirreno - Rapporto Economia del Mare 2024: <a href="https://www.lg.camcom.gov.it" target="_blank">https://www.lg.camcom.gov.it</a></li>
+                        <li>Shipping Italy - Dati porto Livorno 2024: <a href="https://www.shippingitaly.it" target="_blank">https://www.shippingitaly.it</a></li>
+                        <li>Centro Studi Tagliacarne - Valore aggiunto provinciale: <a href="https://www.tagliacarne.it" target="_blank">https://www.tagliacarne.it</a></li>
+                        <li>Confindustria Livorno Massa Carrara: <a href="https://www.confindustrialivornomassacarrara.it" target="_blank">https://www.confindustrialivornomassacarrara.it</a></li>
+                    </ol>
+                </div>
+
+                <div class="fonti-section">
+                    <h3>Note Metodologiche</h3>
+                    <p>
+                        I dati demografici sono stati elaborati a partire dalle serie storiche ISTAT del censimento permanente e dei bilanci demografici mensili. I dati economici derivano da fonti istituzionali (IRPET, Camera di Commercio) integrate con elaborazioni su dati Unioncamere. I dati portuali provengono dalle statistiche ufficiali dell'Autorita' di Sistema Portuale.
+                    </p>
+                    <p>
+                        Le proiezioni e gli scenari sono costruiti su modelli previsionali IRPET e su assunzioni conservative basate sui trend storici. Le stime di impatto economico dei dazi derivano dalle simulazioni IRPET pubblicate nel Rapporto 2025.
+                    </p>
+                    <p style="margin-top: 1rem; font-style: italic;">
+                        Report generato il 27 gennaio 2026 | Centro Ricerche Analisi Territoriali
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation function
+        function showSection(name) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Remove active from all buttons
+            document.querySelectorAll('.nav-tabs button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(name + '-section').classList.add('active');
+
+            // Set active button
+            event.target.classList.add('active');
+        }
+
+        // Chart.js Configuration
+        Chart.defaults.font.family = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+        Chart.defaults.color = '#2d3748';
+
+        // 1. Trend Demografico
+        new Chart(document.getElementById('popChart'), {
+            type: 'line',
+            data: {
+                labels: ['2018', '2019', '2020', '2021', '2022', '2023', '2024'],
+                datasets: [{
+                    label: 'Popolazione Residente',
+                    data: [332887, 331877, 328996, 327262, 326605, 326315, 325749],
+                    borderColor: '#3182ce',
+                    backgroundColor: 'rgba(49, 130, 206, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.3,
+                    pointRadius: 5,
+                    pointBackgroundColor: '#3182ce'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        min: 320000,
+                        max: 335000,
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString('it-IT');
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 2. Saldo Naturale vs Migratorio
+        new Chart(document.getElementById('saldiChart'), {
+            type: 'bar',
+            data: {
+                labels: ['2018', '2019', '2020', '2021', '2022', '2023', '2024'],
+                datasets: [{
+                    label: 'Saldo Naturale',
+                    data: [-2088, -2260, -2704, -2634, -3041, -2536, -2542],
+                    backgroundColor: '#e53e3e',
+                    borderRadius: 4
+                }, {
+                    label: 'Saldo Migratorio',
+                    data: [705, 951, 422, 692, 2639, 2212, 2114],
+                    backgroundColor: '#38a169',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                },
+                scales: {
+                    y: {
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString('it-IT');
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 3. Struttura Eta
+        new Chart(document.getElementById('etaChart'), {
+            type: 'bar',
+            data: {
+                labels: ['0-14', '15-29', '30-44', '45-59', '60-74', '75+'],
+                datasets: [{
+                    label: 'Popolazione',
+                    data: [36006, 42251, 51719, 80861, 65202, 50566],
+                    backgroundColor: [
+                        '#63b3ed', '#4299e1', '#3182ce', '#2b6cb0', '#2c5282', '#1a365d'
+                    ],
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString('it-IT');
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 4. Traffico Porto
+        new Chart(document.getElementById('portoChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Merci (mln t)', 'Container (TEU k)', 'Rotabili (k)', 'Passeggeri (mln)'],
+                datasets: [{
+                    label: '2024',
+                    data: [29.4, 663, 485, 3.3],
+                    backgroundColor: '#3182ce',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // 5. Blue Economy
+        new Chart(document.getElementById('blueEconomyChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Blue Economy Diretta', 'Blue Economy Indiretta', 'Altri Settori'],
+                datasets: [{
+                    data: [2000, 4000, 7500],
+                    backgroundColor: ['#3182ce', '#63b3ed', '#e2e8f0'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.raw.toLocaleString('it-IT') + ' mln EUR';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 6. Export USA - Province Toscane
+        new Chart(document.getElementById('exportChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Firenze', 'Siena', 'Arezzo', 'Lucca', 'Pisa', 'Livorno', 'Prato', 'Pistoia', 'Grosseto', 'Massa-C.'],
+                datasets: [{
+                    label: 'Addetti esposti su export USA',
+                    data: [8479, 5857, 2553, 1695, 1905, 1264, 1089, 1262, 1052, 846],
+                    backgroundColor: function(context) {
+                        return context.dataIndex === 5 ? '#3182ce' : '#a0aec0';
+                    },
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString('it-IT');
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

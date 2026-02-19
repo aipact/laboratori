@@ -1,0 +1,1844 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisi Strategica Territoriale - Provincia di Firenze</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.8;
+        }
+
+        /* Fixed Navigation Header */
+        .nav-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px 30px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-header h1 {
+            color: white;
+            font-size: 1.3em;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+        }
+        .nav-tab {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 10px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        .nav-tab:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-2px);
+        }
+        .nav-tab.active {
+            background: white;
+            color: #667eea;
+            border-color: white;
+            font-weight: 600;
+        }
+
+        /* Main Container */
+        .main-container {
+            margin-top: 80px;
+            padding: 0 20px 40px;
+        }
+
+        /* Section Visibility */
+        .section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========== DASHBOARD SECTION STYLES ========== */
+        .dashboard-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .dashboard-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 50px 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 35px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+        .dashboard-hero h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .dashboard-hero p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(520px, 1fr));
+            gap: 25px;
+        }
+        .dashboard-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        .dashboard-card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .chart-container {
+            position: relative;
+            height: 360px;
+        }
+        .chart-comment {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 5px;
+            font-size: 0.9em;
+            line-height: 1.7;
+            color: #444;
+        }
+        .chart-source {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background: #e3e8ef;
+            border-radius: 5px;
+            font-size: 0.8em;
+            color: #555;
+            font-style: italic;
+        }
+        .chart-source strong {
+            color: #333;
+            font-style: normal;
+        }
+        .chart-source a {
+            color: #667eea;
+            text-decoration: none;
+            border-bottom: 1px dotted #667eea;
+        }
+        .chart-source a:hover {
+            color: #764ba2;
+            border-bottom: 1px solid #764ba2;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        .stat-value {
+            font-size: 2.2em;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .stat-label {
+            font-size: 0.95em;
+            opacity: 0.95;
+        }
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* ========== SINTESI SECTION STYLES ========== */
+        .sintesi-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .sintesi-splash {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 35px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .sintesi-splash h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .sintesi-splash .subtitle {
+            font-size: 1.3em;
+            opacity: 0.95;
+            margin-bottom: 10px;
+        }
+        .sintesi-splash .meta {
+            font-size: 1em;
+            opacity: 0.8;
+            margin-top: 15px;
+        }
+
+        .sintesi-content {
+            background: white;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        }
+        .sintesi-content h2 {
+            color: #667eea;
+            font-size: 2.2em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+            padding-left: 20px;
+        }
+        .sintesi-content h3 {
+            color: #764ba2;
+            font-size: 1.6em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        .sintesi-content p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        .sintesi-content strong {
+            color: #764ba2;
+        }
+        .sintesi-content ul, .sintesi-content ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+        .sintesi-content li {
+            margin-bottom: 10px;
+        }
+        .sintesi-content blockquote {
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 25px 0;
+            font-style: italic;
+            color: #555;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        .sintesi-box {
+            background: #f0f4ff;
+            border: 2px solid #667eea;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+        }
+        .sintesi-box h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .risk-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .risk-table th, .risk-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .risk-table th {
+            background: #667eea;
+            color: white;
+        }
+        .risk-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        /* ========== REPORT SECTION STYLES ========== */
+        .report-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .report-splash {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 35px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .report-splash h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .report-splash p {
+            font-size: 1.3em;
+            opacity: 0.95;
+            margin-bottom: 10px;
+        }
+        .report-splash .meta {
+            font-size: 1em;
+            opacity: 0.8;
+            margin-top: 20px;
+        }
+
+        .toc {
+            background: white;
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            margin-bottom: 35px;
+        }
+        .toc h2 {
+            color: #667eea;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+        }
+        .toc ul {
+            list-style: none;
+        }
+        .toc li {
+            margin-bottom: 12px;
+        }
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: block;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 1.05em;
+        }
+        .toc a:hover {
+            background: #f0f4ff;
+            padding-left: 25px;
+        }
+
+        .report-content {
+            background: white;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+        .report-content h2 {
+            color: #667eea;
+            font-size: 2.2em;
+            margin-top: 50px;
+            margin-bottom: 25px;
+            border-left: 5px solid #667eea;
+            padding-left: 20px;
+        }
+        .report-content h2:first-of-type {
+            margin-top: 0;
+        }
+        .report-content h3 {
+            color: #764ba2;
+            font-size: 1.6em;
+            margin-top: 35px;
+            margin-bottom: 15px;
+        }
+        .report-content h4 {
+            color: #555;
+            font-size: 1.3em;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        .report-content p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        .report-content strong {
+            color: #764ba2;
+        }
+        .report-content ul, .report-content ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+        .report-content li {
+            margin-bottom: 10px;
+        }
+        .report-content blockquote {
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 25px 0;
+            font-style: italic;
+            color: #555;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        .report-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        .report-content th, .report-content td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .report-content th {
+            background: #667eea;
+            color: white;
+        }
+        .report-content tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        .report-content hr {
+            border: none;
+            border-top: 2px solid #e0e0e0;
+            margin: 40px 0;
+        }
+
+        /* ========== VALUTAZIONE SECTION STYLES ========== */
+        .valutazione-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .valutazione-splash {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 35px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .valutazione-splash h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .valutazione-splash .subtitle {
+            font-size: 1.3em;
+            opacity: 0.95;
+        }
+        .valutazione-splash .meta {
+            font-size: 1em;
+            opacity: 0.8;
+            margin-top: 15px;
+        }
+
+        .val-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .val-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        .val-card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .val-card h3 {
+            color: #764ba2;
+            font-size: 1.2em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        /* Voto complessivo gauge */
+        .voto-gauge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 0;
+        }
+        .voto-numero {
+            font-size: 5em;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+        .voto-label {
+            font-size: 1.2em;
+            color: #666;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+        .gauge-bar-container {
+            width: 100%;
+            max-width: 500px;
+            height: 28px;
+            background: #e5e7eb;
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+        }
+        .gauge-bar-fill {
+            height: 100%;
+            border-radius: 14px;
+            background: linear-gradient(90deg, #ef4444 0%, #f59e0b 40%, #10b981 70%, #667eea 100%);
+            transition: width 1s ease;
+        }
+        .gauge-markers {
+            display: flex;
+            justify-content: space-between;
+            max-width: 500px;
+            width: 100%;
+            margin-top: 5px;
+            font-size: 0.8em;
+            color: #999;
+        }
+
+        /* Voti per area */
+        .area-voto {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 14px;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        .area-voto-label {
+            min-width: 240px;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95em;
+        }
+        .area-voto-bar {
+            flex: 1;
+            height: 22px;
+            background: #e5e7eb;
+            border-radius: 11px;
+            overflow: hidden;
+        }
+        .area-voto-fill {
+            height: 100%;
+            border-radius: 11px;
+            transition: width 1s ease;
+        }
+        .area-voto-fill.verde { background: linear-gradient(90deg, #10b981, #059669); }
+        .area-voto-fill.giallo { background: linear-gradient(90deg, #f59e0b, #d97706); }
+        .area-voto-fill.rosso { background: linear-gradient(90deg, #ef4444, #dc2626); }
+        .area-voto-value {
+            min-width: 55px;
+            text-align: right;
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+        .area-voto-value.verde { color: #059669; }
+        .area-voto-value.giallo { color: #d97706; }
+        .area-voto-value.rosso { color: #dc2626; }
+
+        /* Pesi table */
+        .val-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .val-table th, .val-table td {
+            border: 1px solid #ddd;
+            padding: 12px 15px;
+            text-align: left;
+        }
+        .val-table th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+        .val-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        .val-table tr:last-child {
+            font-weight: 700;
+            background: #f0f4ff;
+        }
+        .val-table td:nth-child(2),
+        .val-table td:nth-child(3),
+        .val-table td:nth-child(4) {
+            text-align: center;
+        }
+
+        /* Punti forza / deboli */
+        .punto-item {
+            display: flex;
+            gap: 15px;
+            padding: 18px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+        .punto-item.forza {
+            background: #ecfdf5;
+            border-left: 4px solid #10b981;
+        }
+        .punto-item.debole {
+            background: #fff7ed;
+            border-left: 4px solid #f59e0b;
+        }
+        .punto-icon {
+            font-size: 1.5em;
+            min-width: 35px;
+            display: flex;
+            align-items: flex-start;
+            padding-top: 2px;
+        }
+        .punto-text strong {
+            color: #333;
+        }
+
+        /* Checklist */
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        .checklist-box {
+            min-width: 24px;
+            height: 24px;
+            border: 2px solid #d1d5db;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2px;
+            background: white;
+        }
+
+        /* Miglioramenti cards */
+        .miglioramento-item {
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            line-height: 1.7;
+        }
+        .miglioramento-item strong {
+            color: #667eea;
+        }
+        .miglioramento-item.tecnico {
+            border-left-color: #764ba2;
+        }
+        .miglioramento-item.tecnico strong {
+            color: #764ba2;
+        }
+
+        /* Print Styles */
+        @media print {
+            .nav-header { display: none; }
+            .main-container { margin-top: 0; }
+            .section { display: block !important; }
+            .dashboard-card, .report-content, .sintesi-content {
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .nav-header h1 {
+                font-size: 1.1em;
+            }
+            .nav-tabs {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .report-content, .sintesi-content {
+                padding: 25px;
+            }
+            .dashboard-hero h1 {
+                font-size: 2em;
+            }
+            .report-splash h1, .sintesi-splash h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fixed Navigation Header -->
+    <div class="nav-header">
+        <h1>Analisi Strategica Territoriale - Provincia di Firenze</h1>
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('dashboard')">Dashboard</button>
+            <button class="nav-tab" onclick="showSection('sintesi')">Sintesi Esecutiva</button>
+            <button class="nav-tab" onclick="showSection('report')">Report Completo</button>
+            <button class="nav-tab" onclick="showSection('valutazione')">Valutazione</button>
+            <button class="nav-tab" onclick="window.print()">Stampa</button>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+
+        <!-- ========== DASHBOARD SECTION ========== -->
+        <div id="dashboard-section" class="section active">
+            <div class="dashboard-wrapper">
+                <div class="dashboard-hero">
+                    <h1>Dashboard Territoriale Interattiva</h1>
+                    <p>Citta Metropolitana di Firenze - Analisi Integrata 2018-2024</p>
+                </div>
+
+                <div class="dashboard-grid">
+                    <!-- Card 1: Trend Demografico -->
+                    <div class="dashboard-card">
+                        <h2>Trend Demografico (2018-2024)</h2>
+                        <div class="chart-container">
+                            <canvas id="popChart"></canvas>
+                        </div>
+                        <p class="chart-comment">
+                            <strong>Analisi:</strong> La popolazione della Citta Metropolitana di Firenze ha registrato un calo significativo nel biennio 2020-2021 (effetto pandemia), toccando il minimo di 987.260 nel 2021. Dal 2022 si osserva una stabilizzazione attorno ai 988.000 abitanti grazie al forte saldo migratorio positivo che compensa il saldo naturale negativo. La perdita netta nel periodo 2018-2024 e di circa 10.900 unita (-1,1%).
+                        </p>
+                        <div class="chart-source">
+                            <strong>Fonte dati:</strong> <a href="https://www.tuttitalia.it/toscana/provincia-di-firenze/statistiche/popolazione-andamento-demografico/" target="_blank">TuttiItalia.it</a> - Elaborazione dati ISTAT (2018-2024)
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Saldo Naturale vs Migratorio -->
+                    <div class="dashboard-card">
+                        <h2>Saldo Naturale vs Migratorio</h2>
+                        <div class="chart-container">
+                            <canvas id="balanceChart"></canvas>
+                        </div>
+                        <p class="chart-comment">
+                            <strong>Analisi:</strong> Il saldo naturale e stabilmente negativo (media -5.500/anno), con un picco di -6.674 nel 2022. Il saldo migratorio e stato negativo nel 2020 (pandemia) ma dal 2022 mostra una forte ripresa (+7.677 nel 2022, +7.589 nel 2023), diventando l'unica leva di compensazione demografica. Senza immigrazione, la popolazione calerebbe di oltre 5.000 unita l'anno.
+                        </p>
+                        <div class="chart-source">
+                            <strong>Fonte dati:</strong> <a href="https://www.tuttitalia.it/toscana/provincia-di-firenze/statistiche/popolazione-andamento-demografico/" target="_blank">TuttiItalia.it</a> - Bilancio demografico ISTAT (2018-2024)
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Export per Settore -->
+                    <div class="dashboard-card">
+                        <h2>Export - Variazione per Settore (2024)</h2>
+                        <div class="chart-container">
+                            <canvas id="exportChart"></canvas>
+                        </div>
+                        <p class="chart-comment">
+                            <strong>Analisi:</strong> L'export fiorentino nel 2024 e trainato dalla farmaceutica (+65,7%) e dai macchinari pesanti (+45,4%), mentre il sistema moda soffre pesantemente: pelletteria -20%, calzature -24,9%, abbigliamento -7,4%. Senza la componente farmaceutica, la crescita complessiva dell'export sarebbe stata solo +0,6%, evidenziando una forte dipendenza da questo settore.
+                        </p>
+                        <div class="chart-source">
+                            <strong>Fonte dati:</strong> <a href="https://www.ansa.it" target="_blank">ANSA/Unioncamere</a> - "L'export di Firenze in crescita con farmaci e meccanica pesante" (dicembre 2024)
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Valore Aggiunto Settoriale -->
+                    <div class="dashboard-card">
+                        <h2>Valore Aggiunto per Settore</h2>
+                        <div class="chart-container">
+                            <canvas id="valueAddedChart"></canvas>
+                        </div>
+                        <p class="chart-comment">
+                            <strong>Analisi:</strong> L'economia fiorentina si caratterizza per una forte componente terziaria (turismo, servizi), con il turismo che genera circa 3 miliardi di euro di valore aggiunto. Il sistema moda contribuisce con 2,6 miliardi (incluso commercio), ma ha perso circa 300 milioni nel 2023. La farmaceutica (parte del distretto Life Sciences da 6+ miliardi di fatturato) e in forte espansione.
+                        </p>
+                        <div class="chart-source">
+                            <strong>Fonti dati:</strong> Camera di Commercio di Firenze - "Il Sistema Moda a Firenze" (2024); Centro Studi Turistici Firenze; Toscana Life Sciences
+                        </div>
+                    </div>
+
+                    <!-- Card 5: Struttura Eta -->
+                    <div class="dashboard-card full-width">
+                        <h2>Struttura Popolazione per Fascia d'Eta (2024)</h2>
+                        <div class="chart-container">
+                            <canvas id="ageChart"></canvas>
+                        </div>
+                        <p class="chart-comment">
+                            <strong>Analisi:</strong> Invecchiamento strutturale avanzato con picco nella fascia 45-59 anni (236.997 abitanti, 24,0%), che rappresenta l'imminente ondata pensionistica del prossimo decennio. L'indice di vecchiaia e di 234,3 (oltre 2 anziani per ogni giovane under 14). La base giovanile e critica: solo l'11,5% della popolazione ha meno di 15 anni, con un tasso di natalita ai minimi storici (6,0 per mille).
+                        </p>
+                        <div class="chart-source">
+                            <strong>Fonte dati:</strong> <a href="https://www.tuttitalia.it/toscana/provincia-di-firenze/statistiche/popolazione-eta-sesso-stato-civile-2024/" target="_blank">TuttiItalia.it</a> - Dati ISTAT popolazione per eta (2024)
+                        </div>
+                    </div>
+
+                    <!-- Card 6: KPI -->
+                    <div class="dashboard-card full-width">
+                        <h2>Indicatori Chiave di Performance</h2>
+                        <div class="stats-grid">
+                            <div class="stat-box">
+                                <div class="stat-value">988.068</div>
+                                <div class="stat-label">Popolazione Totale (2024)</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">-1,1%</div>
+                                <div class="stat-label">Variazione Demografica 2018-2024</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">22,5 Mld &euro;</div>
+                                <div class="stat-label">Export 2024 (+8,3%)</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">~3 Mld &euro;</div>
+                                <div class="stat-label">VA Turismo (2024)</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">37.700 &euro;</div>
+                                <div class="stat-label">PIL pro capite Toscana (2023)</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">234,3</div>
+                                <div class="stat-label">Indice di Vecchiaia (2025)</div>
+                            </div>
+                        </div>
+                        <div class="chart-source" style="margin-top: 20px;">
+                            <strong>Fonti Aggregate Dashboard:</strong><br>
+                            &bull; <strong>ISTAT:</strong> Demografia, Conti Territoriali (2018-2024) - via TuttiItalia.it<br>
+                            &bull; <strong>Camera di Commercio FI:</strong> Export, Valore Aggiunto, Sistema Moda<br>
+                            &bull; <strong>ANSA/Unioncamere:</strong> Export settoriale 2024<br>
+                            &bull; <strong>IRPET:</strong> PIL Toscana pro capite 2023; Rapporto 2025
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== SINTESI ESECUTIVA SECTION ========== -->
+        <div id="sintesi-section" class="section">
+            <div class="sintesi-wrapper">
+                <div class="sintesi-splash">
+                    <h1>Sintesi Esecutiva</h1>
+                    <div class="subtitle">Citta Metropolitana di Firenze - Diagnosi Strategica Integrata</div>
+                    <div class="meta">Centro Ricerche Analisi Territoriali | Febbraio 2026 | Dati 2018-2024</div>
+                </div>
+
+                <div class="sintesi-content">
+
+                    <!-- Tesi Centrale -->
+                    <div class="sintesi-box">
+                        <h4>Tesi Centrale</h4>
+                        <p>La Citta Metropolitana di Firenze sta attraversando una <strong>transizione strutturale profonda</strong>: da economia manifatturiera centrata sul sistema moda/pelletteria a polo farmaceutico-tecnologico e turistico di scala globale. Questa transizione, se non governata, rischia di generare fratture sociali significative tra i lavoratori del settore moda in crisi e la crescente domanda di competenze specializzate nei settori emergenti. Il declino demografico naturale (saldo negativo di -5.500/anno) rende la migrazione l'unica leva di stabilizzazione, mentre il divario infrastrutturale tra area urbana e aree interne (Mugello, Valdisieve) minaccia la coesione territoriale.</p>
+                    </div>
+
+                    <h2>Tre Evidenze Chiave</h2>
+
+                    <h3>1. Evidenza Demografica: Invecchiamento Strutturale Compensato dalla Migrazione</h3>
+                    <p>Con un indice di vecchiaia di <strong>234,3</strong> e un'eta media di <strong>47,9 anni</strong>, Firenze presenta un invecchiamento tra i piu accentuati d'Italia. Il saldo naturale e stabilmente negativo (-5.000/-6.700 unita l'anno), mentre il saldo migratorio e diventato l'unico fattore di tenuta demografica: <strong>+7.677 nel 2022</strong>, <strong>+7.589 nel 2023</strong>. La comunita straniera (13,2% della popolazione, 130.700 residenti) e ormai strutturale, con la comunita cinese come prima per numerosita (23.789 residenti).</p>
+
+                    <h3>2. Evidenza Economica: Transizione da Moda a Farmaceutica con Rischi Sociali</h3>
+                    <p>L'export provinciale ha raggiunto <strong>22,5 miliardi di euro nel 2024 (+8,3%)</strong>, ma questa crescita maschera una profonda dualita: la farmaceutica e cresciuta del <strong>+65,7%</strong> (29,8% dell'export totale), mentre la pelletteria - storico settore identitario - ha perso il <strong>-20%</strong>. Il sistema moda ha "bruciato" circa <strong>300 milioni di valore aggiunto</strong> nel 2023, con circa 2 aziende a settimana in chiusura. Il turismo (8,9 milioni di presenze nel 2023, ~3 miliardi di VA) resta un pilastro, ma la dipendenza dalla farmaceutica a controllo estero introduce rischi di delocalizzazione.</p>
+
+                    <h3>3. Evidenza Infrastrutturale: Metropoli Connessa ma con Periferie Fragili</h3>
+                    <p>L'area urbana vanta infrastrutture di eccellenza: tramvia con <strong>39 milioni di passeggeri nel 2024</strong> (+11,8%), Passante AV in costruzione (completamento 2027), aeroporto a <strong>3,5 milioni di passeggeri</strong> (+14,3%), FTTH al <strong>80%+ nel capoluogo</strong>. Tuttavia, <strong>27 comuni su 41</strong> sono sotto la media nazionale per connettivita digitale e 4 comuni (Firenzuola, Marradi, Palazzuolo sul Senio, San Godenzo) sono classificati SNAI come aree periferiche/ultraperiferiche con tempi di percorrenza ai servizi di circa 40 minuti.</p>
+
+                    <h2>Scenari di Rischio</h2>
+
+                    <table class="risk-table">
+                        <thead>
+                            <tr>
+                                <th>Scenario</th>
+                                <th>Probabilita</th>
+                                <th>Impatto</th>
+                                <th>Descrizione</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Collasso del sistema moda</strong></td>
+                                <td>Alta</td>
+                                <td>Molto Alto</td>
+                                <td>Prosecuzione della crisi pelletteria (-20% export) con chiusura accelerata di PMI artigiane. Rischio perdita di 10.000+ posti di lavoro nel settore moda nei prossimi 3-5 anni, con impatto sociale concentrato nell'area Empoli-Scandicci.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dipendenza farmaceutica estera</strong></td>
+                                <td>Media</td>
+                                <td>Alto</td>
+                                <td>Il 29,8% dell'export dipende dalla farmaceutica, settore a forte controllo estero (Sanofi, ecc.). Decisioni di delocalizzazione o riorganizzazione potrebbero ridurre drasticamente l'export e l'occupazione qualificata.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Spopolamento aree interne</strong></td>
+                                <td>Alta</td>
+                                <td>Medio</td>
+                                <td>Mugello e Montagna Fiorentina con digital divide strutturale, servizi a 40 minuti e classificazione SNAI periferica. Rischio di abbandono progressivo con perdita di presidio territoriale e aumento del rischio idrogeologico.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2>Priorita Strategiche</h2>
+
+                    <ol>
+                        <li><strong>Riconversione lavoratori moda verso nuovi settori</strong> - Programmi di reskilling per i 50.000 addetti del sistema moda, con focus su farmaceutica, meccatronica e digitale. KPI: almeno 5.000 lavoratori riconvertiti entro 2028.</li>
+                        <li><strong>Consolidamento polo Life Sciences</strong> - Attrarre investimenti R&amp;S e rafforzare l'ancoraggio territoriale delle multinazionali farmaceutiche. KPI: +20% brevetti e +2.000 addetti R&amp;S entro 2030.</li>
+                        <li><strong>Infrastrutture digitali per aree interne</strong> - Colmare il digital divide dei 27 comuni sotto-performanti, con FTTH o FWA a banda ultralarga. KPI: copertura FTTH &gt;80% in tutti i comuni entro 2028.</li>
+                        <li><strong>Politiche di natalita e retention giovanile</strong> - Contrastare la denatalita (tasso 6,0 per mille) e la fuga dei giovani imprenditori (-24%). KPI: invertire il saldo imprenditoriale giovanile entro 2027.</li>
+                    </ol>
+
+                    <h2>Call to Action</h2>
+
+                    <div class="sintesi-box">
+                        <h4>Timeline Esecutivo</h4>
+                        <ul>
+                            <li><strong>Immediato (2026)</strong>: Avviare piano d'emergenza per lavoratori moda in CIG; accelerare cantieri tramvia T3-T4 e Passante AV.</li>
+                            <li><strong>Breve termine (2026-2027)</strong>: Definire piano di reskilling con Camera di Commercio e Regione; completare copertura FTTH nei 14 comuni meno connessi.</li>
+                            <li><strong>Medio termine (2027-2030)</strong>: Completamento Passante AV e nuova Stazione Belfiore; ampliamento aeroporto Peretola; raggiungimento obiettivo 85 milioni passeggeri/anno tramvia.</li>
+                            <li><strong>Lungo termine (2030+)</strong>: Verifica transizione economica completata; monitoraggio stabilizzazione demografica; valutazione impatto infrastrutturale su coesione territoriale.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== REPORT COMPLETO SECTION ========== -->
+        <div id="report-section" class="section">
+            <div class="report-wrapper">
+                <div class="report-splash">
+                    <h1>Report Completo</h1>
+                    <p>Analisi Strategica della Citta Metropolitana di Firenze</p>
+                    <div class="meta">Centro Ricerche Analisi Territoriali | Febbraio 2026 | Approccio multidisciplinare integrato</div>
+                </div>
+
+                <!-- Indice Navigabile -->
+                <div class="toc">
+                    <h2>Indice</h2>
+                    <ul>
+                        <li><a href="#r-intro">1. Introduzione e Metodologia</a></li>
+                        <li><a href="#r-demo">2. Dimensione Demografica</a></li>
+                        <li><a href="#r-eco">3. Dimensione Economica</a></li>
+                        <li><a href="#r-urban">4. Dimensione Urbanistica e Infrastrutturale</a></li>
+                        <li><a href="#r-corr">5. Correlazioni tra Dimensioni</a></li>
+                        <li><a href="#r-scenari">6. Scenari di Rischio Data-Driven</a></li>
+                        <li><a href="#r-raccomandazioni">7. Raccomandazioni Strategiche</a></li>
+                        <li><a href="#r-conclusioni">8. Conclusioni</a></li>
+                        <li><a href="#r-fonti">9. Fonti e Bibliografia</a></li>
+                    </ul>
+                </div>
+
+                <div class="report-content">
+
+                    <!-- 1. Introduzione e Metodologia -->
+                    <h2 id="r-intro">1. Introduzione e Metodologia</h2>
+
+                    <h3>1.1 Contesto territoriale</h3>
+                    <p>La Citta Metropolitana di Firenze, istituita nel 2015, comprende 41 comuni e rappresenta il cuore economico, culturale e demografico della Toscana. Con quasi 988.000 abitanti (2024), e la provincia toscana piu popolosa e si colloca tra le prime 10 in Italia per valore aggiunto pro capite. Il territorio spazia dal capoluogo fiorentino - patrimonio UNESCO e polo turistico mondiale - alle aree interne montane del Mugello e della Valdisieve, caratterizzate da fragilita strutturali e rischio spopolamento.</p>
+
+                    <h3>1.2 Approccio multidisciplinare</h3>
+                    <p>La presente analisi adotta un approccio integrato articolato su tre dimensioni complementari:</p>
+                    <ul>
+                        <li><strong>Dimensione demografica</strong> (Sociologo dei Processi Locali): trend popolazione, struttura per eta, saldi naturali e migratori, popolazione straniera.</li>
+                        <li><strong>Dimensione economica</strong> (Economista Regionale): PIL e valore aggiunto, export settoriale, mercato del lavoro, distretti produttivi.</li>
+                        <li><strong>Dimensione urbanistica-infrastrutturale</strong> (Urbanista): reti di trasporto, connettivita digitale, consumo di suolo, accessibilita aree interne.</li>
+                    </ul>
+
+                    <h3>1.3 Gerarchia delle fonti</h3>
+                    <p>I dati utilizzati provengono da una gerarchia rigorosa: (1) fonti istituzionali primarie (ISTAT, Camera di Commercio di Firenze, IRPET, Regione Toscana, AGCOM, ISPRA); (2) fonti giornalistiche e di settore con dati verificabili (ANSA, Il Sole 24 Ore, FirenzeTODAY); (3) conoscenza esperta per contestualizzazione e interpretazione dei trend. Ogni dato numerico riportato e accompagnato dalla fonte originale.</p>
+
+                    <hr>
+
+                    <!-- 2. Dimensione Demografica -->
+                    <h2 id="r-demo">2. Dimensione Demografica</h2>
+
+                    <h3>2.1 Trend popolazione 2018-2024</h3>
+                    <p>La popolazione della Citta Metropolitana di Firenze ha registrato un andamento discendente nel periodo 2018-2024, passando da <strong>998.976</strong> abitanti (2018) a <strong>988.068</strong> (2024), con una perdita netta di circa 10.900 unita (-1,1%). Il punto di minimo e stato raggiunto nel 2021 (987.260), anno che ha risentito dell'impatto cumulato della pandemia COVID-19 sul saldo migratorio (divenuto negativo nel 2020: -1.738).</p>
+
+                    <p>Dal 2022 si osserva una stabilizzazione attorno ai 988.000 abitanti, grazie alla ripresa del saldo migratorio che ha raggiunto valori significativi: +7.677 nel 2022, +7.589 nel 2023 e +6.455 nel 2024. Questi flussi migratori positivi compensano il saldo naturale stabilmente negativo, attestatosi tra -4.149 e -6.674 nel periodo considerato.</p>
+
+                    <h3>2.2 Saldo naturale e migratorio</h3>
+                    <p>Il saldo naturale (nati meno morti) e il principale fattore di declino demografico, con una media annua di circa -5.500 unita. Il dato piu critico e stato registrato nel 2022 (-6.674), anno in cui il tasso di natalita e sceso al minimo storico. Il tasso di natalita attuale (6,0 per mille) e tra i piu bassi d'Italia, in netto calo dal 9,0 per mille del 2002, mentre il tasso di mortalita si attesta all'11,8 per mille.</p>
+
+                    <p>Il saldo migratorio e l'unica leva demografica positiva. L'attrattivita migratoria della Citta Metropolitana e confermata dalla forte componente straniera: <strong>130.700 residenti stranieri</strong> (13,2% della popolazione), che rappresentano circa il 30,8% del totale degli immigrati toscani. Le principali comunita sono quella cinese (23.789, 18,2%), romena (17.262, 13,2%) e albanese (15.596, 11,9%).</p>
+
+                    <h3>2.3 Struttura per eta</h3>
+                    <p>La struttura per eta rivela un invecchiamento molto avanzato. La fascia piu numerosa e quella 45-59 anni (236.997 abitanti, 24,0%), seguita da 60-74 anni (183.795, 18,6%). Le fasce giovani sono sottodimensionate: 0-14 anni solo 113.620 (11,5%) e 15-29 anni 123.453 (12,5%).</p>
+
+                    <p>L'indice di vecchiaia e pari a <strong>234,3</strong> (234 anziani over 65 ogni 100 giovani under 14), valore molto superiore alla media nazionale. L'eta media della popolazione e di <strong>47,9 anni</strong>. L'indice di dipendenza strutturale (60,2) indica che per ogni 100 persone in eta lavorativa ve ne sono 60 in eta non attiva (giovani + anziani). La speranza di vita alla nascita (84,6 anni, dato 2023) colloca Firenze tra le prime province italiane per longevita.</p>
+
+                    <h3>2.4 Capitale umano e istruzione</h3>
+                    <p>Il capoluogo fiorentino si distingue per un elevato livello di istruzione: il <strong>24,8%</strong> della popolazione del Comune di Firenze possiede un titolo di laurea o dottorato di ricerca (Censimento ISTAT 2021), contro una media del Centro Italia del 17,2%. Firenze e un hub universitario di rilevanza nazionale, con l'Universita degli Studi di Firenze tra i principali atenei italiani.</p>
+
+                    <hr>
+
+                    <!-- 3. Dimensione Economica -->
+                    <h2 id="r-eco">3. Dimensione Economica</h2>
+
+                    <h3>3.1 PIL e Valore Aggiunto</h3>
+                    <p>Firenze si posiziona al <strong>10deg posto nazionale</strong> per valore aggiunto pro capite (2022), significativamente sopra la media nazionale di 29.703 euro. Il PIL pro capite della Toscana (dato regionale piu recente disponibile) e pari a <strong>37.700 euro</strong> (2023, ISTAT), con il contributo determinante della provincia fiorentina.</p>
+
+                    <p>L'economia fiorentina presenta una struttura complessa e in transizione, con tre pilastri principali:</p>
+                    <ul>
+                        <li><strong>Turismo e cultura:</strong> circa 3 miliardi di euro di valore aggiunto (2024), con 8,9 milioni di presenze turistiche nel solo Comune di Firenze (4deg comune italiano) e una stima di 15 milioni di presenze nell'intera area metropolitana nel 2024. L'88,7% delle presenze estive e di origine straniera.</li>
+                        <li><strong>Sistema moda/pelletteria:</strong> 2,6 miliardi di valore aggiunto (incluso commercio), ~50.000 addetti, ~11.000 imprese. In crisi strutturale dal 2023 con perdita di circa 300 milioni di VA.</li>
+                        <li><strong>Farmaceutica/Life Sciences:</strong> distretto con 200+ aziende, oltre 6 miliardi di fatturato, ~11.000 addetti in Toscana. In forte espansione.</li>
+                    </ul>
+
+                    <h3>3.2 Export</h3>
+                    <p>L'export della Citta Metropolitana di Firenze ha raggiunto una proiezione annua di <strong>22,5 miliardi di euro nel 2024</strong> (+8,3% sull'anno precedente). Nei primi 9 mesi del 2024, le esportazioni hanno totalizzato 17 miliardi di euro (+13,9% rispetto allo stesso periodo 2023). Le esportazioni rappresentano oltre la meta del PIL provinciale.</p>
+
+                    <p>La dinamica settoriale e estremamente polarizzata:</p>
+                    <ul>
+                        <li><strong>Farmaceutica:</strong> +65,7%, con il 29,8% del totale export provinciale</li>
+                        <li><strong>Macchinari pesanti:</strong> +45,4%</li>
+                        <li><strong>Pelletteria:</strong> -20%</li>
+                        <li><strong>Calzature:</strong> -24,9%</li>
+                        <li><strong>Abbigliamento:</strong> -7,4%</li>
+                    </ul>
+
+                    <p>I principali mercati di destinazione sono gli USA (26% del totale, +48 p.p. di crescita), la Francia (13,7%), la Germania (8,1%). Da segnalare la forte crescita verso Regno Unito (+86%), Spagna (+81,2%) e Arabia Saudita (+298,8%). Firenze e la prima provincia toscana per concentrazione di imprese esportatrici verso gli USA (1.087 unita locali, 8.479 addetti, 33% del totale toscano).</p>
+
+                    <h3>3.3 Mercato del lavoro</h3>
+                    <p>Il tasso di occupazione del Comune di Firenze e pari al <strong>72,7%</strong> (ISTAT 2024), con un tasso di disoccupazione del <strong>7,6%</strong>. A livello regionale, la Toscana ha registrato miglioramenti significativi nel 2024: occupati +2,8% nel secondo trimestre, con disoccupazione scesa dal 5,3% al 3,9%. La disoccupazione giovanile toscana e del 17,8% (2023), in calo dal 20,0% del 2022 e sotto la media nazionale del 22,7%.</p>
+
+                    <p>Le criticita riguardano il tessuto imprenditoriale: le imprese artigiane sono scese sotto soglia 27.000 (26.920 a fine 2023, -1,3%), i giovani imprenditori sono in ritirata (-24%), e il settore moda registra circa 2 chiusure aziendali a settimana. Tuttavia, nel 2025 si registra un segnale di ripresa con +574 imprese in saldo positivo.</p>
+
+                    <h3>3.4 Distretti produttivi</h3>
+                    <p>Il territorio e organizzato attorno a quattro distretti principali:</p>
+                    <ul>
+                        <li><strong>Distretto Moda/Pelletteria (Firenze-Empoli-Prato):</strong> centro mondiale della pelletteria di lusso. ~11.000 imprese, 50.000 addetti. In crisi strutturale con chiusure settimanali. Principali committenti: Gucci/Kering, Ferragamo, Prada.</li>
+                        <li><strong>Distretto Life Sciences (Sesto Fiorentino):</strong> 200+ aziende, 6+ miliardi di fatturato, 32 centri di ricerca, 1.500 ricercatori. Player: Menarini, bioMerieux, EOS. Traino dell'export 2023-2024.</li>
+                        <li><strong>Distretto Meccano-Tessile (Empolese-Valdelsa):</strong> macchinari per tessile e lavorazioni meccaniche. Export macchinari +45,4% nel 2024.</li>
+                        <li><strong>Cluster Turismo e Cultura (Firenze citta):</strong> rilevanza mondiale, 8,9 milioni di presenze, principale polo congressuale del Centro Italia (807.000 partecipanti nel 2023, +15,2%).</li>
+                    </ul>
+
+                    <hr>
+
+                    <!-- 4. Dimensione Urbanistica -->
+                    <h2 id="r-urban">4. Dimensione Urbanistica e Infrastrutturale</h2>
+
+                    <h3>4.1 Rete dei trasporti</h3>
+
+                    <h4>Rete stradale</h4>
+                    <p>La provincia e attraversata dall'A1 (Autostrada del Sole, asse nord-sud) e dall'A11 (Firenze-Pisa Nord, asse ovest). Il tratto autostradale Calenzano-Firenze Sud e particolarmente critico per congestione. Sono in corso lavori per la terza corsia Firenze Sud-Incisa (priorita regionale) e l'upgrading dell'A11. Le strade provinciali nelle aree montane (Mugello, Alto Valdarno) sono soggette a dissesto idrogeologico.</p>
+
+                    <h4>Rete ferroviaria e Passante AV</h4>
+                    <p>Firenze e nodo ferroviario centrale della Toscana, con le stazioni di Santa Maria Novella, Rifredi, Campo di Marte e Castello. L'opera infrastrutturale piu rilevante in corso e il <strong>Passante AV</strong>: un sottoattraversamento ferroviario urbano di circa 7 km in galleria, con la nuova <strong>Stazione Firenze Belfiore</strong> (progetto Norman Foster, ~45.000 mq, fino a 25 metri sotto il livello stradale). Al 2024, la talpa IRIS ha scavato oltre 1.630 m dei ~5 km previsti. Completamento stimato entro 2027. L'opera consentira la separazione completa tra treni AV e regionali, aumentando la capacita della rete per i pendolari.</p>
+
+                    <h4>Tramvia</h4>
+                    <p>La tramvia fiorentina rappresenta un successo crescente: <strong>39 milioni di passeggeri nel 2024</strong> (+11,8% rispetto al 2023), con record storico di oltre 4 milioni in un singolo mese (ottobre 2024). La rete comprende la Linea T1 (Scandicci-Careggi) e la Linea T2 (Aeroporto-San Marco, estensione in esercizio dal 25/01/2025). Con fondi PNRR sono previsti +12,2 km di nuove linee (T3 Liberta-Bagno a Ripoli e T4 Leopolda-Piagge-Campi Bisenzio), con obiettivo a regime di <strong>85 milioni di passeggeri/anno</strong>.</p>
+
+                    <h4>Aeroporto</h4>
+                    <p>L'Aeroporto di Firenze-Peretola ha registrato <strong>3.516.925 passeggeri nel 2024</strong> (+14,3%), con un record storico nel primo semestre (oltre 1,6 milioni, +21,9%). E in fase di progettazione l'ampliamento con nuova pista da 2.200 m (attuale 1.650 m), costo oltre 400 milioni di euro, soggetto a parere UE per il sito Natura 2000.</p>
+
+                    <h3>4.2 Connettivita digitale</h3>
+                    <p>La copertura FTTH nella provincia di Firenze raggiunge il <strong>73% delle famiglie</strong> (vs media nazionale 69%), con il Comune di Firenze che supera l'<strong>80%</strong>. Tuttavia, la distribuzione e molto disomogenea: su 41 comuni, <strong>27 risultano sotto-performanti</strong> rispetto alla media nazionale, mentre solo 14 sono sovra-performanti. La copertura mobile/5G raggiunge il 99,06% nell'area urbana ma scende al 95,78% nelle aree rurali.</p>
+
+                    <p>Le aree montane del Mugello e della Montagna Fiorentina presentano un gap strutturale, con interventi di rete mista fibra ottica/ponti radio e FWA (Fixed Wireless Access) per le zone non raggiunte dalla fibra.</p>
+
+                    <h3>4.3 Consumo di suolo</h3>
+                    <p>Il Comune di Firenze presenta una percentuale di superficie artificiale del <strong>42,06%</strong>, terzo comune in Italia (dopo Forte dei Marmi al 46,17%). A livello regionale, la Toscana ha un consumo di suolo del 6,20% (sotto la media nazionale del 7,17%). La riduzione dell'"effetto spugna" dovuta all'impermeabilizzazione costa al Paese oltre 400 milioni di euro l'anno in danni idrogeologici.</p>
+
+                    <h3>4.4 Aree interne e accessibilita</h3>
+                    <p>L'area interna "Valdarno e Valdisieve, Mugello e Val di Bisenzio" e riconosciuta dalla SNAI e comprende 19 comuni, con 4 "comuni progetto" nella provincia di Firenze: <strong>Firenzuola, Marradi, Palazzuolo sul Senio, San Godenzo</strong>. La popolazione dell'area e di circa 161.785 abitanti, con tempi medi di percorrenza ai servizi essenziali di circa 40 minuti. Firenzuola e classificato come comune ultraperiferico.</p>
+
+                    <h3>4.5 Mobilita sostenibile</h3>
+                    <p>La rete ciclabile di Firenze si estende per <strong>113 km</strong> totali (84 km in contesto urbano, con la "Bicipolitana" da 62 km su 8 linee). L'obiettivo 2024 era di raggiungere 120 km complessivi, con finanziamenti PNRR di circa 3 milioni di euro. L'utilizzo nel 2024 ha registrato un +30% rispetto all'anno precedente.</p>
+
+                    <hr>
+
+                    <!-- 5. Correlazioni -->
+                    <h2 id="r-corr">5. Correlazioni tra Dimensioni</h2>
+
+                    <h3>5.1 Demografia-Economia: l'ondata pensionistica minaccia i distretti</h3>
+                    <p>Il picco della fascia 45-59 anni (24% della popolazione) anticipa un'ondata pensionistica massiccia nel prossimo decennio 2030-2035. Questo impatta direttamente i distretti produttivi: il sistema moda, gia in crisi strutturale, rischia di perdere competenze artigianali irrecuperabili se non vengono attivati programmi di trasferimento generazionale. Al contempo, la forte presenza straniera (13,2%) rappresenta una risorsa cruciale per il ricambio della forza lavoro manifatturiera.</p>
+
+                    <h3>5.2 Economia-Infrastrutture: la connettivita come fattore di competitivita</h3>
+                    <p>Il polo farmaceutico/Life Sciences richiede connettivita ad alta velocita, servizi avanzati e accessibilita internazionale. Il Passante AV (2027), l'ampliamento dell'aeroporto e la fibra ottica nel capoluogo sono coerenti con questa traiettoria. Tuttavia, il digital divide delle aree interne rischia di escludere dal processo di innovazione le imprese manifatturiere dell'Empolese-Valdelsa e del Mugello.</p>
+
+                    <h3>5.3 Demografia-Urbanistica: la frattura centro-periferia</h3>
+                    <p>Mentre il capoluogo beneficia di infrastrutture di eccellenza (tramvia, fibra, servizi), le aree interne (Mugello, Valdisieve) soffrono di spopolamento, carenza di servizi e connettivita inadeguata. La SNAI ha riconosciuto 4 comuni come aree periferiche/ultraperiferiche. Il rischio e che il divario infrastrutturale acceleri lo spopolamento, creando un circolo vizioso: meno abitanti, meno servizi, meno incentivi a restare.</p>
+
+                    <h3>5.4 La dualita economica come fattore trasversale</h3>
+                    <p>La transizione da economia moda-centrica a polo farmaceutico-tecnologico attraversa tutte e tre le dimensioni: richiede nuove competenze (dimensione demografica/formazione), nuove infrastrutture (digitali e di trasporto), e genera rischi sociali per i lavoratori in transizione. La gestione coordinata di questa dualita e la sfida strategica centrale per il territorio fiorentino.</p>
+
+                    <hr>
+
+                    <!-- 6. Scenari di Rischio -->
+                    <h2 id="r-scenari">6. Scenari di Rischio Data-Driven</h2>
+
+                    <h3>Scenario 1: Collasso del sistema moda fiorentino</h3>
+                    <table>
+                        <tr><th>Parametro</th><th>Dettaglio</th></tr>
+                        <tr><td><strong>Trigger</strong></td><td>Prosecuzione della contrazione export pelletteria (-20% nel 2024); chiusura di 2 aziende/settimana; riduzione commesse da grandi maison del lusso</td></tr>
+                        <tr><td><strong>Impatto stimato</strong></td><td>Perdita di 10.000-15.000 posti di lavoro in 3-5 anni; riduzione di 500+ milioni di VA; impatto sociale concentrato nelle aree di Scandicci, Empoli, Pontassieve</td></tr>
+                        <tr><td><strong>Probabilita</strong></td><td>Alta - il trend e gia in atto dal 2023</td></tr>
+                        <tr><td><strong>Mitigazione</strong></td><td>Piano di riconversione industriale; incentivi per diversificazione PMI; reskilling lavoratori verso farmaceutica e digitale; sostegno al reddito durante transizione</td></tr>
+                    </table>
+
+                    <h3>Scenario 2: Dipendenza strategica dalla farmaceutica estera</h3>
+                    <table>
+                        <tr><th>Parametro</th><th>Dettaglio</th></tr>
+                        <tr><td><strong>Trigger</strong></td><td>Decisioni di delocalizzazione/riorganizzazione da parte di multinazionali (Sanofi, Menarini, ecc.); cambiamenti normativi UE; concentrazioni industriali</td></tr>
+                        <tr><td><strong>Impatto stimato</strong></td><td>Riduzione del 15-30% dell'export provinciale; perdita di 2.000-5.000 posti qualificati; depauperamento dell'ecosistema R&amp;S</td></tr>
+                        <tr><td><strong>Probabilita</strong></td><td>Media - dipende da fattori geopolitici e strategici extra-territoriali</td></tr>
+                        <tr><td><strong>Mitigazione</strong></td><td>Rafforzare l'ecosistema R&amp;S locale (universita, centri ricerca); attrarre start-up biotech nazionali; accordi territoriali con multinazionali per ancoraggio locale</td></tr>
+                    </table>
+
+                    <h3>Scenario 3: Spopolamento e degrado delle aree interne</h3>
+                    <table>
+                        <tr><th>Parametro</th><th>Dettaglio</th></tr>
+                        <tr><td><strong>Trigger</strong></td><td>Mancato completamento infrastrutture digitali; chiusura progressiva di servizi (scuole, presidi sanitari); invecchiamento accelerato</td></tr>
+                        <tr><td><strong>Impatto stimato</strong></td><td>Riduzione del 15-20% della popolazione nei 4 comuni SNAI in 10 anni; aumento rischio idrogeologico per assenza di presidio; perdita di identita territoriale</td></tr>
+                        <tr><td><strong>Probabilita</strong></td><td>Alta - trend gia in atto, classificazione SNAI confermata</td></tr>
+                        <tr><td><strong>Mitigazione</strong></td><td>Completamento FTTH/FWA; smart working come leva di ripopolamento; turismo lento e agricoltura di qualita; servizi digitali (telemedicina, e-learning)</td></tr>
+                    </table>
+
+                    <hr>
+
+                    <!-- 7. Raccomandazioni Strategiche -->
+                    <h2 id="r-raccomandazioni">7. Raccomandazioni Strategiche</h2>
+
+                    <h3>Priorita 1: Piano di transizione occupazionale per il sistema moda</h3>
+                    <table>
+                        <tr><th>Elemento</th><th>Dettaglio</th></tr>
+                        <tr><td><strong>Obiettivo</strong></td><td>Accompagnare la riconversione dei 50.000 addetti del sistema moda verso settori in crescita</td></tr>
+                        <tr><td><strong>Azioni chiave</strong></td><td>Programmi di reskilling con ITS e universita; incentivi per start-up da ex-artigiani; sostegno al reddito durante transizione; valorizzazione dell'artigianato di nicchia e della pelletteria sostenibile</td></tr>
+                        <tr><td><strong>KPI</strong></td><td>5.000 lavoratori riconvertiti entro 2028; riduzione chiusure aziendali del 50%; creazione di 500 nuove imprese innovative</td></tr>
+                        <tr><td><strong>Timeline</strong></td><td>2026-2030</td></tr>
+                        <tr><td><strong>Governance</strong></td><td>Cabina di regia Camera di Commercio FI + Regione Toscana + Confindustria + sindacati</td></tr>
+                    </table>
+
+                    <h3>Priorita 2: Consolidamento e ancoraggio del polo Life Sciences</h3>
+                    <table>
+                        <tr><th>Elemento</th><th>Dettaglio</th></tr>
+                        <tr><td><strong>Obiettivo</strong></td><td>Rafforzare la base di R&amp;S locale e ridurre la dipendenza da decisioni extra-territoriali</td></tr>
+                        <tr><td><strong>Azioni chiave</strong></td><td>Espansione incubatori Toscana Life Sciences; accordi universita-impresa per dottorati industriali; attrazione di start-up biotech; incentivi fiscali per R&amp;S sul territorio</td></tr>
+                        <tr><td><strong>KPI</strong></td><td>+20% brevetti registrati entro 2030; +2.000 addetti R&amp;S; almeno 50 nuove start-up biotech</td></tr>
+                        <tr><td><strong>Timeline</strong></td><td>2026-2032</td></tr>
+                        <tr><td><strong>Governance</strong></td><td>Fondazione TLS + Universita di Firenze + Citta Metropolitana + Ministero Sviluppo Economico</td></tr>
+                    </table>
+
+                    <h3>Priorita 3: Colmare il digital divide nelle aree interne</h3>
+                    <table>
+                        <tr><th>Elemento</th><th>Dettaglio</th></tr>
+                        <tr><td><strong>Obiettivo</strong></td><td>Portare la copertura FTTH/FWA a banda ultralarga in tutti i 41 comuni della provincia</td></tr>
+                        <tr><td><strong>Azioni chiave</strong></td><td>Completamento piano BUL nei 27 comuni sotto-performanti; potenziamento FWA nelle aree montane; promozione smart working come leva di ripopolamento; servizi digitali (telemedicina, e-learning)</td></tr>
+                        <tr><td><strong>KPI</strong></td><td>FTTH &gt;80% in tutti i comuni entro 2028; copertura 5G &gt;98% su tutto il territorio; almeno 500 nuovi residenti smart worker nelle aree interne</td></tr>
+                        <tr><td><strong>Timeline</strong></td><td>2026-2029</td></tr>
+                        <tr><td><strong>Governance</strong></td><td>Citta Metropolitana + AGCOM + operatori TLC + Comunita Montane</td></tr>
+                    </table>
+
+                    <h3>Priorita 4: Politiche demografiche attive</h3>
+                    <table>
+                        <tr><th>Elemento</th><th>Dettaglio</th></tr>
+                        <tr><td><strong>Obiettivo</strong></td><td>Contrastare la denatalita e attrarre/trattenere i giovani sul territorio</td></tr>
+                        <tr><td><strong>Azioni chiave</strong></td><td>Potenziamento asili nido e servizi per famiglie; incentivi all'imprenditoria giovanile (invertire il -24%); housing sociale per giovani lavoratori e ricercatori; integrazione strutturale delle comunita straniere come risorsa demografica ed economica</td></tr>
+                        <tr><td><strong>KPI</strong></td><td>Aumento tasso di natalita da 6,0 a 7,0 per mille entro 2030; inversione saldo imprenditoriale giovanile entro 2027; copertura asili nido &gt;40% (target UE)</td></tr>
+                        <tr><td><strong>Timeline</strong></td><td>2026-2035</td></tr>
+                        <tr><td><strong>Governance</strong></td><td>Comune di Firenze + Citta Metropolitana + Regione + Ministero Famiglia</td></tr>
+                    </table>
+
+                    <hr>
+
+                    <!-- 8. Conclusioni -->
+                    <h2 id="r-conclusioni">8. Conclusioni</h2>
+
+                    <h3>8.1 Scenari alternativi</h3>
+                    <table>
+                        <tr><th>Scenario</th><th>Descrizione</th><th>Probabilita</th></tr>
+                        <tr>
+                            <td><strong>A - Transizione governata</strong></td>
+                            <td>Politiche attive di reskilling, consolidamento Life Sciences, infrastrutture completate (Passante AV 2027, tramvia T3-T4, ampliamento aeroporto). Popolazione stabile, export in crescita diversificata, aree interne rivitalizzate.</td>
+                            <td>35%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>B - Transizione parziale (status quo)</strong></td>
+                            <td>Farmaceutica continua a crescere, moda continua a contrarsi senza piano organico. Divario centro-periferia si allarga. Popolazione in lento declino. Crescita economica concentrata in pochi settori.</td>
+                            <td>45%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>C - Crisi strutturale</strong></td>
+                            <td>Collasso moda + delocalizzazione farmaceutica + mancato completamento infrastrutture. Declino demografico accelerato, spopolamento aree interne, perdita di competitivita internazionale.</td>
+                            <td>20%</td>
+                        </tr>
+                    </table>
+
+                    <h3>8.2 Call to action per le istituzioni</h3>
+                    <blockquote>
+                        La Citta Metropolitana di Firenze dispone di asset straordinari - capitale culturale, polo farmaceutico in espansione, infrastrutture in fase di potenziamento, attrattivita migratoria - ma la finestra temporale per governare la transizione e limitata. La crisi del sistema moda richiede interventi immediati, il consolidamento del polo Life Sciences richiede visione di medio periodo, e la coesione territoriale tra centro e periferie richiede investimenti strutturali. L'inerzia (Scenario B) e lo scenario piu probabile ma anche quello piu rischioso nel lungo periodo: senza governance attiva, le fratture sociali e territoriali rischiano di diventare irreversibili.
+                    </blockquote>
+
+                    <h3>8.3 Riflessione finale</h3>
+                    <p>Firenze si trova a un bivio strategico. La citta ha dimostrato nei secoli una straordinaria capacita di reinventarsi - dal Rinascimento all'artigianato di lusso, dall'artigianato alla farmaceutica. La sfida attuale e gestire questa ennesima transizione senza lasciare indietro i territori fragili e i lavoratori dei settori in declino, trasformando la dualita economica in un'opportunita di diversificazione resiliente.</p>
+
+                    <hr>
+
+                    <!-- 9. Fonti e Bibliografia -->
+                    <h2 id="r-fonti">9. Fonti e Bibliografia</h2>
+
+                    <h3>9.1 Fonti istituzionali primarie</h3>
+                    <ol>
+                        <li>ISTAT - Conti Economici Territoriali 2021-2023 (gennaio 2025)</li>
+                        <li>ISTAT - Censimento Permanente 2021</li>
+                        <li>ISTAT - Bilancio Demografico e popolazione residente per sesso e eta (2018-2024)</li>
+                        <li>IRPET - Rapporto annuale 2025; Rapporto Turismo in Toscana 2023/2024</li>
+                        <li>Camera di Commercio di Firenze - Rapporto annuale sull'economia; Camera News n.21/2023</li>
+                        <li>Camera di Commercio di Firenze - "Il Sistema Moda a Firenze" (2024)</li>
+                        <li>AGCOM - Rapporto copertura BB Map Q1 2024</li>
+                        <li>ISPRA/SNPA - Rapporto Consumo Suolo 2024</li>
+                        <li>SNAI/Agenzia per la Coesione - Strategia Valdarno-Valdisieve-Mugello</li>
+                        <li>Regione Toscana - Comunicati occupazione T1-T2 2024; Classificazione sismica</li>
+                        <li>MEF Dipartimento Finanze - Statistiche IRPEF 2023</li>
+                    </ol>
+
+                    <h3>9.2 Fonti web secondarie</h3>
+                    <ul>
+                        <li><a href="https://www.tuttitalia.it/toscana/provincia-di-firenze/statistiche/popolazione-andamento-demografico/" target="_blank">TuttiItalia.it - Andamento demografico Citta Metropolitana di Firenze</a></li>
+                        <li><a href="https://www.tuttitalia.it/toscana/provincia-di-firenze/statistiche/popolazione-eta-sesso-stato-civile-2024/" target="_blank">TuttiItalia.it - Struttura per eta 2024</a></li>
+                        <li><a href="https://www.tuttitalia.it/toscana/provincia-di-firenze/statistiche/indici-demografici-struttura-popolazione/" target="_blank">TuttiItalia.it - Indici demografici</a></li>
+                        <li><a href="https://www.tuttitalia.it/toscana/provincia-di-firenze/statistiche/cittadini-stranieri-2024/" target="_blank">TuttiItalia.it - Cittadini stranieri 2024</a></li>
+                        <li><a href="https://www.passantefirenze.it/" target="_blank">Passante AV Firenze - sito ufficiale</a></li>
+                        <li><a href="https://www.fsitaliane.it/content/fsitaliane/it/opere-strategiche/nodo-av-di-firenze.html" target="_blank">FS Italiane - Nodo AV di Firenze</a></li>
+                        <li><a href="https://geo.agcom.it/reportistica/doc/RapportoAggiornamentoBBmap_1Q24vs4Q23_r5.pdf" target="_blank">AGCOM - Rapporto aggiornamento BB Map Q1 2024</a></li>
+                        <li><a href="https://www.ivynet.it/copertura/Toscana/Firenze" target="_blank">ivynet.it - Copertura Internet Provincia Firenze</a></li>
+                        <li><a href="https://www.snpambiente.it/wp-content/uploads/2025/01/Rapporto_consumo_di_suolo_2024.pdf" target="_blank">ISPRA/SNPA - Rapporto Consumo Suolo 2024</a></li>
+                        <li><a href="https://www.arpat.toscana.it/notizie/2025/consumo-suolo-2025" target="_blank">ARPAT - Consumo suolo Toscana 2025</a></li>
+                        <li><a href="https://www.agenziacoesione.gov.it/strategia-nazionale-aree-interne/regione-toscana/mugello-valdisieve-valbisenzio/" target="_blank">Agenzia per la Coesione - SNAI Valdarno Valdisieve Mugello</a></li>
+                        <li><a href="https://mobilita.comune.fi.it/mobilita_sostenibile/mobilita_sostenibile/mobilita_ciclistica.html" target="_blank">Comune di Firenze - Mobilita ciclistica</a></li>
+                        <li><a href="https://www.regione.toscana.it/-/classificazione-sismica-della-toscana" target="_blank">Regione Toscana - Classificazione sismica</a></li>
+                        <li><a href="https://www.irpet.it/wp-content/uploads/2024/03/IRPET_Report-Aree-Interne-CR-12.2023.pdf" target="_blank">IRPET - Aree Interne in Toscana (2023)</a></li>
+                    </ul>
+
+                    <h3>9.3 Note metodologiche</h3>
+                    <p>I dati demografici provengono prevalentemente da TuttiItalia.it, che elabora dati ISTAT ufficiali. I dati sull'export si riferiscono alle statistiche ANSA/Unioncamere pubblicate a dicembre 2024 (primi 9 mesi 2024 con proiezione annuale). I dati sul valore aggiunto settoriale sono frammentati per settore (turismo: Centro Studi Turistici; moda: Camera di Commercio FI; farmaceutica: Toscana Life Sciences) e non e disponibile una composizione settoriale completa e omogenea. Il PIL pro capite e riportato a livello regionale toscano (37.700 euro, ISTAT 2023) poiche il dato provinciale disaggregato non e pubblicato nelle fonti consultate. Dove indicato, le stime sono chiaramente identificate come tali.</p>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== VALUTAZIONE SECTION ========== -->
+        <div id="valutazione-section" class="section">
+            <div class="valutazione-wrapper">
+                <div class="valutazione-splash">
+                    <h1>Valutazione del Report</h1>
+                    <div class="subtitle">Pagella Qualitativa - Provincia di Firenze</div>
+                    <div class="meta">Data valutazione: 18 Febbraio 2026 | Scala 1-10</div>
+                </div>
+
+                <!-- 1. Voto complessivo -->
+                <div class="val-card">
+                    <h2>&#9733; Voto Complessivo</h2>
+                    <div class="voto-gauge">
+                        <div class="voto-numero">7,5/10</div>
+                        <div class="voto-label">Un report solido, ben strutturato e visivamente curato</div>
+                        <div class="gauge-bar-container">
+                            <div class="gauge-bar-fill" style="width: 75%;"></div>
+                        </div>
+                        <div class="gauge-markers">
+                            <span>0</span><span>2</span><span>4</span><span>6</span><span>8</span><span>10</span>
+                        </div>
+                    </div>
+                    <p style="text-align:center; color:#555; max-width:700px; margin:15px auto 0; line-height:1.7;">
+                        Le principali penalizzazioni derivano da lacune nei dati obbligatori (famiglie, VA totale, composizione settoriale classica, disoccupazione giovanile provinciale), dalla discrepanza non risolta nei dati sulla struttura per et&agrave;, e da alcuni adattamenti nel KPI box rispetto alle specifiche.
+                    </p>
+                </div>
+
+                <!-- 2. Voti per area -->
+                <div class="val-card">
+                    <h2>&#9881; Voti per Area</h2>
+                    <div class="area-voto">
+                        <span class="area-voto-label">A. Completezza Dati</span>
+                        <div class="area-voto-bar"><div class="area-voto-fill giallo" style="width: 70%;"></div></div>
+                        <span class="area-voto-value giallo">7,0</span>
+                    </div>
+                    <div class="area-voto">
+                        <span class="area-voto-label">B. Qualit&agrave; Fonti</span>
+                        <div class="area-voto-bar"><div class="area-voto-fill verde" style="width: 80%;"></div></div>
+                        <span class="area-voto-value verde">8,0</span>
+                    </div>
+                    <div class="area-voto">
+                        <span class="area-voto-label">C. Qualit&agrave; Analisi e Narrativa</span>
+                        <div class="area-voto-bar"><div class="area-voto-fill verde" style="width: 85%;"></div></div>
+                        <span class="area-voto-value verde">8,5</span>
+                    </div>
+                    <div class="area-voto">
+                        <span class="area-voto-label">D. Qualit&agrave; HTML e Visualizzazione</span>
+                        <div class="area-voto-bar"><div class="area-voto-fill verde" style="width: 80%;"></div></div>
+                        <span class="area-voto-value verde">8,0</span>
+                    </div>
+                    <div class="area-voto">
+                        <span class="area-voto-label">E. Conformit&agrave; al Protocollo</span>
+                        <div class="area-voto-bar"><div class="area-voto-fill giallo" style="width: 70%;"></div></div>
+                        <span class="area-voto-value giallo">7,0</span>
+                    </div>
+                </div>
+
+                <!-- 3. Tabella pesi -->
+                <div class="val-card">
+                    <h2>&#9878; Nota Metodologica - Pesi e Contributi</h2>
+                    <table class="val-table">
+                        <thead>
+                            <tr>
+                                <th>Area</th>
+                                <th>Peso</th>
+                                <th>Voto</th>
+                                <th>Contributo Ponderato</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>A. Completezza Dati</td>
+                                <td>30%</td>
+                                <td>7,0</td>
+                                <td>2,10</td>
+                            </tr>
+                            <tr>
+                                <td>B. Qualit&agrave; Fonti</td>
+                                <td>20%</td>
+                                <td>8,0</td>
+                                <td>1,60</td>
+                            </tr>
+                            <tr>
+                                <td>C. Qualit&agrave; Analisi</td>
+                                <td>20%</td>
+                                <td>8,5</td>
+                                <td>1,70</td>
+                            </tr>
+                            <tr>
+                                <td>D. Qualit&agrave; HTML</td>
+                                <td>15%</td>
+                                <td>8,0</td>
+                                <td>1,20</td>
+                            </tr>
+                            <tr>
+                                <td>E. Conformit&agrave; Protocollo</td>
+                                <td>15%</td>
+                                <td>7,0</td>
+                                <td>1,05</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Totale</strong></td>
+                                <td><strong>100%</strong></td>
+                                <td></td>
+                                <td><strong>7,65 &rarr; 7,5/10</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p style="color:#666; font-size:0.9em; margin-top:10px; font-style:italic;">
+                        Il voto complessivo &egrave; stato arrotondato a 7,5/10, penalizzando leggermente per la discrepanza non risolta nella struttura per et&agrave; che ha impatto su pi&ugrave; aree contemporaneamente.
+                    </p>
+                </div>
+
+                <!-- 4. Punti di forza -->
+                <div class="val-card">
+                    <h2>&#10004; Punti di Forza</h2>
+                    <div class="punto-item forza">
+                        <div class="punto-icon">&#9889;</div>
+                        <div class="punto-text">
+                            <strong>Narrativa eccellente</strong><br>
+                            La qualit&agrave; dell'analisi, le correlazioni cross-dimensionali e gli scenari di rischio sono il punto pi&ugrave; forte del report. La tesi sulla transizione moda-farmaceutica &egrave; convincente e ben documentata.
+                        </div>
+                    </div>
+                    <div class="punto-item forza">
+                        <div class="punto-icon">&#127758;</div>
+                        <div class="punto-text">
+                            <strong>Ricerca urbanistica esemplare</strong><br>
+                            L'agente urbanista ha prodotto la raccolta dati pi&ugrave; completa e documentata, coprendo un ampio spettro di temi (Passante AV, tramvia, aeroporto, digital divide, SNAI, consumo suolo, ciclabilit&agrave;, rischio sismico) con fonti precise.
+                        </div>
+                    </div>
+                    <div class="punto-item forza">
+                        <div class="punto-icon">&#128269;</div>
+                        <div class="punto-text">
+                            <strong>Trasparenza sulle lacune</strong><br>
+                            Il team ha sistematicamente documentato i dati mancanti, le limitazioni delle fonti e le scelte metodologiche nei log e nei file dati, dimostrando onest&agrave; intellettuale e rigore.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Punti deboli -->
+                <div class="val-card">
+                    <h2>&#9888; Punti Deboli</h2>
+                    <div class="punto-item debole">
+                        <div class="punto-icon">&#128203;</div>
+                        <div class="punto-text">
+                            <strong>Dati obbligatori mancanti</strong><br>
+                            La composizione settoriale classica del VA (agricoltura/industria/servizi), il numero di famiglie, il PIL pro capite provinciale e la disoccupazione giovanile provinciale sono dati richiesti dal protocollo ma assenti.
+                        </div>
+                    </div>
+                    <div class="punto-item debole">
+                        <div class="punto-icon">&#128200;</div>
+                        <div class="punto-text">
+                            <strong>Discrepanza struttura per et&agrave; non risolta</strong><br>
+                            La differenza di 63.283 persone tra il totale delle fasce d'et&agrave; (924.785) e il totale provinciale (988.068) &egrave; grave e non &egrave; stata n&eacute; corretta n&eacute; adeguatamente spiegata. Questo errore si propaga nel grafico e nel tooltip.
+                        </div>
+                    </div>
+                    <div class="punto-item debole">
+                        <div class="punto-icon">&#127963;</div>
+                        <div class="punto-text">
+                            <strong>Temi rilevanti per Firenze assenti</strong><br>
+                            Overtourism e impatto sulla qualit&agrave; della vita, mercato immobiliare e accessibilit&agrave; abitativa, economia universitaria, Airbnb e short-term rentals &mdash; tutti temi centrali per un'analisi strategica di Firenze non trattati.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. Checklist per il 10/10 -->
+                <div class="val-card">
+                    <h2>&#9745; Checklist per il 10/10</h2>
+                    <p style="color:#555; margin-bottom:20px;">16 azioni necessarie per raggiungere il punteggio massimo:</p>
+
+                    <div class="checklist-item">
+                        <div class="checklist-box"></div>
+                        <div>Integrare la composizione settoriale del VA (agricoltura/industria/servizi) da ISTAT Conti Economici Territoriali</div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checklist-box"></div>
+                        <div>Ottenere e inserire il PIL pro capite provinciale (da IstatData o Eurostat NUTS3)</div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checklist-box"></div>
+                        <div>Ottenere e inserire il VA totale della provincia nel KPI box (sostituendo "VA Turismo")</div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checklist-box"></div>
+                        <div>Recuperare dati su numero famiglie e dimensione media da demo.istat.it o Censimento 2021</div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checklist-box"></div>
+                        <div>Risolvere la discrepanza struttura per et&agrave; (924.785 vs 988.068) &mdash; verificare la fonte originale e correggere</div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checklist-box"></div>
+                        <div>Correggere il totale nel tooltip del grafico struttura per et&agrave; (riga <code>const total = 924785</code>)</div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checklist-box"></div>
+                        <div>Aggiungere sezione overtourism nella narrativa (dati turisti/residenti, Airbnb, provvedimenti comunali)</div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checklist-box"></div>
+                        <div>Aggiungere sezione mercato immobiliare (prezzi, accessibilit&agrave;, impatto short-term rentals)</div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checklist-box"></div>
+                        <div>Correggere le lettere accentate in tutto il documento HTML</div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checklist-box"></div>
+                        <div>Aggiungere <code>page-break-before</code> nelle print styles per separare le sezioni</div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checklist-box"></div>
+                        <div>Aggiungere footer con crediti, data, contatti</div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checklist-box"></div>
+                        <div>Inserire la disoccupazione giovanile provinciale (se disponibile) o documentare pi&ugrave; rigorosamente il proxy regionale</div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checklist-box"></div>
+                        <div>Migliorare il grafico VA settoriale con la composizione completa dell'economia</div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checklist-box"></div>
+                        <div>Aggiungere un benchmark territoriale comparativo (almeno 2-3 province/citt&agrave; di riferimento)</div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checklist-box"></div>
+                        <div>Nella tabella popolazione del sociologo, aggiungere la colonna "Variazione %" come da template TEAM_PROMPTS</div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checklist-box"></div>
+                        <div>Verificare e documentare meglio le stime: VA turismo (~3 Mld) e VA farmaceutica (2,1 Mld)</div>
+                    </div>
+                </div>
+
+                <!-- 7. Dati mancanti da integrare -->
+                <div class="val-card">
+                    <h2>&#128218; Dati Mancanti da Integrare</h2>
+                    <table class="val-table">
+                        <thead>
+                            <tr>
+                                <th>Dato Mancante</th>
+                                <th>Dove Trovarlo</th>
+                                <th>Dove Inserirlo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Composizione settoriale VA (Agricoltura/Industria/Servizi)</td>
+                                <td>ISTAT - Conti Economici Territoriali (esploradati.istat.it, sezione "Valore aggiunto" NUTS3)</td>
+                                <td><code>DATI/economista_firenze.md</code> sez. 2 e grafico VA Settoriale</td>
+                            </tr>
+                            <tr>
+                                <td>PIL pro capite provinciale</td>
+                                <td>ISTAT Conti Territoriali oppure Eurostat NUTS3 (ITI14 = Firenze)</td>
+                                <td>KPI box e report economico</td>
+                            </tr>
+                            <tr>
+                                <td>Numero famiglie e dimensione media</td>
+                                <td>ISTAT demo.istat.it sez. "Famiglie" o Censimento Permanente 2021</td>
+                                <td><code>DATI/sociologo_firenze.md</code> sez. 5</td>
+                            </tr>
+                            <tr>
+                                <td>Disoccupazione giovanile provinciale</td>
+                                <td>ISTAT - dati.istat.it &gt; Lavoro &gt; Tasso disoccupazione (filtro et&agrave; + provincia)</td>
+                                <td><code>DATI/economista_firenze.md</code> sez. 4</td>
+                            </tr>
+                            <tr>
+                                <td>Valore Aggiunto totale della provincia</td>
+                                <td>ISTAT Conti Economici Territoriali</td>
+                                <td>KPI box (sostituire "VA Turismo") e testo report</td>
+                            </tr>
+                            <tr>
+                                <td>Struttura famiglie</td>
+                                <td>ISTAT Censimento Permanente 2021, tavole comunali e provinciali</td>
+                                <td><code>DATI/sociologo_firenze.md</code> sez. 5</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 8. Miglioramenti alla narrativa -->
+                <div class="val-card">
+                    <h2>&#9997; Miglioramenti alla Narrativa</h2>
+                    <div class="miglioramento-item">
+                        <strong>1. Analisi dell'overtourism</strong><br>
+                        Firenze &egrave; uno dei casi pi&ugrave; studiati in Europa. Includere dati su rapporto turisti/residenti, impatto su affitti (short-term rentals vs residenziale), provvedimenti anti-turistificazione del Comune (es. limiti Airbnb nel centro storico). Fonti: Comune di Firenze, Inside Airbnb, FORMIT.
+                    </div>
+                    <div class="miglioramento-item">
+                        <strong>2. Sezione mercato immobiliare</strong><br>
+                        Prezzi al mq (tendenza, confronto con redditi medi), accessibilit&agrave; abitativa per giovani e famiglie, impatto degli affitti brevi sulla disponibilit&agrave; di alloggi per residenti. Fonti: OMI Agenzia Entrate, Nomisma, Immobiliare.it/Idealista.
+                    </div>
+                    <div class="miglioramento-item">
+                        <strong>3. Economia universitaria</strong><br>
+                        L'Universit&agrave; di Firenze ha circa 50.000 studenti e 4.500 dipendenti. L'impatto economico diretto e indiretto sull'economia locale &egrave; significativo e va quantificato. Fonte: Bilancio sociale Universit&agrave; di Firenze.
+                    </div>
+                    <div class="miglioramento-item">
+                        <strong>4. Correlazioni con dati specifici</strong><br>
+                        Quantificare il numero di lavoratori moda riconvertibili in base alle competenze trasferibili, citando studi specifici sulla transizione occupazionale. Fonti: IRPET, rapporti Confindustria Firenze.
+                    </div>
+                    <div class="miglioramento-item">
+                        <strong>5. Benchmark territoriali</strong><br>
+                        Confronto con Milano (farmaceutica), Veneto (manifattura), Barcellona o Amsterdam (turismo) per contestualizzare meglio le sfide fiorentine.
+                    </div>
+                </div>
+
+                <!-- 9. Miglioramenti tecnici HTML -->
+                <div class="val-card">
+                    <h2>&#128736; Miglioramenti Tecnici HTML</h2>
+                    <div class="miglioramento-item tecnico">
+                        <strong>1. Correggere il totale nel tooltip struttura per et&agrave;</strong><br>
+                        Sostituire <code>const total = 924785</code> con <code>const total = 988068</code> o calcolare dinamicamente dalla somma dei dati. La discrepanza con i dati della fonte andrebbe investigata e risolta.
+                    </div>
+                    <div class="miglioramento-item tecnico">
+                        <strong>2. Correggere encoding caratteri accentati</strong><br>
+                        Sostituire tutte le occorrenze di vocali senza accento con le corrette entit&agrave; HTML o caratteri UTF-8. Il meta charset UTF-8 &egrave; gi&agrave; presente ma il contenuto non usa i caratteri accentati.
+                    </div>
+                    <div class="miglioramento-item tecnico">
+                        <strong>3. Aggiungere un sesto grafico</strong><br>
+                        Un grafico sulla connettivit&agrave; digitale (es. bar chart confronto FTTH tra comuni principali) sfrutterebbe i dati eccellenti dell'urbanista e arricchirebbe la dashboard.
+                    </div>
+                    <div class="miglioramento-item tecnico">
+                        <strong>4. Migliorare print styles</strong><br>
+                        Aggiungere <code>page-break-before: always</code> prima di ogni sezione principale; header/footer stampabile; nascondere canvas Chart.js in stampa e sostituire con tabelle dati.
+                    </div>
+                    <div class="miglioramento-item tecnico">
+                        <strong>5. Aggiungere interattivit&agrave;</strong><br>
+                        Data la ricchezza dei dati, aggiungere un filtro temporale sulla dashboard (slider per selezionare il range anni), o tooltip pi&ugrave; ricchi sui grafici con dati contestuali.
+                    </div>
+                    <div class="miglioramento-item tecnico">
+                        <strong>6. Aggiungere un footer</strong><br>
+                        Manca completamente un footer con crediti, data di generazione, licenza dati e contatti. L'esempio Arezzo ha lo stesso difetto.
+                    </div>
+                    <div class="miglioramento-item tecnico">
+                        <strong>7. Grafico VA settoriale</strong><br>
+                        Con soli 3 settori il grafico &egrave; poco informativo. Con la composizione classica (agricoltura/industria/servizi), risulterebbe molto pi&ugrave; completo e confrontabile con altre province.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Tab Navigation
+        function showSection(name) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(name + '-section').classList.add('active');
+            // Find the matching tab button
+            const tabs = document.querySelectorAll('.nav-tab');
+            const tabMap = { 'dashboard': 0, 'sintesi': 1, 'report': 2, 'valutazione': 3 };
+            if (tabMap[name] !== undefined) {
+                tabs[tabMap[name]].classList.add('active');
+            }
+            window.scrollTo(0, 0);
+        }
+
+        // ========== CHART.JS GRAPHS ==========
+
+        // Color palette
+        const blue = '#667eea';
+        const purple = '#764ba2';
+        const green = '#10b981';
+        const red = '#ef4444';
+        const orange = '#f59e0b';
+        const cyan = '#06b6d4';
+
+        // 1. Trend Demografico (Line Chart)
+        new Chart(document.getElementById('popChart'), {
+            type: 'line',
+            data: {
+                labels: ['2018', '2019', '2020', '2021', '2022', '2023', '2024'],
+                datasets: [{
+                    label: 'Popolazione Residente',
+                    data: [998976, 995517, 998431, 987260, 988194, 988785, 988068],
+                    borderColor: blue,
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    borderWidth: 3,
+                    pointBackgroundColor: blue,
+                    pointRadius: 6,
+                    pointHoverRadius: 8,
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(ctx) {
+                                return ctx.parsed.y.toLocaleString('it-IT') + ' abitanti';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        min: 984000,
+                        max: 1002000,
+                        ticks: {
+                            callback: function(val) {
+                                return (val / 1000).toFixed(0) + 'k';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 2. Saldo Naturale vs Migratorio (Bar Chart)
+        new Chart(document.getElementById('balanceChart'), {
+            type: 'bar',
+            data: {
+                labels: ['2018', '2019', '2020', '2021', '2022', '2023', '2024'],
+                datasets: [
+                    {
+                        label: 'Saldo Naturale',
+                        data: [-4149, -4736, -6333, -5677, -6674, -5428, -5721],
+                        backgroundColor: red,
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Saldo Migratorio',
+                        data: [2238, 618, -1738, 2067, 7677, 7589, 6455],
+                        backgroundColor: green,
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(ctx) {
+                                const val = ctx.parsed.y;
+                                return ctx.dataset.label + ': ' + (val >= 0 ? '+' : '') + val.toLocaleString('it-IT');
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        ticks: {
+                            callback: function(val) {
+                                return (val >= 0 ? '+' : '') + val.toLocaleString('it-IT');
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 3. Export per Settore - Variazione % (Horizontal Bar)
+        new Chart(document.getElementById('exportChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Farmaceutica', 'Macchinari pesanti', 'Abbigliamento', 'Pelletteria', 'Calzature'],
+                datasets: [{
+                    label: 'Variazione % Export 2024',
+                    data: [65.7, 45.4, -7.4, -20.0, -24.9],
+                    backgroundColor: [green, cyan, orange, red, '#dc2626'],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(ctx) {
+                                const val = ctx.parsed.x;
+                                return (val >= 0 ? '+' : '') + val.toFixed(1) + '%';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            callback: function(val) {
+                                return (val >= 0 ? '+' : '') + val + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 4. Valore Aggiunto Settoriale (Horizontal Bar)
+        new Chart(document.getElementById('valueAddedChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Turismo e Cultura', 'Sistema Moda (incl. commercio)', 'Farmaceutica/Life Sciences*'],
+                datasets: [{
+                    label: 'Valore Aggiunto (Mld €)',
+                    data: [3.0, 2.6, 2.1],
+                    backgroundColor: [blue, purple, green],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(ctx) {
+                                return ctx.parsed.x.toFixed(1) + ' Mld €';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(val) {
+                                return val.toFixed(1) + ' Mld €';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 5. Struttura Eta (Bar Chart)
+        new Chart(document.getElementById('ageChart'), {
+            type: 'bar',
+            data: {
+                labels: ['0-14', '15-29', '30-44', '45-59', '60-74', '75+'],
+                datasets: [{
+                    label: 'Popolazione per fascia',
+                    data: [113620, 123453, 166698, 236997, 183795, 100222],
+                    backgroundColor: [
+                        '#06b6d4',
+                        '#10b981',
+                        '#667eea',
+                        '#764ba2',
+                        '#f59e0b',
+                        '#ef4444'
+                    ],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(ctx) {
+                                const total = 924785;
+                                const pct = ((ctx.parsed.y / total) * 100).toFixed(1);
+                                return ctx.parsed.y.toLocaleString('it-IT') + ' abitanti (' + pct + '%)';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(val) {
+                                return (val / 1000).toFixed(0) + 'k';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

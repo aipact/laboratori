@@ -103,6 +103,9 @@ laboratori/
 ### Laboratorio B - Istruzioni
 - [Istruzioni Laboratorio B](https://aipact.github.io/laboratori/LABORATORIO_B/ISTRUZIONI/)
 
+### Esempi Agentici
+- [Esempi Agentici](https://aipact.github.io/laboratori/LABORATORIO_A/esempi_agentici/) — Analisi territoriali (Arezzo, Firenze, Livorno) generate con Claude Code in pochi minuti
+
 ### Strumenti
 - [Extract HTML Tool](https://aipact.github.io/laboratori/LABORATORIO_A/tools/extract_html.html)
 

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esempi Agentici | AI-PACT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e40af;
+            --primary-light: #3b82f6;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --purple: #7c3aed;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 50%, var(--purple) 100%);
+            color: white;
+            padding: 4rem 1.5rem 6rem;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 1.5rem 3rem;
+        }
+
+        /* How it works */
+        .how-section {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin: -3rem auto 2.5rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            position: relative;
+            z-index: 1;
+        }
+
+        .how-section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .how-section p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .how-steps {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .step {
+            flex: 1;
+            min-width: 200px;
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .step h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+        }
+
+        .step p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* Screenshot */
+        .screenshot-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .screenshot-section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .screenshot-card {
+            background: var(--card);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        }
+
+        .screenshot-card img {
+            width: 100%;
+            display: block;
+        }
+
+        .screenshot-caption {
+            padding: 1.25rem 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        /* Cards */
+        .reports-section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .card-link {
+            display: inline-block;
+            margin-top: 1rem;
+            color: var(--primary-light);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Back link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+        }
+
+        .back-link:hover {
+            color: var(--primary);
+        }
+
+        /* Tech badge */
+        .tech-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #d97706, #f59e0b);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.75rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: var(--primary-light);
+            text-decoration: none;
+        }
+
+        @media (max-width: 640px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .how-steps {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero">
+        <div class="hero-badge">AI-PACT | Laboratorio A</div>
+        <h1>Esempi Agentici</h1>
+        <p>Analisi strategiche territoriali generate con <strong>Claude Code</strong> in modalità agentica. Definito il team di agenti e lanciata l'esecuzione: report completi in pochi minuti.</p>
+    </div>
+
+    <div class="container">
+
+        <div class="how-section">
+            <h2>Come funziona</h2>
+            <p>
+                Questi report sono stati generati utilizzando <strong>Claude Code</strong>, uno strumento di IA agentica che orchestra autonomamente team di agenti specializzati. Non si tratta di semplici prompt: l'operatore definisce il team e il compito, poi il sistema lavora in autonomia — ricerca dati, analizza, struttura e produce il report finale in formato HTML.
+            </p>
+            <div class="how-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Definisci il team</h3>
+                    <p>Si descrivono gli agenti e il loro ruolo nell'analisi territoriale</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Lancia l'esecuzione</h3>
+                    <p>Claude Code orchestra gli agenti in autonomia, senza intervento umano</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Report pronto</h3>
+                    <p>In pochi minuti: analisi completa con grafici, dati e raccomandazioni</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="screenshot-section">
+            <h2>Il terminale in azione</h2>
+            <div class="screenshot-card">
+                <img src="terminale_agenti_firenze_claude_code.png" alt="Screenshot del terminale Claude Code con agenti in esecuzione per l'analisi di Firenze">
+                <div class="screenshot-caption">
+                    Claude Code al lavoro sull'analisi di Firenze: gli agenti ricercano dati, li analizzano e producono il report HTML in autonomia.
+                </div>
+            </div>
+        </div>
+
+        <div class="reports-section">
+            <h2>I report generati</h2>
+            <div class="cards-grid">
+                <a class="card" href="ANALISI_COMPLETA_AREZZO.html">
+                    <div class="card-icon">🏛️</div>
+                    <h3>Provincia di Arezzo</h3>
+                    <p>Analisi strategica territoriale: punti di forza, debolezze, opportunità e rischi del territorio aretino.</p>
+                    <span class="tech-badge">Claude Code</span>
+                    <span class="card-link">Apri il report →</span>
+                </a>
+                <a class="card" href="ANALISI_COMPLETA_FIRENZE.html">
+                    <div class="card-icon">🏰</div>
+                    <h3>Provincia di Firenze</h3>
+                    <p>Analisi strategica territoriale: punti di forza, debolezze, opportunità e rischi del territorio fiorentino.</p>
+                    <span class="tech-badge">Claude Code</span>
+                    <span class="card-link">Apri il report →</span>
+                </a>
+                <a class="card" href="ANALISI_COMPLETA_LIVORNO.html">
+                    <div class="card-icon">⚓</div>
+                    <h3>Provincia di Livorno</h3>
+                    <p>Analisi strategica territoriale: punti di forza, debolezze, opportunità e rischi del territorio livornese.</p>
+                    <span class="tech-badge">Claude Code</span>
+                    <span class="card-link">Apri il report →</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <a href="../../">← Torna alla homepage AI-PACT</a>
+        <br><br>
+        Progetto AI-PACT — IFEL/ANCI Toscana — Febbraio 2026
+    </footer>
+
+</body>
+</html>

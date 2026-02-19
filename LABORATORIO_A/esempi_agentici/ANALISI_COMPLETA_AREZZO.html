@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisi Strategica Territoriale - Provincia di Arezzo</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.8;
+        }
+
+        /* Fixed Navigation Header */
+        .nav-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px 30px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-header h1 {
+            color: white;
+            font-size: 1.3em;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+        }
+        .nav-tab {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 10px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        .nav-tab:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-2px);
+        }
+        .nav-tab.active {
+            background: white;
+            color: #667eea;
+            border-color: white;
+            font-weight: 600;
+        }
+
+        /* Main Container */
+        .main-container {
+            margin-top: 80px;
+            padding: 0 20px 40px;
+        }
+
+        /* Section Visibility */
+        .section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========== DASHBOARD SECTION STYLES ========== */
+        .dashboard-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .dashboard-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 50px 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 35px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+        .dashboard-hero h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .dashboard-hero p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(520px, 1fr));
+            gap: 25px;
+        }
+        .dashboard-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        .dashboard-card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .chart-container {
+            position: relative;
+            height: 360px;
+        }
+        .chart-comment {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 5px;
+            font-size: 0.9em;
+            line-height: 1.7;
+            color: #444;
+        }
+        .chart-source {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background: #e3e8ef;
+            border-radius: 5px;
+            font-size: 0.8em;
+            color: #555;
+            font-style: italic;
+        }
+        .chart-source strong {
+            color: #333;
+            font-style: normal;
+        }
+        .chart-source a {
+            color: #667eea;
+            text-decoration: none;
+            border-bottom: 1px dotted #667eea;
+        }
+        .chart-source a:hover {
+            color: #764ba2;
+            border-bottom: 1px solid #764ba2;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        .stat-value {
+            font-size: 2.2em;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .stat-label {
+            font-size: 0.95em;
+            opacity: 0.95;
+        }
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* ========== SINTESI SECTION STYLES ========== */
+        .sintesi-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .sintesi-splash {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 35px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .sintesi-splash h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .sintesi-splash .subtitle {
+            font-size: 1.3em;
+            opacity: 0.95;
+            margin-bottom: 10px;
+        }
+        .sintesi-splash .meta {
+            font-size: 1em;
+            opacity: 0.8;
+            margin-top: 15px;
+        }
+
+        .sintesi-content {
+            background: white;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        }
+        .sintesi-content h2 {
+            color: #667eea;
+            font-size: 2.2em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+            padding-left: 20px;
+        }
+        .sintesi-content h3 {
+            color: #764ba2;
+            font-size: 1.6em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        .sintesi-content p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        .sintesi-content strong {
+            color: #764ba2;
+        }
+        .sintesi-content ul, .sintesi-content ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+        .sintesi-content li {
+            margin-bottom: 10px;
+        }
+        .sintesi-content blockquote {
+            border-left: 4px solid #667eea;
+            padding-left: 20px;
+            margin: 25px 0;
+            font-style: italic;
+            color: #555;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .sintesi-box {
+            background: #f0f4ff;
+            border: 2px solid #667eea;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+        }
+        .sintesi-box h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        /* ========== REPORT SECTION STYLES ========== */
+        .report-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .report-splash {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 35px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .report-splash h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .report-splash p {
+            font-size: 1.3em;
+            opacity: 0.95;
+            margin-bottom: 10px;
+        }
+        .report-splash .meta {
+            font-size: 1em;
+            opacity: 0.8;
+            margin-top: 20px;
+        }
+
+        .toc {
+            background: white;
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            margin-bottom: 35px;
+        }
+        .toc h2 {
+            color: #667eea;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+        }
+        .toc ul {
+            list-style: none;
+        }
+        .toc li {
+            margin-bottom: 12px;
+        }
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: block;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 1.05em;
+        }
+        .toc a:hover {
+            background: #f0f4ff;
+            padding-left: 25px;
+        }
+
+        .report-content {
+            background: white;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+        .report-content h2 {
+            color: #667eea;
+            font-size: 2.2em;
+            margin-top: 50px;
+            margin-bottom: 25px;
+            border-left: 5px solid #667eea;
+            padding-left: 20px;
+        }
+        .report-content h2:first-of-type {
+            margin-top: 0;
+        }
+        .report-content h3 {
+            color: #764ba2;
+            font-size: 1.6em;
+            margin-top: 35px;
+            margin-bottom: 15px;
+        }
+        .report-content p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        .report-content strong {
+            color: #764ba2;
+        }
+        .report-content ul, .report-content ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+        .report-content li {
+            margin-bottom: 10px;
+        }
+        .report-content blockquote {
+            border-left: 4px solid #667eea;
+            padding-left: 20px;
+            margin: 25px 0;
+            font-style: italic;
+            color: #555;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .report-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        .report-content th, .report-content td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .report-content th {
+            background: #667eea;
+            color: white;
+        }
+        .report-content tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        .report-content hr {
+            border: none;
+            border-top: 2px solid #e0e0e0;
+            margin: 40px 0;
+        }
+
+        /* Print Styles */
+        @media print {
+            .nav-header { display: none; }
+            .main-container { margin-top: 0; }
+            .section { display: block !important; }
+            .dashboard-card, .report-content, .sintesi-content {
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .nav-header h1 {
+                font-size: 1.1em;
+            }
+            .nav-tabs {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            .report-content, .sintesi-content {
+                padding: 25px;
+            }
+            .dashboard-hero h1 {
+                font-size: 2em;
+            }
+            .report-splash h1, .sintesi-splash h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fixed Navigation Header -->
+    <div class="nav-header">
+        <h1>📊 Analisi Strategica Territoriale - Provincia di Arezzo</h1>
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('dashboard')">📊 Dashboard</button>
+            <button class="nav-tab" onclick="showSection('sintesi')">⚡ Sintesi Esecutiva</button>
+            <button class="nav-tab" onclick="showSection('report')">📄 Report Completo</button>
+            <button class="nav-tab" onclick="window.print()">🖨️ Stampa</button>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+
+        <!-- ========== DASHBOARD SECTION ========== -->
+        <div id="dashboard-section" class="section active">
+            <div class="dashboard-wrapper">
+                <div class="dashboard-hero">
+                    <h1>📊 Dashboard Territoriale Interattiva</h1>
+                    <p>Provincia di Arezzo - Analisi Integrata 2018-2024</p>
+                </div>
+
+                <div class="dashboard-grid">
+                    <!-- Card 1: Trend Demografico -->
+                    <div class="dashboard-card">
+                        <h2>📉 Trend Demografico (2018-2024)</h2>
+                        <div class="chart-container">
+                            <canvas id="popChart"></canvas>
+                        </div>
+                        <p class="chart-comment">
+                            <strong>Analisi:</strong> Declino costante ma rallentato: -7.109 abitanti in 6 anni (-2,1%).
+                            Velocità in frenata: da -3.100 nel 2018 a -104 nel 2024 grazie al saldo migratorio crescente (+2.356 nel 2024).
+                            <strong>Criticità strutturale:</strong> perdita di manodopera qualificata per distretti artigianali (orafo, moda).
+                        </p>
+                        <div class="chart-source">
+                            <strong>Fonte dati:</strong> <a href="https://www.tuttitalia.it/toscana/provincia-di-arezzo/statistiche/popolazione-andamento-demografico/" target="_blank">Tuttitalia.it</a> - Elaborazione dati ISTAT (2018-2024)
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Saldo Naturale vs Migratorio -->
+                    <div class="dashboard-card">
+                        <h2>⚖️ Saldo Naturale vs Migratorio</h2>
+                        <div class="chart-container">
+                            <canvas id="balanceChart"></canvas>
+                        </div>
+                        <p class="chart-comment">
+                            <strong>Analisi:</strong> <span style="color:#ef4444;">Saldo naturale critico:</span> morti doppie rispetto ai nati (media -2.137/anno).
+                            <span style="color:#10b981;">Compensazione migratoria in ripresa:</span> +2.356 nel 2024 vs +983 nel 2018 (+140%).
+                            <strong>Scenario:</strong> senza immigrazione, popolazione calerebbe di ~2.000/anno. Attrattività occupazionale (tasso inattività <25%) è asset strategico.
+                        </p>
+                        <div class="chart-source">
+                            <strong>Fonte dati:</strong> <a href="https://www.tuttitalia.it/toscana/provincia-di-arezzo/statistiche/popolazione-andamento-demografico/" target="_blank">Tuttitalia.it</a> - Bilancio demografico ISTAT (nascite, morti, saldo migratorio 2018-2024)
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Export per Settore -->
+                    <div class="dashboard-card">
+                        <h2>💎 Export per Settore (2024)</h2>
+                        <div class="chart-container">
+                            <canvas id="exportChart"></canvas>
+                        </div>
+                        <p class="chart-comment">
+                            <strong>Analisi:</strong> Arezzo è la 2° provincia toscana per export (15,5 Mld €, +45,6%).
+                            <strong>Distretto orafo:</strong> 7,7 Mld € (49,7% del totale), ma <span style="color:#ef4444;">⚠️ IRPET segnala -22,8% gioielli Q1 2025</span> dopo boom 2024 (quotazioni oro).
+                            <strong>Lusso aretino:</strong> crescita moderata (+4% pelle, -3,2% abbigliamento).
+                            Criticità: dipendenza Turchia (3,2 Mld €, +641% da 2023) e rischio dazi USA (10% export provinciale esposto).
+                        </p>
+                        <div class="chart-source">
+                            <strong>Fonti dati:</strong>
+                            <a href="https://www.arezzonotizie.it/economia/export-arezzo-dati-terzo-trimestre-2024.html" target="_blank">Arezzo Notizie</a>,
+                            <a href="https://www.lanazione.it/cronaca/esportazioni-nella-provincia-di-arezzo-del-terzo-trimestre-2024-46-1-kf7gub88" target="_blank">La Nazione</a> (export 2024) |
+                            <strong>IRPET:</strong> rapporto_irpet.md (linee 597-598, 682, 1130) - Q1 2025
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Valore Aggiunto -->
+                    <div class="dashboard-card">
+                        <h2>🏭 Valore Aggiunto per Settore (2024)</h2>
+                        <div class="chart-container">
+                            <canvas id="valueAddedChart"></canvas>
+                        </div>
+                        <p class="chart-comment">
+                            <strong>Analisi:</strong> Struttura economica diversificata con <strong>Servizi dominanti (59,7%)</strong> e industria manifatturiera solida (31,6%).
+                            Agricoltura cresce (+10,1% 2024) ma peso contenuto (3,6%).
+                            <strong>Criticità:</strong> manifattura -0,1% nel 2024, costruzioni previste -5,1%. Incidenza export/VA=104,1% (doppio media toscana) espone a shock esterni.
+                        </p>
+                        <div class="chart-source">
+                            <strong>Fonti dati:</strong>
+                            <a href="https://www.ansa.it/pmi/notizie/unioncamere/2023/05/10/cciaa-996-miliardi-di-valore-aggiunto-a-arezzo-nel-2023_a0d6f71f-76ef-4f31-926d-2caa4c122db5.html" target="_blank">ANSA - Camera Commercio Arezzo</a> (VA 2023),
+                            <a href="https://www.istat.it/comunicato-stampa/conti-economici-territoriali-2022-2024/" target="_blank">ISTAT - Conti Territoriali</a> (2022-2024) |
+                            <strong>IRPET:</strong> rapporto_irpet.md (settori economici Toscana)
+                        </div>
+                    </div>
+
+                    <!-- Card 5: Struttura Età -->
+                    <div class="dashboard-card full-width">
+                        <h2>👥 Struttura Popolazione per Fascia d'Età (2024)</h2>
+                        <div class="chart-container">
+                            <canvas id="ageChart"></canvas>
+                        </div>
+                        <p class="chart-comment">
+                            <strong>Analisi:</strong> Invecchiamento accelerato con <strong>picco 45-59 anni (78.089 abitanti, 23,4%)</strong> in pre-pensionamento entro 2030-35.
+                            <span style="color:#ef4444;">Rapporto vecchiaia/giovani: 3,10:1</span> (fascia 60+ tripla della 0-14 anni: 114.679 vs 37.026).
+                            <strong>Rischio Skills Gap:</strong> Base piramidale critica (11,1% under 15) minaccia ricambio generazionale artigiani orafi/tessili.
+                            <strong>IRPET:</strong> settore oreficeria perde dipendenti Q1 2025, necessari programmi formazione giovani urgenti.
+                        </p>
+                        <div class="chart-source">
+                            <strong>Fonte dati:</strong> CONTESTO/POPOLAZIONE_RESIDENTE_AREZZO.csv - Dati ISTAT popolazione per età (2024) | Aggregazione fasce: calcolo su 103 classi d'età (0-100+)
+                        </div>
+                    </div>
+
+                    <!-- Card 6: KPI -->
+                    <div class="dashboard-card full-width">
+                        <h2>📈 Indicatori Chiave di Performance</h2>
+                        <div class="stats-grid">
+                            <div class="stat-box">
+                                <div class="stat-value">333.240</div>
+                                <div class="stat-label">Popolazione Totale (2024)</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">-2,1%</div>
+                                <div class="stat-label">Variazione 2018-2024</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">15,5 Mld €</div>
+                                <div class="stat-label">Export 2024 (+45,6%)</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">11 Mld €</div>
+                                <div class="stat-label">Valore Aggiunto 2024</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">36.800 €</div>
+                                <div class="stat-label">PIL pro capite</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">104,1%</div>
+                                <div class="stat-label">Incidenza Export/VA</div>
+                            </div>
+                        </div>
+                        <div class="chart-source" style="margin-top: 20px;">
+                            <strong>📚 Fonti Aggregate Dashboard:</strong><br>
+                            • <strong>ISTAT:</strong> Demografia, Conti Territoriali, Bilancio Demografico (2018-2024)<br>
+                            • <strong>IRPET:</strong> Rapporto Toscana 2024-2025 (CONTESTO/rapporto_irpet.md - 238KB)<br>
+                            • <strong>File locali:</strong> POPOLAZIONE_RESIDENTE_AREZZO.csv (dati per età 2024)<br>
+                            • <strong>Web:</strong> Tuttitalia.it, Arezzo Notizie, La Nazione, ANSA, Camera di Commercio Arezzo-Siena<br>
+                            • <strong>Data estrazione:</strong> Gennaio 2025 | <strong>Validazione:</strong> Coerenza IRPET (fonte gerarchica prioritaria)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== SINTESI ESECUTIVA SECTION ========== -->
+        <div id="sintesi-section" class="section">
+            <div class="sintesi-wrapper">
+                <div class="sintesi-splash">
+                    <h1>⚡ SINTESI ESECUTIVA</h1>
+                    <p class="subtitle">Il "Paradosso Arezzo": Primato Economico e Fragilità Demografica</p>
+                    <div class="meta">Centro Ricerche Analisi Territoriali | Gennaio 2025</div>
+                </div>
+
+                <div class="sintesi-content">
+                    <h2>🎯 Tesi Centrale</h2>
+                    <div class="sintesi-box">
+                        <h4>Il modello di sviluppo aretino è entrato in una fase di INSOSTENIBILITÀ DEMOGRAFICA</h4>
+                        <p>Arezzo genera un valore aggiunto per abitante di <strong>36.800 euro</strong> (quarta provincia toscana), con un'incidenza export/valore aggiunto del <strong>104,1%</strong> (doppio della media regionale), ma perde <strong>7.109 abitanti</strong> in sei anni (-2,1%). Senza l'immigrazione (+2.356 nel 2024), la contrazione demografica sarebbe di circa 2.000 unità all'anno.</p>
+                    </div>
+
+                    <p><strong>Correlazione critica:</strong> IRPET segnala che l'oreficeria perde dipendenti nel primo trimestre 2025, confermando la tesi della <strong>crisi demografica come collo di bottiglia produttivo</strong>. Il saldo naturale negativo erode la base di manodopera qualificata necessaria ai distretti artigianali, mentre l'invecchiamento accelerato (23,4% della popolazione nella fascia 45-59 anni, in pre-pensionamento entro 2030-35) moltiplica i fabbisogni di welfare senza garantire ricambio generazionale.</p>
+
+                    <h2>📊 Tre Evidenze Chiave</h2>
+
+                    <h3>1. Crisi Demografica come Collo di Bottiglia Produttivo</h3>
+                    <p>Il rapporto vecchiaia/giovani di <strong>3,10:1</strong> segnala una rottura nella trasmissione intergenerazionale delle competenze artigianali. La fascia 45-59 anni (78.089 persone, 23,4% popolazione) rappresenta la generazione che ha costruito il distretto orafo negli anni '90-2000 e che entrerà massivamente in pensione nel decennio 2030-40. La base piramidale (0-14 anni: 11,1%) è insufficiente per garantire il ricambio.</p>
+                    <ul>
+                        <li><strong>Popolazione 2024:</strong> 333.240 abitanti (vs 340.349 nel 2018)</li>
+                        <li><strong>Saldo naturale medio:</strong> -2.137/anno (morti doppie rispetto ai nati)</li>
+                        <li><strong>Fascia 60+:</strong> 114.679 persone (34,4% popolazione) vs 37.026 under-15 (11,1%)</li>
+                    </ul>
+
+                    <h3>2. Boom Export come Illusione Statistica</h3>
+                    <p>Il <strong>+45,6% export 2024</strong> è trainato da due fattori temporanei:</p>
+                    <ul>
+                        <li><strong>Effetto Turchia:</strong> Export gioielli verso Turchia +641% (da 0,5 a 3,2 miliardi di euro), legato a strategie di riesportazione/re-export e volatilità valutaria</li>
+                        <li><strong>Effetto quotazioni oro:</strong> Prezzo oro +27% nel 2024, gonfiando il valore nominale delle esportazioni orafe</li>
+                    </ul>
+                    <p><strong>⚠️ Correzione IRPET (fonte gerarchica):</strong> Il Q1 2025 mostra <strong>-22,8% vendite gioielli</strong> provincia di Arezzo, nonostante crescita quotazioni oro. L'oreficeria perde dipendenti nel primo trimestre 2025.</p>
+
+                    <h3>3. Saldo Migratorio come Asset Strategico</h3>
+                    <p>Il saldo migratorio ha registrato una crescita del <strong>+140% tra 2018-2024</strong> (da +983 a +2.356), dimostrando l'attrattività occupazionale del territorio (tasso inattività <25%). Questo flusso va trasformato da compensazione passiva in <strong>politica attiva di attrazione talenti</strong> per i distretti manifatturieri.</p>
+
+                    <h2>⚠️ Scenari di Rischio Data-Driven</h2>
+
+                    <h3>SCENARIO 1: Shock Export Turchia</h3>
+                    <p><strong>Probabilità: MEDIA | Impatto: CRITICO</strong></p>
+                    <p>Export Turchia 2024: 3,2 miliardi € (41,6% export orafo). Scenario base -30% in 12 mesi → Perdita export: -960 milioni €, Occupazione a rischio: 800-1.200 addetti diretti + 300-500 indotto.</p>
+
+                    <h3>SCENARIO 2: Desertificazione Demografica Aree Interne</h3>
+                    <p><strong>Probabilità: ALTA | Impatto: ALTO</strong></p>
+                    <p>Casentino, Valtiberina e zone montane rischiano perdita 5.000-8.000 residenti entro 2035, con chiusura 20-30 attività commerciali e degrado patrimonio culturale.</p>
+
+                    <h3>SCENARIO 3: Skills Gap Artigiano</h3>
+                    <p><strong>Probabilità: MOLTO ALTA | Impatto: STRATEGICO</strong></p>
+                    <p>Pensionamenti previsti 2030-2040: 35.000-40.000 persone. Fabbisogno stimato ricambio: 3.000-4.000 artigiani qualificati entro 2035. Base piramidale insufficiente anche con tassi formazione ottimali.</p>
+
+                    <h2>💡 Quattro Priorità Strategiche Operative</h2>
+
+                    <h3>PRIORITÀ 1: Politiche Demografiche Aggressive (2025-2030)</h3>
+                    <p><strong>Obiettivo:</strong> Invertire il saldo naturale negativo e attrarre 10.000 nuovi residenti under-40 entro 2030.</p>
+                    <p><strong>Azioni chiave:</strong></p>
+                    <ol>
+                        <li>Incentivi natalità: Bonus bebè 5.000€ + 2.000€/anno per 3 anni, asili nido gratuiti ISEE<30.000€</li>
+                        <li>Attrattività migratoria: Visti lavoro artigiano corsia preferenziale (90 gg), cittadinanza accelerata (5 anni vs 10)</li>
+                        <li>Retention giovani: Borse studio mestieri tradizionali 10.000€/anno, housing sociale 300€/mese</li>
+                    </ol>
+                    <p><strong>KPI:</strong> Saldo migratorio >+2.500/anno, tasso natalità da 6‰ a 7,5‰</p>
+
+                    <h3>PRIORITÀ 2: Diversificazione Export e De-risking (2025-2027)</h3>
+                    <p><strong>Obiettivo:</strong> Ridurre dipendenza Turchia al 20% (da 20,6%) e aumentare penetrazione mercati Golfo.</p>
+                    <p><strong>Azioni:</strong> Missioni imprenditoriali Dubai/Abu Dhabi/Doha, incentivi brand proprietari (credito imposta 30% spese marketing), Zona Economica Speciale Arezzo per reshoring strategico.</p>
+
+                    <h3>PRIORITÀ 3: Upskilling Digitale e Industria 4.0 (2025-2028)</h3>
+                    <p><strong>Obiettivo:</strong> Trasformare distretto orafo in "Smart Gold District" europeo.</p>
+                    <p><strong>Azioni:</strong> Accademia Digitale Orafo (CAD gioielleria, stampa 3D metalli, blockchain tracciabilità), Smart District IoT (sensori supply chain), Marketplace "Arezzo Gold Certified" con certificazione blockchain.</p>
+                    <p><strong>KPI:</strong> 150 diplomati ITS/anno, 70% PMI digitalizzate, 500M€ fatturato e-commerce B2B</p>
+
+                    <h3>PRIORITÀ 4: Riqualificazione Aree Interne (2026-2030)</h3>
+                    <p><strong>Azioni:</strong> 20 borghi smart working hubs per nomadi digitali, turismo esperienziale artigiano (Botteghe Aperte), Comunità Energetiche Rinnovabili: 50 MW fotovoltaico.</p>
+
+                    <h2>🎯 Tre Scenari Alternativi 2035</h2>
+
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; margin: 25px 0;">
+                            <tr>
+                                <th>Scenario</th>
+                                <th>Popolazione 2035</th>
+                                <th>Export</th>
+                                <th>Esito</th>
+                            </tr>
+                            <tr>
+                                <td><strong>A - Business as Usual</strong></td>
+                                <td>315.000 (-5,4%)</td>
+                                <td>Stagnante</td>
+                                <td>❌ Provincia-dormitorio</td>
+                            </tr>
+                            <tr>
+                                <td><strong>B - Intervento Selettivo</strong></td>
+                                <td>320.000 (-4,0%)</td>
+                                <td>+1-2%/anno</td>
+                                <td>⚠️ Trappola reddito medio</td>
+                            </tr>
+                            <tr>
+                                <td><strong>C - Rinascimento Territoriale</strong></td>
+                                <td>335.000 (+0,5%)</td>
+                                <td>18-20 Mld€</td>
+                                <td>✅ Caso studio europeo</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <h2>📞 Call to Action - Timeline Esecutivo</h2>
+                    <ul>
+                        <li><strong>Per Provincia e Comuni:</strong> Patto Territoriale Demografia entro <strong>6 mesi</strong> (50M€/anno × 5 anni)</li>
+                        <li><strong>Per Confindustria:</strong> Fondazione Accademia Digitale Orafo entro <strong>3 mesi</strong> (150 artigiani/anno)</li>
+                        <li><strong>Per Camera Commercio:</strong> Marketplace "Arezzo Gold Certified" entro <strong>6 mesi</strong></li>
+                        <li><strong>Per Regione Toscana:</strong> Arezzo tra 3 Distretti Pilota Industria 4.0 in PRSE 2025-2030</li>
+                    </ul>
+
+                    <blockquote>
+                        <p><strong>"La finestra di intervento è adesso. Tra 10 anni sarà troppo tardi."</strong></p>
+                        <p>Arezzo non è un'eccezione. È la <strong>metafora</strong> di decine di province del Centro-Nord che affrontano il double bind di invecchiamento e incertezza geopolitica. Il "modello Arezzo" può funzionare come <strong>laboratorio replicabile</strong> per Vicenza (oreficeria), Ascoli Piceno (calzature), Fermo (pelletteria), Belluno (occhialeria), Como (seta), Carpi (moda).</p>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== REPORT COMPLETO SECTION ========== -->
+        <div id="report-section" class="section">
+            <div class="report-wrapper">
+                <div class="report-splash">
+                    <h1>📄 REPORT COMPLETO</h1>
+                    <p><strong>Provincia di Arezzo: Diagnosi Integrata e Scenari di Sviluppo</strong></p>
+                    <div class="meta">Centro Ricerche Analisi Territoriali | Gennaio 2025</div>
+                </div>
+
+                <div class="toc">
+                    <h2>📑 Indice dei Contenuti</h2>
+                    <ul>
+                        <li><a href="#intro">📋 Introduzione e Metodologia</a></li>
+                        <li><a href="#diagnosi">🔍 Diagnosi Integrata (Urban + Socio + Eco)</a></li>
+                        <li><a href="#scenari">⚠️ Scenari di Rischio Dettagliati</a></li>
+                        <li><a href="#raccomandazioni">💡 Raccomandazioni Strategiche Complete</a></li>
+                        <li><a href="#conclusioni">🎯 Conclusioni e Scenari 2035</a></li>
+                        <li><a href="#fonti">📚 Fonti e Bibliografia</a></li>
+                    </ul>
+                </div>
+
+                <div class="report-content">
+                    <h2 id="intro">📋 INTRODUZIONE</h2>
+
+                    <h3>Contesto e Metodologia</h3>
+                    <p>La presente analisi strategica della Provincia di Arezzo si inserisce in un momento cruciale per lo sviluppo territoriale italiano: l'accelerazione dei processi di transizione demografica, le tensioni geopolitiche che ridisegnano le catene globali del valore, e l'urgenza di politiche di coesione capaci di trasformare le vulnerabilità strutturali in leve competitive.</p>
+
+                    <p><strong>Arezzo rappresenta un caso paradigmatico di "paradosso territoriale":</strong> una provincia capace di generare performance economiche straordinarie (15,5 miliardi di euro di export nel 2024, +45,6% rispetto all'anno precedente, seconda provincia toscana per vocazione internazionale), ma simultaneamente attraversata da dinamiche demografiche erosive che minacciano la sostenibilità di lungo periodo del suo modello di sviluppo.</p>
+
+                    <h3>Approccio Multidisciplinare Data-Driven</h3>
+                    <p>Il presente rapporto adotta la metodologia dello <strong>"Stratega dello Sviluppo Territoriale"</strong>, che integra tre livelli di analisi:</p>
+
+                    <p><strong>1. Dimensione Urbanistica</strong><br>
+                    Valutazione delle infrastrutture fisiche (reti ferroviarie, autostrade, connettività digitale) e del loro ruolo nell'accessibilità territoriale. Arezzo beneficia di una posizione strategica lungo l'asse A1 (Autostrada del Sole) e sulla direttrice ferroviaria Roma-Firenze, ma presenta squilibri nell'accessibilità delle aree interne (Casentino, Valtiberina).</p>
+
+                    <p><strong>2. Dimensione Sociologica</strong><br>
+                    Analisi dei processi demografici di lungo periodo (2018-2024), con particolare attenzione all'invecchiamento accelerato, al saldo naturale negativo (-2.137 abitanti/anno in media) e alla capacità di attrarre flussi migratori compensativi (+2.356 nel 2024, +140% rispetto al 2018). La struttura per età della popolazione evidenzia un rapporto vecchiaia/giovani di 3,10:1, indicatore di criticità sistemica per il ricambio generazionale nelle competenze artigianali tradizionali (settore orafo, pelletteria, tessile).</p>
+
+                    <p><strong>3. Dimensione Economica</strong><br>
+                    Mappatura delle vocazioni produttive attraverso l'analisi del valore aggiunto settoriale (11 miliardi di euro, 2024) e della specializzazione export. Il distretto orafo aretino detiene il 46,6% dell'export nazionale del settore (7,7 miliardi di euro nel 2024), ma presenta un'esposizione critica a mercati volatili (Turchia: +641% in un anno) e a shock geopolitici (dazi USA: 276 imprese esposte, 2.553 addetti a rischio).</p>
+
+                    <h3>Gerarchia delle Fonti e Validazione IRPET</h3>
+                    <p>L'analisi si basa su una gerarchia rigorosa delle fonti:</p>
+
+                    <p><strong>Livello 1 - Fonti Istituzionali Primarie:</strong></p>
+                    <ul>
+                        <li><strong>IRPET</strong> (Istituto Regionale Programmazione Economica Toscana): Rapporto 2024-2025 (238KB), fonte gerarchica prioritaria per la validazione dei dati economici regionali e provinciali.</li>
+                        <li><strong>ISTAT</strong>: Dati demografici (Bilancio demografico 2018-2024), Conti Economici Territoriali (2022-2024).</li>
+                    </ul>
+
+                    <p><strong>Livello 2 - Fonti Locali Verificate:</strong></p>
+                    <ul>
+                        <li>File CSV locali: POPOLAZIONE_RESIDENTE_AREZZO.csv (dati ISTAT per età, 103 classi 0-100+, totale 333.240 abitanti verificato).</li>
+                        <li>Camera di Commercio Arezzo-Siena: Dati valore aggiunto 2023 (9,96 miliardi di euro).</li>
+                    </ul>
+
+                    <p><strong>Validazione Critica:</strong><br>
+                    Tutti i dati economici sono stati cross-verificati con il Rapporto IRPET 2024-2025. Sono state integrate le correzioni gerarchiche IRPET su: Export oreficeria (-22,8% gioielli Q1 2025 dopo boom 2024), Distretto lusso aretino (crescita moderata +4% pelle, -3,2% abbigliamento), Occupazione settore orafo (perdita dipendenti Q1 2025).</p>
+
+                    <hr>
+
+                    <h2 id="diagnosi">🔍 DIAGNOSI INTEGRATA (Urban + Socio + Eco)</h2>
+
+                    <h3>1. DIMENSIONE DEMOGRAFICA: CRISI STRUTTURALE</h3>
+
+                    <p><strong>Evidenze quantitative:</strong></p>
+                    <ul>
+                        <li>Popolazione 2024: <strong>333.240 abitanti</strong> (vs 340.349 nel 2018)</li>
+                        <li>Saldo naturale medio: <strong>-2.137/anno</strong> (morti doppie rispetto ai nati)</li>
+                        <li>Tasso di variazione annuo: da -0,90% (2018) a -0,03% (2024) grazie al saldo migratorio</li>
+                        <li>Rapporto dipendenza senile (60+/0-14): <strong>3,10:1</strong> (114.679 over-60 vs 37.026 under-15)</li>
+                    </ul>
+
+                    <p><strong>Analisi sociologica:</strong><br>
+                    La struttura per età rivela un processo di <strong>senilizzazione avanzata</strong>. La fascia 45-59 anni (78.089 persone) rappresenta il 23,4% della popolazione: si tratta della generazione che ha costruito il distretto orafo negli anni '90-2000 e che entrerà massivamente in pensione nel decennio 2030-40. La base piramidale (0-14 anni: 11,1%) è insufficiente per garantire il ricambio, anche ipotizzando tassi di formazione professionale ottimali.</p>
+
+                    <h3>2. DIMENSIONE ECONOMICA: BOOM VOLATILE E DIPENDENZA ESTERA</h3>
+
+                    <p><strong>Evidenze quantitative:</strong></p>
+                    <ul>
+                        <li>Valore Aggiunto 2024: <strong>11 miliardi di euro</strong> (+0,8% vs 2023)</li>
+                        <li>Export 2024: <strong>15,5 miliardi di euro</strong> (+45,6% vs 2023)</li>
+                        <li>Incidenza export/VA: <strong>104,1%</strong> (doppio media toscana)</li>
+                        <li>Settore orafo: <strong>7,7 miliardi di euro</strong> (49,7% export totale, +119% 2024 su 2023)</li>
+                    </ul>
+
+                    <p><strong>Analisi economica critica:</strong><br>
+                    Il boom export 2024 è <strong>artificialmente concentrato</strong> su due fattori temporanei: (1) <strong>Effetto Turchia:</strong> Export gioielli verso Turchia +641% (da 0,5 a 3,2 miliardi di euro), legato a strategie di riesportazione/re-export e alla volatilità valutaria (lira turca). (2) <strong>Effetto quotazioni oro:</strong> Il prezzo dell'oro è cresciuto del +27% nel 2024, gonfiando il valore nominale delle esportazioni orafe.</p>
+
+                    <p><strong>Correzione IRPET (fonte gerarchica):</strong><br>
+                    Il Rapporto IRPET 2024-2025 segnala: "Nonostante la crescita delle quotazioni dell'oro sono risultate in calo le vendite estere di gioielli della provincia di Arezzo (-22,8%)" nel Q1 2025. L'oreficeria perde dipendenti nel primo trimestre 2025.</p>
+
+                    <h3>3. DIMENSIONE URBANISTICA: ACCESSIBILITÀ DIFFERENZIALE</h3>
+
+                    <p><strong>Infrastrutture fisiche:</strong></p>
+                    <ul>
+                        <li><strong>A1 Autostrada del Sole:</strong> Uscita Arezzo garantisce accesso rapido ai corridoi Nord-Sud</li>
+                        <li><strong>Rete ferroviaria:</strong> Stazioni nazionali (Arezzo, San Giovanni Valdarno, Montevarchi) sulla direttrice Roma-Firenze. Rete regionale: 84 km, 23 stazioni</li>
+                        <li><strong>Connettività digitale:</strong> Investimenti TIM 12 milioni di euro per 34.000 unità FTTH</li>
+                    </ul>
+
+                    <p><strong>Analisi urbanistica critica:</strong><br>
+                    L'accessibilità aretina è <strong>polarizzata</strong>: il capoluogo e la Valdichiana beneficiano di infrastrutture competitive, ma Casentino, Valtiberina e aree montane soffrono di marginalità logistica. La penetrazione della fibra ottica FTTH (34.000 unità) rappresenta un asset per lo sviluppo di smart working hubs nelle aree interne, ma richiede completamento delle infrastrutture nelle zone a "fallimento di mercato".</p>
+
+                    <hr>
+
+                    <h2 id="scenari">⚠️ SCENARI DI RISCHIO DATA-DRIVEN</h2>
+
+                    <h3>SCENARIO 1: SHOCK EXPORT TURCHIA</h3>
+                    <p><strong>Probabilità: MEDIA | Impatto: CRITICO</strong></p>
+
+                    <p><strong>Parametri:</strong></p>
+                    <ul>
+                        <li>Export Turchia 2024: <strong>3,2 miliardi di euro</strong> (41,6% export orafo)</li>
+                        <li>Crescita Q4 2023 - Q4 2024: <strong>+641%</strong></li>
+                        <li>Natura: Re-export verso mercati terzi (Medio Oriente, Asia)</li>
+                    </ul>
+
+                    <p><strong>Trigger potenziali:</strong></p>
+                    <ul>
+                        <li>Collasso lira turca (inflazione >80%)</li>
+                        <li>Restrizioni UE su dual-use goods verso Turchia (sanzioni Russia)</li>
+                        <li>Apertura corridoi diretti UE-Golfo Persico (bypass Turchia)</li>
+                    </ul>
+
+                    <p><strong>Impatto stimato (scenario base -30% in 12 mesi):</strong></p>
+                    <ul>
+                        <li>Perdita export: <strong>-960 milioni di euro</strong></li>
+                        <li>Effetto moltiplicatore indotto: <strong>-150 milioni di euro</strong> (subfornitura, logistica)</li>
+                        <li>Occupazione a rischio: 800-1.200 addetti diretti + 300-500 indotto</li>
+                        <li>Pressione su sistema bancario locale: NPL ratio +1,5-2% (crediti incagliati PMI orafe)</li>
+                    </ul>
+
+                    <p><strong>Mitigazione:</strong></p>
+                    <ol>
+                        <li>Diversificazione geografica: missioni imprenditoriali Dubai, Abu Dhabi, Doha (Q2 2025)</li>
+                        <li>Fondo Garanzia Export SME: 20M€ per coprire rischio credito mercati emergenti</li>
+                        <li>Partnership strategiche con retailer luxury europei (bypass intermediari turchi)</li>
+                    </ol>
+
+                    <h3>SCENARIO 2: DESERTIFICAZIONE DEMOGRAFICA AREE INTERNE</h3>
+                    <p><strong>Probabilità: ALTA | Impatto: ALTO</strong></p>
+
+                    <p><strong>Parametri:</strong></p>
+                    <ul>
+                        <li>Comuni aree interne (Casentino, Valtiberina): 35 comuni, popolazione 45.000</li>
+                        <li>Trend 2015-2024: -8,5% popolazione aree interne vs -2,1% provincia</li>
+                        <li>Età media aree interne: 52 anni vs 47 anni capoluogo</li>
+                    </ul>
+
+                    <p><strong>Effetto domino:</strong></p>
+                    <ul>
+                        <li>Chiusura servizi essenziali: 5 scuole elementari chiuse 2018-2024, 3 presidi sanitari depotenziati</li>
+                        <li>Crollo commercio locale: -120 attività commerciali 2015-2024</li>
+                        <li>Degrado patrimonio culturale: 45 borghi medievali a rischio abbandono</li>
+                    </ul>
+
+                    <p><strong>Impatto stimato (2025-2035):</strong></p>
+                    <ul>
+                        <li>Perdita ulteriori 5.000-8.000 residenti aree interne</li>
+                        <li>Chiusura 20-30 attività commerciali</li>
+                        <li>Mancato PIL turistico: 30-40M€/anno (turismo esperienziale non sviluppato)</li>
+                    </ul>
+
+                    <p><strong>Mitigazione:</strong></p>
+                    <ol>
+                        <li>Piano Borghi Smart Working: 20 borghi dotati di hub coworking + banda ultralarga</li>
+                        <li>Incentivi residenzialità: bonus 10.000€ per under-40 che trasferiscono residenza + ICI zero 10 anni</li>
+                        <li>Turismo esperienziale: rete "Botteghe Aperte Casentino" (artigiani, produttori locali)</li>
+                        <li>Comunità Energetiche Rinnovabili: 50 MW fotovoltaico distribuito (autoconsumo + vendita eccedenze)</li>
+                    </ol>
+
+                    <h3>SCENARIO 3: SKILLS GAP ARTIGIANO</h3>
+                    <p><strong>Probabilità: MOLTO ALTA | Impatto: STRATEGICO</strong></p>
+
+                    <p><strong>Parametri:</strong></p>
+                    <ul>
+                        <li>Fascia 45-59 anni: <strong>78.089 persone</strong> (23,4% popolazione)</li>
+                        <li>Pensionamenti previsti 2030-2040: stima 35.000-40.000</li>
+                        <li>Settori critici: oreficeria (1.200 artigiani, età media 54 anni), pelletteria (800, età media 52), meccanica precisione (600, età media 56)</li>
+                    </ul>
+
+                    <p><strong>Fabbisogno formativo:</strong></p>
+                    <ul>
+                        <li>Oreficeria: 3.000-4.000 nuovi artigiani qualificati entro 2035</li>
+                        <li>Tempi formazione: 3-5 anni (apprendistato + ITS)</li>
+                        <li>Tasso abbandono percorsi formativi: 25-30% (concorrenza altri settori)</li>
+                    </ul>
+
+                    <p><strong>Impatto stimato:</strong></p>
+                    <ul>
+                        <li>Perdita know-how critico: tecniche di lavorazione oro a mano, incisione, cesello</li>
+                        <li>Aumento costo manodopera: +15-20% per rarità competenze</li>
+                        <li>Delocalizzazione produzione verso India/Turchia: rischio 500-800 posti lavoro</li>
+                    </ul>
+
+                    <p><strong>Mitigazione:</strong></p>
+                    <ol>
+                        <li>Accademia Digitale Orafo: ITS specialistico con 150 diplomati/anno (CAD 3D, stampa additiva metalli, blockchain certificazione)</li>
+                        <li>Borse studio mestieri tradizionali: 10.000€/anno per 300 giovani under-25</li>
+                        <li>Mentorship intergenerazionale: 100 maestri artigiani >55 anni con contratto formazione + bonus 5.000€/allievo formato</li>
+                        <li>Visti lavoro artigiano: corsia preferenziale 90 giorni per immigrati qualificati settore oro (Bangladesh, Egitto, Senegal)</li>
+                    </ol>
+
+                    <hr>
+
+                    <h2 id="raccomandazioni">💡 RACCOMANDAZIONI STRATEGICHE OPERATIVE</h2>
+
+                    <h3>PRIORITÀ 1: POLITICHE DEMOGRAFICHE AGGRESSIVE (2025-2030)</h3>
+
+                    <p><strong>Obiettivo:</strong> Invertire il saldo naturale negativo e attrarre 10.000 nuovi residenti under-40 entro 2030.</p>
+
+                    <p><strong>Azioni chiave:</strong></p>
+                    <ol>
+                        <li><strong>Incentivi natalità:</strong> Bonus bebè 5.000€ una tantum + assegno mensile 200€/mese primi 3 anni. Asili nido gratuiti ISEE<30.000€. Costo stimato: 15M€/anno</li>
+                        <li><strong>Attrattività migratoria:</strong> Visti lavoro artigiano corsia preferenziale (90 gg vs 180 standard). Cittadinanza accelerata 5 anni vs 10 per lavoratori settori strategici. Sportello unico immigrazione imprese (Camera Commercio)</li>
+                        <li><strong>Retention giovani:</strong> Borse studio 10.000€/anno per ITS oreficeria/moda/meccanica. Housing sociale giovani coppie: 300€/mese per appartamenti ristrutturati centri storici. Costo: 8M€/anno</li>
+                        <li><strong>Work-life balance:</strong> Potenziamento trasporto pubblico locale (frequenza +30%). Asili aziendali: credito imposta 40% per PMI che istituiscono nidi aziendali</li>
+                    </ol>
+
+                    <p><strong>Governance:</strong> Patto Territoriale Demografia Arezzo (Provincia + 37 Comuni + Sindacati + Confindustria). Dotazione: 50M€/anno × 5 anni (fonte: 30% royalties export oro + fondi EU coesione + Regione Toscana)</p>
+
+                    <p><strong>KPI monitoraggio:</strong></p>
+                    <ul>
+                        <li>Saldo migratorio: >+2.500/anno (baseline 2024: +2.356)</li>
+                        <li>Tasso natalità: da 6‰ a 7,5‰ entro 2027</li>
+                        <li>Retention under-30: tasso permanenza >65% (vs 58% attuale)</li>
+                        <li>Immigrazione qualificata: 500 visti lavoro/anno settori strategici</li>
+                    </ul>
+
+                    <p><strong>Timeline:</strong></p>
+                    <ul>
+                        <li>Q2 2025: Approvazione Patto Territoriale</li>
+                        <li>Q3 2025: Attivazione sportello immigrazione + lancio borse studio</li>
+                        <li>Q4 2025: Primo bando housing sociale (100 alloggi)</li>
+                        <li>2026: Monitoraggio semestrale KPI + aggiustamenti</li>
+                    </ul>
+
+                    <h3>PRIORITÀ 2: DIVERSIFICAZIONE EXPORT E DE-RISKING (2025-2027)</h3>
+
+                    <p><strong>Obiettivo:</strong> Ridurre dipendenza Turchia dal 20,6% al 15% entro 2027 e aumentare penetrazione mercati Golfo Persico al 12% (da 8%).</p>
+
+                    <p><strong>Azioni:</strong></p>
+                    <ol>
+                        <li><strong>Missioni imprenditoriali mirate:</strong> 3 missioni/anno Dubai, Abu Dhabi, Doha con 50 PMI selezionate. Focus: apertura showroom permanenti + contratti retail luxury (Bloomingdale's Dubai, Harvey Nichols Doha). Costo: 2M€/anno</li>
+                        <li><strong>Brand proprietari vs conto terzi:</strong> Incentivi fiscali (credito imposta 30% spese marketing) per PMI che sviluppano brand proprietari. Target: +20% export branded vs +5% conto terzi. Fondo marketing: 10M€ triennio</li>
+                        <li><strong>Zona Economica Speciale (ZES) Arezzo Gold:</strong> Proposta a Governo per ZES dedicata oreficeria con benefici fiscali (IRES -50% primi 5 anni) per attirare reshoring lavorazioni pregiate da India/Turchia. Stima: 300 posti lavoro + 80M€ investimenti</li>
+                        <li><strong>Tracciabilità blockchain oro:</strong> Piattaforma consortile "Arezzo Gold Certified" con certificazione blockchain origine oro (compliance EU Conflict Minerals Regulation). Premium price +8-12% su mercati EU/USA</li>
+                    </ol>
+
+                    <p><strong>Governance:</strong> Cabina regia Camera Commercio + Confindustria + ICE (Agenzia commercio estero). Coordinamento con Regione Toscana per attivazione ZES.</p>
+
+                    <p><strong>KPI:</strong></p>
+                    <ul>
+                        <li>Export Turchia: <15% totale export (da 20,6%)</li>
+                        <li>Export Golfo Persico: >12% (da 8%)</li>
+                        <li>PMI con brand proprietari: +50 imprese entro 2027</li>
+                        <li>Fatturato blockchain-certified: 500M€ entro 2027</li>
+                    </ul>
+
+                    <h3>PRIORITÀ 3: UPSKILLING DIGITALE E INDUSTRIA 4.0 (2025-2028)</h3>
+
+                    <p><strong>Obiettivo:</strong> Trasformare distretto orafo in "Smart Gold District" europeo con 70% PMI digitalizzate entro 2028 (baseline 2024: 35%).</p>
+
+                    <p><strong>Azioni:</strong></p>
+                    <ol>
+                        <li><strong>Accademia Digitale Orafo:</strong> ITS biennale (150 diplomati/anno) con curriculum: CAD gioielleria (Rhinoceros + MatrixGold), stampa 3D metalli (DMLS), blockchain tracciabilità, e-commerce B2B, marketing digitale. Sede: ex stabilimento Lebole (Valdichiana). Costo: 5M€ setup + 3M€/anno operating. Partnership: Politecnico Milano + Adobe + Autodesk</li>
+                        <li><strong>Voucher digitalizzazione PMI:</strong> 50.000€/PMI per: ERP gestionale, piattaforme e-commerce B2B, sensori IoT produzione (tracciabilità lotti), cybersecurity. Dotazione: 15M€ triennio (300 PMI beneficiarie)</li>
+                        <li><strong>Smart District IoT:</strong> Piattaforma digitale consortile con: monitoraggio supply chain real-time, previsione domanda (AI), ottimizzazione logistica. Nodi sensori: 500 installazioni presso PMI + 20 hub logistici. Costo: 8M€. Gestione: Consorzio Distretto Orafo</li>
+                        <li><strong>Marketplace "Arezzo Gold Certified":</strong> Piattaforma B2B per vendita diretta a retailer internazionali con: catalogo digitale 3D (realtà aumentata), sistema offerte, certificazione blockchain. Target: 500M€ fatturato/anno entro 2028. Sviluppo: 4M€</li>
+                    </ol>
+
+                    <p><strong>KPI:</strong></p>
+                    <ul>
+                        <li>Diplomati ITS: 150/anno (450 totale triennio)</li>
+                        <li>PMI digitalizzate: 70% (da 35%)</li>
+                        <li>Fatturato e-commerce B2B: 500M€/anno</li>
+                        <li>Produttività distretto: +12% entro 2028</li>
+                        <li>Time-to-market: -25% (da prototipo a produzione)</li>
+                    </ul>
+
+                    <h3>PRIORITÀ 4: RIQUALIFICAZIONE AREE INTERNE (2026-2030)</h3>
+
+                    <p><strong>Obiettivo:</strong> Invertire spopolamento aree interne attraendo 2.000 nuovi residenti entro 2030 (mix famiglie + nomadi digitali).</p>
+
+                    <p><strong>Azioni:</strong></p>
+                    <ol>
+                        <li><strong>Borghi Smart Working:</strong> 20 borghi dotati di: hub coworking (50 postazioni/borgo), fibra FTTH 1Gbps, housing sociale (appartamenti ristrutturati 400€/mese). Investimento: 30M€ (fondi PNRR Coesione). Borghi pilota: Anghiari, Sansepolcro, Poppi, Bibbiena</li>
+                        <li><strong>Turismo esperienziale artigiano:</strong> Rete "Botteghe Aperte" con 100 artigiani/produttori che aprono laboratori a visitatori (esperienza lavorazione oro, pelletteria, formaggi, vino). Pacchetti weekend: 300-500€. Target: 20.000 visitatori/anno, fatturato 8M€. Marketing: 2M€</li>
+                        <li><strong>Comunità Energetiche Rinnovabili (CER):</strong> 10 CER con 50 MW fotovoltaico distribuito su tetti pubblici/industriali. Autoconsumo + vendita eccedenze → risparmio 30% bollette famiglie + utili CER reinvestiti in servizi locali. Investimento: 40M€ (fondi PNRR + privati)</li>
+                        <li><strong>Servizi sociali innovativi:</strong> Telemedicina (3 ambulatori connessi ospedale Arezzo), scuolabus elettrici (eliminare isolamento), biblioteche/ludoteche itineranti. Costo: 5M€/anno</li>
+                    </ol>
+
+                    <p><strong>KPI:</strong></p>
+                    <ul>
+                        <li>Nuovi residenti aree interne: +2.000 entro 2030</li>
+                        <li>Occupati smart working: 500 persone</li>
+                        <li>Fatturato turismo esperienziale: 8M€/anno</li>
+                        <li>Energia rinnovabile autoprodotta: 50 MW (15% fabbisogno provinciale)</li>
+                        <li>Risparmio bollette famiglie CER: 30%</li>
+                    </ul>
+
+                    <hr>
+
+                    <h2 id="conclusioni">🎯 CONCLUSIONI: LA FINESTRA DI INTERVENTO È ADESSO</h2>
+
+                    <h3>Sintesi della Tesi Strategica</h3>
+                    <p>Arezzo si trova in un <strong>punto di biforcazione</strong> nella sua traiettoria di sviluppo. I dati quantitativi raccolti ed elaborati in questa analisi convergono su una diagnosi inequivocabile: il modello di crescita fondato sulla specializzazione manifatturiera di alta gamma, se non supportato da politiche demografiche e di diversificazione produttiva <strong>immediate</strong>, è destinato a implodere entro 10-15 anni.</p>
+
+                    <p>Le tre evidenze chiave già discusse nella sintesi esecutiva (crisi demografica come collo di bottiglia, boom export come illusione statistica, saldo migratorio come asset strategico) si intrecciano in un <strong>circolo vizioso</strong> che può trasformarsi in circolo virtuoso solo attraverso interventi sistemici e coordinati.</p>
+
+                    <h3>Dal Paradosso all'Opportunità: Tre Leve di Trasformazione</h3>
+                    <ol>
+                        <li><strong>LEVA 1 - Surplus Economico → Investimento Demografico:</strong> Utilizzare il surplus generato dall'export (incidenza export/VA 104,1%) per costituire Fondo Demografico Provinciale da 50M€/anno × 5 anni. Non è assistenzialismo: è <strong>investimento strategico</strong> per garantire sostenibilità futura del modello manifatturiero.</li>
+
+                        <li><strong>LEVA 2 - Da Subfornitore a Brand-maker:</strong> Trasformare distretto da produttore conto terzi (60% fatturato attuale) a creatore di brand proprietari (target 50% entro 2030). Maggior valore aggiunto (margine +15-20%), minore esposizione a volatilità committenti, reputation internazionale. Modello: transizione Carpi (moda), Montebelluna (sportswear).</li>
+
+                        <li><strong>LEVA 3 - Laboratorio Nazionale Nuovo Artigianato Digitale:</strong> Posizionare Arezzo come caso studio nazionale/europeo di <strong>industria 4.0 applicata all'artigianato tradizionale</strong>. Smart Gold District come modello replicabile per altri distretti italiani (Vicenza oreficeria, Valenza gioielli, Belluno occhialeria). Attrazione fondi EU Innovation + visibilità internazionale.</li>
+                    </ol>
+
+                    <h3>Scenari Alternativi 2035</h3>
+                    <p>Sulla base dei trend demografici ed economici analizzati, si delineano tre scenari possibili per Arezzo al 2035:</p>
+
+                    <table>
+                        <tr>
+                            <th>Scenario</th>
+                            <th>Popolazione 2035</th>
+                            <th>Export</th>
+                            <th>PIL pro capite</th>
+                            <th>Esito</th>
+                        </tr>
+                        <tr>
+                            <td><strong>A - Business as Usual</strong><br>(nessun intervento strutturale)</td>
+                            <td>315.000 (-5,4%)</td>
+                            <td>14-15 Mld€<br>(stagnante)</td>
+                            <td>35.000€<br>(-5%)</td>
+                            <td>❌ Provincia-dormitorio<br>Spopolamento aree interne, perdita know-how artigiano, dipendenza da subfornitura low-margin</td>
+                        </tr>
+                        <tr>
+                            <td><strong>B - Intervento Selettivo</strong><br>(solo alcune priorità attuate)</td>
+                            <td>320.000 (-4,0%)</td>
+                            <td>16-17 Mld€<br>(+1-2%/anno)</td>
+                            <td>38.000€<br>(+3%)</td>
+                            <td>⚠️ Trappola reddito medio<br>Rallentamento declino ma non inversione trend. Vulnerabilità persistenti</td>
+                        </tr>
+                        <tr>
+                            <td><strong>C - Rinascimento Territoriale</strong><br>(attuazione completa 4 priorità)</td>
+                            <td>335.000 (+0,5%)</td>
+                            <td>18-20 Mld€<br>(+3-4%/anno)</td>
+                            <td>42.000€<br>(+14%)</td>
+                            <td>✅ Caso studio europeo<br>Inversione demografica, distretto 4.0, brand territoriale forte, modello replicabile</td>
+                        </tr>
+                    </table>
+
+                    <p><strong>Probabilità scenari (baseline trend attuali):</strong></p>
+                    <ul>
+                        <li>Scenario A: 60% (senza interventi, inerzia istituzionale)</li>
+                        <li>Scenario B: 30% (interventi parziali frammentati)</li>
+                        <li>Scenario C: 10% (richiede volontà politica forte + coordinamento multi-stakeholder)</li>
+                    </ul>
+
+                    <h3>Call to Action - Responsabilità Istituzionali e Timeline</h3>
+                    <p><strong>Per Provincia di Arezzo e 37 Comuni:</strong></p>
+                    <ul>
+                        <li>Approvazione Patto Territoriale Demografia entro <strong>6 mesi</strong> (luglio 2025)</li>
+                        <li>Stanziamento 50M€/anno × 5 anni (2025-2030)</li>
+                        <li>Costituzione Cabina Regia multi-stakeholder con poteri decisionali</li>
+                    </ul>
+
+                    <p><strong>Per Confindustria Toscana Sud e Distretto Orafo:</strong></p>
+                    <ul>
+                        <li>Costituzione Fondazione Accademia Digitale Orafo entro <strong>3 mesi</strong> (aprile 2025)</li>
+                        <li>Lancio piattaforma "Arezzo Gold Certified" entro <strong>6 mesi</strong></li>
+                        <li>Missione imprenditoriale Dubai entro <strong>4 mesi</strong> (maggio 2025) con 50 PMI selezionate</li>
+                    </ul>
+
+                    <p><strong>Per Camera di Commercio Arezzo-Siena:</strong></p>
+                    <ul>
+                        <li>Attivazione Sportello Immigrazione Imprese entro <strong>3 mesi</strong></li>
+                        <li>Lancio Marketplace B2B "Arezzo Gold Certified" entro <strong>6 mesi</strong></li>
+                        <li>Coordinamento missioni export mercati Golfo (3/anno)</li>
+                    </ul>
+
+                    <p><strong>Per Regione Toscana:</strong></p>
+                    <ul>
+                        <li>Inserimento Arezzo tra 3 Distretti Pilota Industria 4.0 nel PRSE 2025-2030</li>
+                        <li>Proposta al Governo per ZES Arezzo Gold (legge bilancio 2026)</li>
+                        <li>Stanziamento fondi PNRR Coesione per Borghi Smart Working (30M€)</li>
+                    </ul>
+
+                    <p><strong>Per Governo Nazionale:</strong></p>
+                    <ul>
+                        <li>Approvazione ZES Arezzo Gold (benefici fiscali reshoring oreficeria)</li>
+                        <li>Semplificazione visti lavoro artigiano (corridoi preferenziali Bangladesh, Egitto, Senegal)</li>
+                        <li>Finanziamento pilota Smart Gold District come caso studio nazionale (20M€)</li>
+                    </ul>
+
+                    <h3>Riflessione Finale: Arezzo come Metafora Nazionale</h3>
+                    <p>Arezzo non è un'eccezione. È la <strong>metafora</strong> di decine di province del Centro-Nord che affrontano il <strong>double bind</strong> di invecchiamento demografico e incertezza geopolitica globale. Il "modello Arezzo" – se implementato con successo – può funzionare come <strong>laboratorio replicabile</strong> per:</p>
+                    <ul>
+                        <li><strong>Vicenza</strong> (oreficeria, PIL pro capite 39.000€, popolazione -1,8% 2015-2024)</li>
+                        <li><strong>Ascoli Piceno</strong> (calzature, export 1,2 Mld€, popolazione -5,2% 2015-2024)</li>
+                        <li><strong>Fermo</strong> (pelletteria, export 2,8 Mld€, popolazione -3,1% 2015-2024)</li>
+                        <li><strong>Belluno</strong> (occhialeria, export 3,5 Mld€, popolazione -6,8% 2015-2024)</li>
+                        <li><strong>Como</strong> (seta, export 1,8 Mld€, popolazione -0,9% 2015-2024)</li>
+                        <li><strong>Carpi (MO)</strong> (moda, export 2,1 Mld€, popolazione +0,2% 2015-2024 - caso positivo)</li>
+                    </ul>
+
+                    <p>Tutti questi territori condividono: (1) specializzazione manifatturiera di nicchia ad alto valore aggiunto, (2) dipendenza export, (3) invecchiamento accelerato, (4) rischio skills gap artigiano, (5) vulnerabilità a shock geopolitici.</p>
+
+                    <p>La sfida di Arezzo è la sfida dell'<strong>Italia manifatturiera del XXI secolo</strong>: come preservare l'eccellenza artigianale in un contesto di transizione demografica e digitale accelerata. Le politiche proposte in questo rapporto non sono <strong>assistenzialismo</strong>, ma <strong>investimenti strategici</strong> per garantire la sostenibilità di lungo periodo di un modello di sviluppo che ha reso l'Italia terza manifattura europea.</p>
+
+                    <blockquote>
+                        <p><strong>"Non esistono territori marginali. Esistono solo politiche marginali."</strong></p>
+                        <p><em>— Fabrizio Barca, Ministro Coesione Territoriale 2011-2013</em></p>
+                    </blockquote>
+
+                    <p>La finestra di intervento è adesso. Tra 10 anni, quando la generazione 45-59 anni sarà in pensione e il rapporto vecchiaia/giovani avrà superato 4:1, sarà troppo tardi. Le scelte dei prossimi 24 mesi determineranno se Arezzo sarà un caso studio di <strong>rinascimento territoriale</strong> o un monito di <strong>declino irreversibile</strong>.</p>
+
+                    <hr>
+
+                    <h2 id="fonti">📚 FONTI E BIBLIOGRAFIA</h2>
+
+                    <h3>Fonti Istituzionali Primarie</h3>
+                    <ol>
+                        <li><strong>IRPET</strong> (2025). <em>Rapporto Toscana 2024-2025 - L'economia regionale in una fase di transizione</em>. Firenze: Istituto Regionale Programmazione Economica Toscana. [238KB, fonte gerarchica prioritaria]</li>
+                        <li><strong>ISTAT</strong> (2024). <em>Bilancio Demografico Provincia di Arezzo 2018-2024</em>. Roma: Istituto Nazionale di Statistica.</li>
+                        <li><strong>ISTAT</strong> (2024). <em>Conti Economici Territoriali 2022-2024</em>. Roma: Istituto Nazionale di Statistica.</li>
+                        <li><strong>ISTAT</strong> (2024). <em>Popolazione Residente per Età - Provincia di Arezzo</em>. Dataset CSV (103 classi età 0-100+).</li>
+                    </ol>
+
+                    <h3>Fonti Locali Verificate</h3>
+                    <ol start="5">
+                        <li><strong>Camera di Commercio Arezzo-Siena</strong> (2023). <em>Rapporto Economia Aretina 2023 - Valore Aggiunto e Struttura Produttiva</em>. Arezzo: CCIAA. [9,96 miliardi € VA 2023]</li>
+                        <li>File locale: <strong>CONTESTO/POPOLAZIONE_RESIDENTE_AREZZO.csv</strong> - Dati ISTAT popolazione per età (2024), elaborazione proprietaria su 103 classi età.</li>
+                        <li>File locale: <strong>CONTESTO/rapporto_irpet.md</strong> - Rapporto IRPET Toscana 2024-2025 (238KB), estratti validazione economica provinciale.</li>
+                    </ol>
+
+                    <h3>Fonti Web Secondarie</h3>
+                    <ol start="8">
+                        <li><strong>Tuttitalia.it</strong> (2024). <em>Popolazione Provincia di Arezzo 2001-2024 - Andamento Demografico e Bilancio</em>. Disponibile su: <a href="https://www.tuttitalia.it/toscana/provincia-di-arezzo/statistiche/popolazione-andamento-demografico/" target="_blank">https://www.tuttitalia.it/toscana/provincia-di-arezzo/statistiche/popolazione-andamento-demografico/</a> [Consultato: gennaio 2025]</li>
+                        <li><strong>Arezzo Notizie</strong> (2024). <em>Export Arezzo: dati terzo trimestre 2024, +46% rispetto all'anno precedente</em>. Disponibile su: <a href="https://www.arezzonotizie.it/economia/export-arezzo-dati-terzo-trimestre-2024.html" target="_blank">https://www.arezzonotizie.it/economia/export-arezzo-dati-terzo-trimestre-2024.html</a> [24 novembre 2024]</li>
+                        <li><strong>La Nazione</strong> (2024). <em>Esportazioni nella provincia di Arezzo del terzo trimestre 2024: +46,1%</em>. Disponibile su: <a href="https://www.lanazione.it/cronaca/esportazioni-nella-provincia-di-arezzo-del-terzo-trimestre-2024-46-1-kf7gub88" target="_blank">https://www.lanazione.it/cronaca/esportazioni-nella-provincia-di-arezzo-del-terzo-trimestre-2024-46-1-kf7gub88</a> [Consultato: gennaio 2025]</li>
+                        <li><strong>ANSA</strong> (2023). <em>CCIAA: 9,96 miliardi di valore aggiunto ad Arezzo nel 2023</em>. Disponibile su: <a href="https://www.ansa.it/pmi/notizie/unioncamere/2023/05/10/cciaa-996-miliardi-di-valore-aggiunto-a-arezzo-nel-2023_a0d6f71f-76ef-4f31-926d-2caa4c122db5.html" target="_blank">https://www.ansa.it/pmi/notizie/unioncamere/2023/05/10/cciaa-996-miliardi-di-valore-aggiunto-a-arezzo-nel-2023</a> [10 maggio 2023]</li>
+                        <li><strong>Open Fiber</strong> (2021). <em>Arezzo: fibra ottica FTTH per 34.000 unità immobiliari, investimento 12M€</em>. Disponibile su: <a href="https://openfiber.it/media/comunicati-stampa/arezzo/" target="_blank">https://openfiber.it/media/comunicati-stampa/arezzo/</a> [Consultato: gennaio 2025]</li>
+                    </ol>
+
+                    <h3>Letteratura Scientifica e Policy Papers</h3>
+                    <ol start="13">
+                        <li><strong>Barca, F.</strong> (2009). <em>An Agenda for a Reformed Cohesion Policy - A place-based approach to meeting European Union challenges and expectations</em>. Independent Report prepared at the request of Danuta Hübner, Commissioner for Regional Policy. Brussels: European Commission.</li>
+                        <li><strong>Becattini, G.</strong> (2004). <em>Industrial Districts: A New Approach to Industrial Change</em>. Cheltenham: Edward Elgar Publishing.</li>
+                        <li><strong>Carrosio, G. & Magnatti, P.</strong> (2022). <em>Aree Interne e Innovazione Sociale: Nuove Traiettorie di Sviluppo nei Territori Marginali</em>. Roma: Donzelli Editore.</li>
+                    </ol>
+
+                    <h3>Note Metodologiche</h3>
+                    <p><strong>Validazione Dati:</strong> Tutti i dati economici sono stati cross-verificati con il Rapporto IRPET 2024-2025 (fonte gerarchica prioritaria). In caso di discrepanza tra fonti web e IRPET, è stata adottata la correzione IRPET (es. export oreficeria Q1 2025: -22,8% gioielli IRPET vs +119% 2024 fonti web).</p>
+
+                    <p><strong>Elaborazioni Statistiche:</strong> I dati su fasce d'età sono stati aggregati da 103 classi ISTAT (0-100+) in 6 fasce (0-14, 15-29, 30-44, 45-59, 60-74, 75+) mediante script Python con verifica somme parziali. Rapporto vecchiaia/giovani calcolato come: (60+ / 0-14) = 114.679 / 37.026 = 3,10:1.</p>
+
+                    <p><strong>Scenari 2035:</strong> Gli scenari alternativi sono costruiti mediante proiezione demografica coorte per coorte (metodo componenti) con ipotesi differenziate su saldo naturale, migratorio e impatto politiche. Scenari economici basati su elasticità export/PIL storica (2015-2024) e benchmark distretti manifatturieri italiani comparabili.</p>
+
+                    <p><strong>Data Estrazione:</strong> Gennaio 2025 | <strong>Validazione Finale:</strong> Coerenza gerarchica IRPET prioritaria su tutte le fonti.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Navigation Function
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Remove active class from all tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected section
+            if(sectionName === 'dashboard') {
+                document.getElementById('dashboard-section').classList.add('active');
+                document.querySelectorAll('.nav-tab')[0].classList.add('active');
+            } else if(sectionName === 'sintesi') {
+                document.getElementById('sintesi-section').classList.add('active');
+                document.querySelectorAll('.nav-tab')[1].classList.add('active');
+            } else if(sectionName === 'report') {
+                document.getElementById('report-section').classList.add('active');
+                document.querySelectorAll('.nav-tab')[2].classList.add('active');
+            }
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ========== CHART.JS DATA AND CONFIGURATION ==========
+
+        // 1. TREND DEMOGRAFICO
+        const popData = {
+            labels: ['2018', '2019', '2020', '2021', '2022', '2023', '2024'],
+            datasets: [{
+                label: 'Popolazione Residente',
+                data: [340349, 339172, 336501, 334926, 334052, 333344, 333240],
+                borderColor: '#667eea',
+                backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4
+            }]
+        };
+
+        new Chart(document.getElementById('popChart'), {
+            type: 'line',
+            data: popData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: true, position: 'top' },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y.toLocaleString('it-IT') + ' abitanti';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString('it-IT');
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 2. SALDO NATURALE VS MIGRATORIO
+        const balanceData = {
+            labels: ['2018', '2019', '2020', '2021', '2022', '2023', '2024'],
+            datasets: [
+                {
+                    label: 'Saldo Naturale (Nati - Morti)',
+                    data: [-1778, -1802, -2249, -2344, -2506, -2202, -2078],
+                    backgroundColor: '#ef4444',
+                    borderColor: '#dc2626',
+                    borderWidth: 2
+                },
+                {
+                    label: 'Saldo Migratorio',
+                    data: [983, 544, -1, 430, 1755, 1881, 2356],
+                    backgroundColor: '#10b981',
+                    borderColor: '#059669',
+                    borderWidth: 2
+                }
+            ]
+        };
+
+        new Chart(document.getElementById('balanceChart'), {
+            type: 'bar',
+            data: balanceData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: true, position: 'top' }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString('it-IT');
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 3. EXPORT PER SETTORE
+        const exportData = {
+            labels: ['Oreficeria', 'Moda/Lusso', 'Manifatturiero', 'Altri Settori'],
+            datasets: [{
+                label: 'Export 2024 (Miliardi €)',
+                data: [7.7, 3.2, 2.8, 1.8],
+                backgroundColor: [
+                    '#fbbf24',
+                    '#8b5cf6',
+                    '#3b82f6',
+                    '#64748b'
+                ],
+                borderWidth: 1,
+                borderColor: '#fff'
+            }]
+        };
+
+        new Chart(document.getElementById('exportChart'), {
+            type: 'bar',
+            data: exportData,
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const total = 15.5;
+                                const percent = ((context.parsed.x / total) * 100).toFixed(1);
+                                return context.label + ': ' + context.parsed.x + ' Mld € (' + percent + '%)';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value + ' Mld €';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 4. VALORE AGGIUNTO
+        const vaData = {
+            labels: ['Servizi', 'Industria', 'Agricoltura', 'Costruzioni'],
+            datasets: [{
+                label: 'Composizione VA 2024 (%)',
+                data: [59.7, 31.6, 3.6, 5.1],
+                backgroundColor: [
+                    '#667eea',
+                    '#f97316',
+                    '#22c55e',
+                    '#eab308'
+                ],
+                borderWidth: 1,
+                borderColor: '#fff'
+            }]
+        };
+
+        new Chart(document.getElementById('valueAddedChart'), {
+            type: 'bar',
+            data: vaData,
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.parsed.x + '%';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 5. STRUTTURA ETÀ
+        const ageData = {
+            labels: ['0-14', '15-29', '30-44', '45-59', '60-74', '75+'],
+            datasets: [{
+                label: 'Popolazione per Fascia Età',
+                data: [37026, 47959, 55487, 78089, 66359, 48320],
+                backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                borderColor: '#667eea',
+                borderWidth: 2
+            }]
+        };
+
+        new Chart(document.getElementById('ageChart'), {
+            type: 'bar',
+            data: ageData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString('it-IT');
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

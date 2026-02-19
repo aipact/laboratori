@@ -1,21 +1,22 @@
 <!--
-  CARTIA - https://github.com/scarsellifi/cartia
-  Copyright (c) 2025 scarsellifi
-  Licensed under the MIT License: https://opensource.org/licenses/MIT
+  Simulatore AI-PACT
+  Riadattamento del progetto open source CARTIA (https://github.com/scarsellifi/cartia)
+  di Marco Scarselli, per il progetto AI-PACT.
+  Licenza originale: MIT License (https://opensource.org/licenses/MIT)
 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CARTIA (Online)</title>
-    <meta name="description" content="CARTIA is an e-ink friendly AI chat designed for comfortable reading, prompt engineering, and long sessions on screens.">
+    <title>Simulatore AI-PACT</title>
+    <meta name="description" content="Simulatore AI-PACT - Riadattamento del progetto open source CARTIA di Marco Scarselli per il progetto AI-PACT.">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="CARTIA (Online)">
+    <meta property="og:title" content="Simulatore AI-PACT">
     <meta property="og:description" content="An e-ink friendly AI chat focused on readability, prompt engineering, and low eye strain.">
-    <meta property="og:site_name" content="CARTIA">
+    <meta property="og:site_name" content="Simulatore AI-PACT">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="CARTIA (Online)">
+    <meta name="twitter:title" content="Simulatore AI-PACT">
     <meta name="twitter:description" content="An e-ink friendly AI chat focused on readability, prompt engineering, and low eye strain.">
     <style>
         * {
@@ -1188,7 +1189,7 @@
     <div id="setupScreen" aria-hidden="true" inert>
         <div class="setup-container">
             <div class="setup-header">
-                <h1>CARTIA <span class="online-badge">ONLINE</span></h1>
+                <h1>Simulatore <span class="online-badge">AI-PACT</span></h1>
                 <div class="setup-header-actions">
                     <div class="setup-lang" aria-label="Language">
                         <button id="setupLangEn" class="setup-lang-btn" type="button" title="English">🇬🇧</button>
@@ -1198,8 +1199,8 @@
                 </div>
             </div>
             <div class="project-blurb" data-i18n-html="setup.blurb">
-                Un progetto di <strong>Marco Scarselli</strong>, pensato per chi soffre di secchezza oculare e passa molte ore davanti al monitor:
-                una chat studiata per gli schermi e-ink, utilizzabile anche su PC e smartphone.
+                Riadattamento del progetto open source <strong>CARTIA</strong> di Marco Scarselli per il progetto <strong>AI-PACT</strong>.
+                Simulatore di chat AI per i laboratori di Design Thinking nei Comuni.
             </div>
             <div class="setup-actions">
                 <button id="setupTourBtn" type="button" data-i18n="guide.launch">Guida</button>
@@ -1379,11 +1380,11 @@
 
         const I18N = {
             it: {
-                docTitle: 'CARTIA (Online)',
+                docTitle: 'Simulatore AI-PACT',
                 setup: {
                     close: 'Chiudi',
                     demoContinue: 'Continua demo',
-                    blurb: 'Un progetto di <strong>Marco Scarselli</strong>, pensato per chi soffre di secchezza oculare e passa molte ore davanti al monitor: una chat studiata per gli schermi e-ink, utilizzabile anche su PC e smartphone.',
+                    blurb: 'Riadattamento del progetto open source <strong>CARTIA</strong> di Marco Scarselli per il progetto <strong>AI-PACT</strong>. Simulatore di chat AI per i laboratori di Design Thinking nei Comuni.',
                     prompt: 'Inserisci la tua chiave API di OpenRouter per iniziare. La chiave viene salvata solo nel tuo browser.',
                     apiPlaceholder: 'sk-or-v1-...',
                     saveStart: 'Salva e Inizia',
@@ -1526,11 +1527,11 @@
                 }
             },
             en: {
-                docTitle: 'CARTIA (Online)',
+                docTitle: 'Simulatore AI-PACT',
                 setup: {
                     close: 'Close',
                     demoContinue: 'Continue demo',
-                    blurb: 'A project by <strong>Marco Scarselli</strong>, designed for people with dry eyes who spend many hours in front of a monitor: a chat experience tailored for e-ink screens, also usable on PC and smartphone.',
+                    blurb: 'Adaptation of the open source project <strong>CARTIA</strong> by Marco Scarselli for the <strong>AI-PACT</strong> project. AI chat simulator for Design Thinking workshops in municipalities.',
                     prompt: 'Enter your OpenRouter API key to begin. The key is saved only in your browser.',
                     apiPlaceholder: 'sk-or-v1-...',
                     saveStart: 'Save and Start',
@@ -1880,7 +1881,7 @@
                             'Content-Type': 'application/json',
                             'Authorization': `Bearer ${apiKey}`,
                             'HTTP-Referer': window.location.origin,
-                            'X-Title': 'CARTIA Online'
+                            'X-Title': 'Simulatore AI-PACT'
                         },
                         body: JSON.stringify(payload)
                     });
