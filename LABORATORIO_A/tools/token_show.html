@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Token Show | AI-PACT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e40af;
+            --primary-light: #3b82f6;
+            --accent: #7c3aed;
+            --accent-hover: #6d28d9;
+            --accent-soft: rgba(124, 58, 237, 0.12);
+            --purple: #7c3aed;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --bg: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-input: #f1f5f9;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            --radius: 16px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* ── Nav ── */
+        .nav {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 24px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .nav__logo {
+            font-size: 0.95rem; font-weight: 700;
+            color: var(--text); text-decoration: none;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .nav__badge {
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            color: white;
+            padding: 2px 10px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .nav__links { display: flex; gap: 8px; }
+        .nav__link {
+            color: var(--text-muted); text-decoration: none; font-size: 0.85rem;
+            padding: 6px 12px; border-radius: 8px;
+            transition: background 0.2s, color 0.2s;
+        }
+        .nav__link:hover { background: var(--accent-soft); color: var(--accent); }
+
+        /* ── Container ── */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 32px 20px 60px;
+        }
+
+        /* ── Hero ── */
+        .hero__eyebrow {
+            text-transform: uppercase; font-size: 0.75rem; letter-spacing: 3px;
+            color: var(--accent); margin-bottom: 8px; font-weight: 600;
+        }
+        .hero__title {
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
+            font-weight: 800; margin-bottom: 12px;
+        }
+        .hero__lead {
+            color: var(--text-muted); font-size: 1rem; max-width: 700px; margin-bottom: 28px;
+        }
+
+        /* ── API Key setup (compact, collapsible) ── */
+        .api-setup {
+            margin-bottom: 16px;
+        }
+        .api-setup__toggle {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: none; border: none;
+            color: var(--text-muted); font-size: 0.8rem;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer; padding: 4px 0;
+            transition: color 0.2s;
+        }
+        .api-setup__toggle:hover { color: var(--text); }
+        .api-setup__toggle .arrow { font-size: 0.6rem; transition: transform 0.2s; }
+        .api-setup__toggle.open .arrow { transform: rotate(90deg); }
+        .api-setup__panel {
+            display: none;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-top: 8px;
+            box-shadow: var(--shadow);
+            align-items: center; gap: 10px;
+            flex-wrap: wrap;
+        }
+        .api-setup__panel.open {
+            display: flex;
+        }
+        .api-setup__input {
+            flex: 1; min-width: 180px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: 'Space Grotesk', monospace;
+            font-size: 0.82rem;
+            padding: 7px 12px;
+        }
+        .api-setup__input::placeholder { color: #94a3b8; }
+        .api-setup__input:focus { outline: none; border-color: var(--accent); }
+        .api-setup__status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 50px;
+            font-weight: 600;
+        }
+        .api-setup__status--saved { background: rgba(16,185,129,0.12); color: var(--success); }
+        .api-setup__status--missing { background: rgba(239,68,68,0.1); color: var(--danger); }
+        .api-setup__note {
+            width: 100%;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            opacity: 0.7;
+            margin-top: 2px;
+        }
+
+        /* ── Input area ── */
+        .input-area {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow);
+        }
+        .input-area label {
+            display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;
+        }
+        .input-row {
+            display: flex; gap: 12px;
+        }
+        .input-row textarea {
+            flex: 1;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            padding: 12px 16px;
+            resize: none;
+            height: 48px;
+        }
+        .input-row textarea::placeholder { color: rgba(148,163,184,0.4); }
+        .input-row textarea:focus { outline: none; border-color: var(--accent); }
+
+        .btn {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600; font-size: 0.95rem;
+            border: none; border-radius: 12px;
+            padding: 12px 24px; cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            white-space: nowrap;
+        }
+        .btn:active { transform: scale(0.97); }
+        .btn--primary { background: var(--accent); color: white; }
+        .btn--primary:hover { background: var(--accent-hover); }
+        .btn--stop { background: var(--danger); color: #fff; }
+        .btn--stop:hover { background: #f87171; }
+
+        /* ── Suggestions ── */
+        .suggestions {
+            display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px;
+        }
+        .suggestions button {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            color: var(--text-muted);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+            padding: 6px 16px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+        }
+        .suggestions button:hover {
+            background: var(--accent-soft); color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        /* ══ PLAYER CONTROLS ══ */
+        .player {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .player__btn {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text);
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .player__btn:hover:not(:disabled) {
+            background: var(--accent-soft);
+            border-color: var(--accent);
+        }
+        .player__btn:disabled {
+            opacity: 0.3; cursor: not-allowed;
+        }
+        .player__btn--play {
+            width: 52px; height: 52px;
+            font-size: 1.4rem;
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        .player__btn--play:hover:not(:disabled) {
+            background: var(--accent-hover);
+        }
+        .player__step {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            min-width: 90px;
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+        }
+        .player__step strong { color: var(--accent); }
+
+        .player__speed {
+            display: flex; align-items: center; gap: 8px;
+            margin-left: 12px;
+        }
+        .player__speed label {
+            font-size: 0.75rem; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .player__speed input[type="range"] {
+            width: 80px;
+            accent-color: var(--accent);
+        }
+        .player__speed-val {
+            font-size: 0.8rem; color: var(--accent);
+            min-width: 36px; font-variant-numeric: tabular-nums;
+        }
+
+        /* ══ DIAGRAM ══ */
+        .diagram {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            grid-template-rows: auto auto;
+            gap: 0;
+            align-items: stretch;
+            margin-bottom: 24px;
+        }
+
+        .diagram__context {
+            grid-column: 1; grid-row: 1;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            display: flex; flex-direction: column;
+            min-height: 200px;
+            overflow-y: auto;
+            box-shadow: var(--shadow);
+        }
+        .diagram__context-label {
+            font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;
+            color: var(--text-muted); margin-bottom: 12px;
+        }
+        .context-tokens {
+            flex: 1;
+            font-size: 1.05rem;
+            line-height: 1.9;
+            word-break: break-word;
+        }
+        .ctx-token {
+            display: inline;
+            border-radius: 3px;
+            padding: 1px 0;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .ctx-token:hover {
+            background: var(--accent-soft);
+        }
+        .ctx-token--active {
+            background: var(--accent-soft);
+            border-bottom: 2px solid var(--accent);
+        }
+        .ctx-prompt { color: var(--text-muted); cursor: default; }
+        .ctx-separator { color: var(--accent); opacity: 0.6; cursor: default; font-size: 0.9em; }
+        .ctx-generated { color: var(--text); }
+        .ctx-hidden { display: none; }
+
+        .diagram__center {
+            grid-column: 2; grid-row: 1;
+            display: flex; flex-direction: row;
+            align-items: center;
+            padding: 0 16px; gap: 12px;
+        }
+        .arrow { font-size: 1.8rem; color: var(--text-muted); line-height: 1; }
+        .nn-icon { width: 90px; height: 90px; }
+        .nn-icon svg { width: 100%; height: 100%; }
+        .nn-icon circle { fill: var(--text-muted); transition: fill 0.2s; }
+        .nn-icon line { stroke: var(--border); stroke-width: 1; transition: stroke 0.2s; }
+        .nn-icon.active circle { fill: var(--accent); }
+        .nn-icon.active line { stroke: rgba(124,58,237,0.4); }
+        .nn-label {
+            text-align: center; font-size: 0.7rem; color: var(--text-muted);
+            margin-top: 4px; letter-spacing: 1px; text-transform: uppercase;
+        }
+        .nn-wrapper { display: flex; flex-direction: column; align-items: center; }
+
+        .diagram__probs {
+            grid-column: 3; grid-row: 1;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            display: flex; flex-direction: column;
+            min-height: 200px;
+            box-shadow: var(--shadow);
+        }
+        .diagram__probs-label {
+            font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;
+            color: var(--text-muted); margin-bottom: 12px;
+        }
+        .prob-list {
+            flex: 1;
+            display: flex; flex-direction: column;
+            justify-content: center; gap: 8px;
+        }
+        .prob-row {
+            display: flex; align-items: center; gap: 10px;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .prob-token {
+            min-width: 90px; font-size: 1rem;
+            font-family: 'Space Grotesk', monospace;
+            font-weight: 500; white-space: pre;
+        }
+        .prob-token--chosen { color: var(--accent); font-weight: 700; }
+        .prob-bar-bg {
+            flex: 1; height: 14px;
+            background: var(--bg-input);
+            border-radius: 7px; overflow: hidden;
+        }
+        .prob-bar {
+            height: 100%; border-radius: 7px;
+            transition: width 0.4s ease;
+        }
+        .prob-bar--high   { background: var(--accent); }
+        .prob-bar--medium { background: var(--warning); }
+        .prob-bar--low    { background: var(--danger); }
+        .prob-pct {
+            min-width: 50px; text-align: right;
+            font-size: 0.9rem; color: var(--text-muted);
+            font-variant-numeric: tabular-nums;
+        }
+        .prob-empty {
+            color: var(--text-muted); opacity: 0.5;
+            font-style: italic; text-align: center; padding: 30px 0;
+        }
+
+        .diagram__loop {
+            grid-column: 1 / -1; grid-row: 2;
+            display: flex; justify-content: center;
+            padding: 12px 0 0;
+        }
+        .loop-arrow {
+            display: flex; align-items: center; gap: 8px;
+            color: var(--text-muted); font-size: 0.78rem;
+            letter-spacing: 1px; opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+        .loop-arrow.active { opacity: 1; color: var(--accent); }
+        .loop-arrow svg { width: 200px; height: 24px; }
+        .loop-arrow svg path { fill: none; stroke: currentColor; stroke-width: 2; }
+        .loop-arrow svg polygon { fill: currentColor; }
+
+        .legend {
+            display: flex; gap: 20px; flex-wrap: wrap;
+            font-size: 0.8rem; color: var(--text-muted);
+        }
+        .legend__item { display: flex; align-items: center; gap: 6px; }
+        .legend__color { width: 20px; height: 4px; border-radius: 2px; }
+
+        .loading {
+            text-align: center; padding: 20px;
+            color: var(--text-muted); font-style: italic;
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 20px; height: 20px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Footer ── */
+        .footer {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+        .footer a { color: var(--primary-light); text-decoration: none; }
+
+        /* ── Responsive ── */
+        @media (max-width: 820px) {
+            .diagram {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto auto;
+                gap: 12px;
+            }
+            .diagram__context { grid-column: 1; grid-row: 1; min-height: 120px; max-height: 250px; }
+            .diagram__center {
+                grid-column: 1; grid-row: 2;
+                justify-content: center; padding: 8px 0;
+            }
+            .diagram__probs { grid-column: 1; grid-row: 3; min-height: auto; }
+            .diagram__loop { grid-column: 1; grid-row: 4; }
+            .input-row { flex-direction: column; }
+            .btn { width: 100%; }
+            .player { gap: 8px; }
+            .player__speed { margin-left: 0; }
+            .api-setup__panel.open { flex-direction: column; align-items: stretch; }
+            .nav__links { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="nav">
+    <a href="../../" class="nav__logo">
+        AI-PACT <span class="nav__badge">Laboratori</span>
+    </a>
+    <div class="nav__links">
+        <a href="../../LABORATORIO_A/ISTRUZIONI/" class="nav__link">Istruzioni</a>
+        <a href="simulatore.html" class="nav__link">Simulatore</a>
+        <a href="token_show.html" class="nav__link" style="color:var(--accent);">Token Show</a>
+    </div>
+</nav>
+
+<div class="container">
+    <p class="hero__eyebrow">Strumento didattico &middot; AI-PACT</p>
+    <h1 class="hero__title">Token Show</h1>
+    <p class="hero__lead">
+        Osserva come un LLM genera testo: legge tutti i token precedenti,
+        calcola le probabilit&agrave; del prossimo, sceglie quello pi&ugrave; probabile,
+        e ripete. Un token alla volta. Usa i controlli per navigare passo per passo.
+    </p>
+
+    <!-- ── API Key (compact, collapsible) ── -->
+    <div class="api-setup">
+        <button class="api-setup__toggle" id="apiToggle" type="button">
+            <span class="arrow">&#x25B6;</span>
+            API Key OpenRouter
+            <span class="api-setup__status" id="apiKeyStatus"></span>
+        </button>
+        <div class="api-setup__panel" id="apiPanel">
+            <input type="password" class="api-setup__input" id="apiKeyInput" placeholder="sk-or-v1-..." autocomplete="off">
+            <div class="api-setup__note">
+                Salvata nel browser (localStorage). <a href="https://openrouter.ai/keys" target="_blank" rel="noopener" style="color:var(--primary-light);">Ottieni una chiave</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="input-area">
+        <label for="prompt">Scrivi un prompt e osserva il processo di generazione</label>
+        <div class="input-row">
+            <textarea id="prompt" rows="1" placeholder="La capitale d'Italia &egrave;..."></textarea>
+            <button class="btn btn--primary" id="btnGenerate">Genera</button>
+        </div>
+    </div>
+
+    <div class="suggestions">
+        <button data-prompt="La capitale d'Italia è">La capitale d'Italia &egrave;</button>
+        <button data-prompt="C'era una volta un">C'era una volta un</button>
+        <button data-prompt="Il teorema di Pitagora afferma che">Teorema di Pitagora</button>
+        <button data-prompt="Per fare una buona pizza bisogna">Una buona pizza</button>
+        <button data-prompt="L'intelligenza artificiale è">L'intelligenza artificiale</button>
+        <button data-prompt="Sei un esperto pescatore. Spiegami come gestire una pesca in estate.">Pesca in estate (pescatore)</button>
+        <button data-prompt="Sei un esperto agronomo. Spiegami come gestire una pesca in estate.">Pesca in estate (agronomo)</button>
+    </div>
+
+    <!-- ══ PLAYER ══ -->
+    <div class="player" id="player" style="display:none;">
+        <button class="player__btn" id="btnFirst" title="Inizio">&#x23EE;</button>
+        <button class="player__btn" id="btnPrev" title="Passo indietro">&#x23F4;</button>
+        <button class="player__btn player__btn--play" id="btnPlay" title="Play / Pausa">&#x25B6;</button>
+        <button class="player__btn" id="btnNext" title="Passo avanti">&#x23F5;</button>
+        <button class="player__btn" id="btnLast" title="Fine">&#x23ED;</button>
+
+        <div class="player__step" id="stepCounter">0 / 0</div>
+
+        <div class="player__speed">
+            <label>Velocit&agrave;</label>
+            <input type="range" id="speedSlider" min="100" max="2000" step="100" value="500">
+            <span class="player__speed-val" id="speedVal">0.5s</span>
+        </div>
+    </div>
+
+    <!-- ══ DIAGRAM ══ -->
+    <div class="diagram">
+
+        <!-- LEFT: context -->
+        <div class="diagram__context">
+            <div class="diagram__context-label">Contesto (token precedenti)</div>
+            <div class="context-tokens" id="contextTokens">
+                <span class="prob-empty">Il testo apparir&agrave; qui...</span>
+            </div>
+        </div>
+
+        <!-- CENTER: arrows + NN -->
+        <div class="diagram__center">
+            <span class="arrow">&rarr;</span>
+            <div class="nn-wrapper">
+                <div class="nn-icon" id="nnIcon">
+                    <svg viewBox="0 0 90 90">
+                        <circle cx="15" cy="18" r="5"/><circle cx="15" cy="45" r="5"/><circle cx="15" cy="72" r="5"/>
+                        <circle cx="45" cy="12" r="5"/><circle cx="45" cy="36" r="5"/><circle cx="45" cy="58" r="5"/><circle cx="45" cy="78" r="5"/>
+                        <circle cx="75" cy="25" r="5"/><circle cx="75" cy="50" r="5"/><circle cx="75" cy="72" r="5"/>
+                        <line x1="20" y1="18" x2="40" y2="12"/><line x1="20" y1="18" x2="40" y2="36"/><line x1="20" y1="18" x2="40" y2="58"/><line x1="20" y1="18" x2="40" y2="78"/>
+                        <line x1="20" y1="45" x2="40" y2="12"/><line x1="20" y1="45" x2="40" y2="36"/><line x1="20" y1="45" x2="40" y2="58"/><line x1="20" y1="45" x2="40" y2="78"/>
+                        <line x1="20" y1="72" x2="40" y2="12"/><line x1="20" y1="72" x2="40" y2="36"/><line x1="20" y1="72" x2="40" y2="58"/><line x1="20" y1="72" x2="40" y2="78"/>
+                        <line x1="50" y1="12" x2="70" y2="25"/><line x1="50" y1="12" x2="70" y2="50"/><line x1="50" y1="12" x2="70" y2="72"/>
+                        <line x1="50" y1="36" x2="70" y2="25"/><line x1="50" y1="36" x2="70" y2="50"/><line x1="50" y1="36" x2="70" y2="72"/>
+                        <line x1="50" y1="58" x2="70" y2="25"/><line x1="50" y1="58" x2="70" y2="50"/><line x1="50" y1="58" x2="70" y2="72"/>
+                        <line x1="50" y1="78" x2="70" y2="25"/><line x1="50" y1="78" x2="70" y2="50"/><line x1="50" y1="78" x2="70" y2="72"/>
+                    </svg>
+                </div>
+                <div class="nn-label">Transformer</div>
+            </div>
+            <span class="arrow">&rarr;</span>
+        </div>
+
+        <!-- RIGHT: probabilities -->
+        <div class="diagram__probs">
+            <div class="diagram__probs-label">Probabilit&agrave; prossimo token</div>
+            <div class="prob-list" id="probList">
+                <div class="prob-empty">Clicca su un token o usa i controlli</div>
+            </div>
+        </div>
+
+        <!-- LOOP ARROW -->
+        <div class="diagram__loop">
+            <div class="loop-arrow" id="loopArrow">
+                <svg viewBox="0 0 200 24">
+                    <path d="M180 4 C 100 4, 100 4, 20 4 C 8 4, 4 8, 4 14 L 4 18" />
+                    <polygon points="0,14 4,22 8,14" />
+                </svg>
+                <span>il token scelto torna nel contesto</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="legend">
+        <div class="legend__item"><span class="legend__color" style="background:var(--accent)"></span> Alta probabilit&agrave; (&gt;60%)</div>
+        <div class="legend__item"><span class="legend__color" style="background:var(--warning)"></span> Media (15-60%)</div>
+        <div class="legend__item"><span class="legend__color" style="background:var(--danger)"></span> Bassa (&lt;15%)</div>
+        <div class="legend__item" style="margin-left:auto; opacity:0.6;">meta-llama/llama-3.1-8b-instruct</div>
+    </div>
+</div>
+
+<div class="footer">
+    Progetto AI-PACT &mdash; IFEL/ANCI Toscana
+    &nbsp;|&nbsp; <a href="../../">Torna alla homepage</a>
+</div>
+
+<script>
+(function() {
+    const STORAGE_KEY = 'aipact_openrouter_key';
+    const MODEL = 'meta-llama/llama-3.1-8b-instruct';
+
+    // ── DOM refs ──
+    const $apiKey      = document.getElementById('apiKeyInput');
+    const $apiStatus   = document.getElementById('apiKeyStatus');
+    const $apiToggle   = document.getElementById('apiToggle');
+    const $apiPanel    = document.getElementById('apiPanel');
+    const $prompt      = document.getElementById('prompt');
+    const $btnGen      = document.getElementById('btnGenerate');
+    const $context     = document.getElementById('contextTokens');
+    const $probList    = document.getElementById('probList');
+    const $nnIcon      = document.getElementById('nnIcon');
+    const $loopArrow   = document.getElementById('loopArrow');
+    const $player      = document.getElementById('player');
+    const $stepCounter = document.getElementById('stepCounter');
+    const $btnFirst    = document.getElementById('btnFirst');
+    const $btnPrev     = document.getElementById('btnPrev');
+    const $btnPlay     = document.getElementById('btnPlay');
+    const $btnNext     = document.getElementById('btnNext');
+    const $btnLast     = document.getElementById('btnLast');
+    const $speedSlider = document.getElementById('speedSlider');
+    const $speedVal    = document.getElementById('speedVal');
+
+    // ── API Key management ──
+    function getApiKey() {
+        return localStorage.getItem(STORAGE_KEY) || '';
+    }
+
+    function saveApiKey(key) {
+        if (key) {
+            localStorage.setItem(STORAGE_KEY, key);
+        } else {
+            localStorage.removeItem(STORAGE_KEY);
+        }
+        updateApiStatus();
+    }
+
+    function updateApiStatus() {
+        const key = getApiKey();
+        if (key) {
+            $apiStatus.textContent = 'Salvata';
+            $apiStatus.className = 'api-setup__status api-setup__status--saved';
+            $apiKey.value = key;
+        } else {
+            $apiStatus.textContent = 'Mancante';
+            $apiStatus.className = 'api-setup__status api-setup__status--missing';
+        }
+    }
+
+    // ── API Key toggle ──
+    function toggleApiPanel(forceOpen) {
+        const open = forceOpen !== undefined ? forceOpen : !$apiPanel.classList.contains('open');
+        $apiPanel.classList.toggle('open', open);
+        $apiToggle.classList.toggle('open', open);
+    }
+    $apiToggle.addEventListener('click', () => toggleApiPanel());
+
+    // Load saved key on init — auto-open if missing
+    updateApiStatus();
+    if (!getApiKey()) toggleApiPanel(true);
+
+    // Save on change (debounced)
+    let saveTimeout;
+    $apiKey.addEventListener('input', () => {
+        clearTimeout(saveTimeout);
+        saveTimeout = setTimeout(() => {
+            saveApiKey($apiKey.value.trim());
+        }, 500);
+    });
+
+    // ── State ──
+    let allTokens = [];
+    let promptText = '';
+    let currentStep = -1;
+    let maxRevealed = -1;
+    let playing = false;
+    let playTimer = null;
+    let loading = false;
+
+    // ── Speed slider ──
+    $speedSlider.addEventListener('input', () => {
+        $speedVal.textContent = ($speedSlider.value / 1000).toFixed(1) + 's';
+        if (playing) { stopPlay(); startPlay(); }
+    });
+
+    // ── Suggestions ──
+    document.querySelectorAll('.suggestions button').forEach(btn => {
+        btn.addEventListener('click', () => {
+            $prompt.value = btn.dataset.prompt;
+            $prompt.focus();
+        });
+    });
+
+    // ── Generate ──
+    $btnGen.addEventListener('click', startGeneration);
+    $prompt.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); startGeneration(); }
+    });
+
+    // ── Byte-token helpers (ported from backend) ──
+    function isByteToken(tokenStr) {
+        if (!tokenStr) return false;
+        if (tokenStr.startsWith('bytes:')) return true;
+        if (tokenStr.includes('\ufffd')) return true;
+        // Single byte >= 0x80
+        const encoder = new TextEncoder();
+        const bytes = encoder.encode(tokenStr);
+        if (bytes.length === 1 && bytes[0] >= 0x80) return true;
+        return false;
+    }
+
+    function tryDecodePending(items) {
+        const raw = items.map(i => i.token).join('');
+        if (raw.includes('\ufffd')) return null;
+        try {
+            // Check it round-trips cleanly
+            const enc = new TextEncoder();
+            const dec = new TextDecoder('utf-8', { fatal: true });
+            dec.decode(enc.encode(raw));
+            return raw;
+        } catch (_) {
+            return null;
+        }
+    }
+
+    function extractToken(lpItem) {
+        const token = lpItem.token;
+        const prob = Math.exp(lpItem.logprob);
+        const topCandidates = (lpItem.top_logprobs || []).map(t => ({
+            token: t.token,
+            prob: Math.exp(t.logprob),
+        }));
+        if (!topCandidates.find(c => c.token === token)) {
+            topCandidates.unshift({ token, prob });
+        }
+        topCandidates.sort((a, b) => b.prob - a.prob);
+        return {
+            text: token,
+            chosenToken: token,
+            chosenProb: prob,
+            candidates: topCandidates.slice(0, 5),
+        };
+    }
+
+    async function startGeneration() {
+        const prompt = $prompt.value.trim();
+        if (!prompt || loading) return;
+
+        const apiKey = getApiKey();
+        if (!apiKey) {
+            toggleApiPanel(true);
+            $apiKey.focus();
+            $apiStatus.textContent = 'Inserisci la chiave!';
+            $apiStatus.className = 'api-setup__status api-setup__status--missing';
+            return;
+        }
+
+        // Reset state
+        allTokens = [];
+        promptText = prompt;
+        currentStep = -1;
+        maxRevealed = -1;
+        stopPlay();
+        $player.style.display = 'none';
+        $loopArrow.classList.remove('active');
+        $nnIcon.classList.remove('active');
+
+        $context.innerHTML = '<div class="loading"><span class="loading-spinner"></span>Generazione in corso...</div>';
+        $probList.innerHTML = '<div class="prob-empty">Elaborazione...</div>';
+
+        loading = true;
+        $btnGen.textContent = 'Caricamento...';
+        $btnGen.classList.remove('btn--primary');
+        $btnGen.classList.add('btn--stop');
+
+        try {
+            const resp = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`,
+                    'HTTP-Referer': window.location.origin,
+                    'X-Title': 'Token Show AI-PACT'
+                },
+                body: JSON.stringify({
+                    model: MODEL,
+                    messages: [
+                        { role: 'system', content: 'Rispondi sempre in italiano. Rispondi in massimo 2 frasi brevi.' },
+                        { role: 'user', content: prompt }
+                    ],
+                    max_tokens: 90,
+                    stream: true,
+                    logprobs: true,
+                    top_logprobs: 5,
+                    provider: { require_parameters: true }
+                }),
+            });
+
+            if (!resp.ok) {
+                let errMsg = `${resp.status} ${resp.statusText}`;
+                try { const j = await resp.json(); errMsg = j.error?.message || errMsg; } catch(_) {}
+                $context.innerHTML = '';
+                $probList.innerHTML = `<div class="prob-empty">Errore: ${escapeHtml(errMsg)}</div>`;
+                return;
+            }
+
+            const reader = resp.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = '';
+
+            // Byte-token buffer (mirrors backend logic)
+            let pendingItems = [];
+
+            function flushPending() {
+                if (pendingItems.length === 0) return;
+                const mergedText = pendingItems.map(i => i.token).join('');
+                const merged = { ...pendingItems[0], token: mergedText };
+                const tok = extractToken(merged);
+                tok.text = mergedText;
+                allTokens.push(tok);
+                pendingItems = [];
+            }
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split('\n');
+                buffer = lines.pop();
+
+                for (const line of lines) {
+                    if (!line.startsWith('data: ')) continue;
+                    const data = line.slice(6).trim();
+                    if (data === '[DONE]') { flushPending(); continue; }
+
+                    try {
+                        const chunk = JSON.parse(data);
+                        const choice = chunk.choices?.[0];
+                        if (!choice) continue;
+
+                        const lpItems = choice.logprobs?.content || [];
+
+                        if (lpItems.length === 0) {
+                            // No logprobs — use delta content directly
+                            flushPending();
+                            const content = choice.delta?.content;
+                            if (content) {
+                                allTokens.push({
+                                    text: content,
+                                    chosenToken: content,
+                                    chosenProb: 1,
+                                    candidates: [],
+                                });
+                            }
+                            continue;
+                        }
+
+                        // Process each logprob item (handles multi-token chunks)
+                        for (const lpItem of lpItems) {
+                            const tokenText = lpItem.token || '';
+
+                            if (isByteToken(tokenText)) {
+                                pendingItems.push(lpItem);
+                                const decoded = tryDecodePending(pendingItems);
+                                if (decoded !== null) {
+                                    const merged = { ...pendingItems[0], token: decoded };
+                                    const tok = extractToken(merged);
+                                    tok.text = decoded;
+                                    allTokens.push(tok);
+                                    pendingItems = [];
+                                }
+                            } else {
+                                flushPending();
+                                allTokens.push(extractToken(lpItem));
+                            }
+                        }
+                    } catch (_) {}
+                }
+            }
+
+            // Flush anything remaining
+            flushPending();
+
+            if (allTokens.length === 0) {
+                $context.innerHTML = '<div class="prob-empty">Nessun token ricevuto</div>';
+                return;
+            }
+
+            buildContextPanel();
+            $player.style.display = 'flex';
+            $probList.innerHTML = '<div class="prob-empty">Premi &#x25B6; o clicca un token</div>';
+            goToStep(0);
+
+        } catch (e) {
+            $context.innerHTML = '';
+            $probList.innerHTML = `<div class="prob-empty">Errore di connessione: ${escapeHtml(e.message)}</div>`;
+        } finally {
+            loading = false;
+            $btnGen.textContent = 'Genera';
+            $btnGen.classList.add('btn--primary');
+            $btnGen.classList.remove('btn--stop');
+        }
+    }
+
+    function buildContextPanel() {
+        $context.innerHTML = '';
+
+        const ps = document.createElement('span');
+        ps.className = 'ctx-prompt';
+        ps.textContent = promptText;
+        $context.appendChild(ps);
+
+        const sep = document.createElement('span');
+        sep.className = 'ctx-separator';
+        sep.textContent = ' \u25B8 ';
+        $context.appendChild(sep);
+
+        for (let i = 0; i < allTokens.length; i++) {
+            const span = document.createElement('span');
+            span.className = 'ctx-token ctx-generated ctx-hidden';
+            span.textContent = allTokens[i].text;
+            span.dataset.idx = i;
+            span.addEventListener('click', () => {
+                stopPlay();
+                goToStep(i);
+            });
+            $context.appendChild(span);
+        }
+    }
+
+    function goToStep(step) {
+        if (allTokens.length === 0) return;
+        step = Math.max(0, Math.min(step, allTokens.length - 1));
+        currentStep = step;
+
+        if (step > maxRevealed) maxRevealed = step;
+        const allRevealed = maxRevealed >= allTokens.length - 1;
+
+        const spans = $context.querySelectorAll('.ctx-generated');
+        spans.forEach((s, i) => {
+            if (allRevealed || i <= maxRevealed) {
+                s.classList.remove('ctx-hidden');
+            } else {
+                s.classList.add('ctx-hidden');
+            }
+            s.classList.toggle('ctx-token--active', i === step);
+        });
+
+        showProbabilities(allTokens[step]);
+        $nnIcon.classList.add('active');
+        $loopArrow.classList.toggle('active', step < allTokens.length - 1);
+        $stepCounter.innerHTML = `<strong>${step + 1}</strong> / ${allTokens.length}`;
+
+        $btnPrev.disabled = step === 0;
+        $btnFirst.disabled = step === 0;
+        $btnNext.disabled = step === allTokens.length - 1;
+        $btnLast.disabled = step === allTokens.length - 1;
+
+        const activeSpan = $context.querySelector('.ctx-token--active');
+        if (activeSpan) activeSpan.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function showProbabilities(td) {
+        $probList.innerHTML = '';
+        if (!td.candidates.length) {
+            $probList.innerHTML = '<div class="prob-empty">Nessun dato logprobs</div>';
+            return;
+        }
+
+        const maxProb = td.candidates[0].prob;
+
+        for (const c of td.candidates) {
+            const pct = (c.prob * 100).toFixed(1);
+            const barWidth = Math.max(3, (c.prob / Math.max(maxProb, 0.01)) * 100);
+            const isChosen = c.token === td.chosenToken;
+
+            let level = 'low';
+            if (c.prob > 0.6) level = 'high';
+            else if (c.prob > 0.15) level = 'medium';
+
+            const display = c.token.replace(/ /g, '\u2423').replace(/\n/g, '\u21B5');
+
+            const row = document.createElement('div');
+            row.className = 'prob-row';
+            row.innerHTML = `
+                <span class="prob-token ${isChosen ? 'prob-token--chosen' : ''}">${escapeHtml(display)}</span>
+                <div class="prob-bar-bg">
+                    <div class="prob-bar prob-bar--${level}" style="width:${barWidth}%"></div>
+                </div>
+                <span class="prob-pct">${pct}%</span>
+            `;
+            $probList.appendChild(row);
+        }
+    }
+
+    // ── Player controls ──
+    $btnFirst.addEventListener('click', () => { stopPlay(); goToStep(0); });
+    $btnPrev.addEventListener('click', ()  => { stopPlay(); goToStep(currentStep - 1); });
+    $btnNext.addEventListener('click', ()  => { stopPlay(); goToStep(currentStep + 1); });
+    $btnLast.addEventListener('click', ()  => { stopPlay(); goToStep(allTokens.length - 1); });
+
+    $btnPlay.addEventListener('click', () => {
+        if (playing) {
+            stopPlay();
+        } else {
+            if (currentStep >= allTokens.length - 1) {
+                goToStep(0);
+            }
+            startPlay();
+        }
+    });
+
+    function startPlay() {
+        playing = true;
+        $btnPlay.innerHTML = '&#x23F8;';
+        tick();
+    }
+
+    function stopPlay() {
+        playing = false;
+        $btnPlay.innerHTML = '&#x25B6;';
+        if (playTimer) { clearTimeout(playTimer); playTimer = null; }
+    }
+
+    function tick() {
+        if (!playing) return;
+        if (currentStep < allTokens.length - 1) {
+            goToStep(currentStep + 1);
+            playTimer = setTimeout(tick, parseInt($speedSlider.value));
+        } else {
+            stopPlay();
+        }
+    }
+
+    // ── Keyboard shortcuts ──
+    document.addEventListener('keydown', e => {
+        if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
+        if (allTokens.length === 0) return;
+
+        if (e.key === 'ArrowLeft')  { e.preventDefault(); stopPlay(); goToStep(currentStep - 1); }
+        if (e.key === 'ArrowRight') { e.preventDefault(); stopPlay(); goToStep(currentStep + 1); }
+        if (e.key === ' ')          { e.preventDefault(); $btnPlay.click(); }
+        if (e.key === 'Home')       { e.preventDefault(); stopPlay(); goToStep(0); }
+        if (e.key === 'End')        { e.preventDefault(); stopPlay(); goToStep(allTokens.length - 1); }
+    });
+
+    function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+})();
+</script>
+</body>
+</html>
