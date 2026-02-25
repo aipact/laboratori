@@ -107,6 +107,7 @@ laboratori/
 - [Esempi Agentici](https://aipact.github.io/laboratori/LABORATORIO_A/esempi_agentici/) — Analisi territoriali (Arezzo, Firenze, Livorno) generate con Claude Code in pochi minuti
 
 ### Strumenti
+- [Checklist Sessione](https://aipact.github.io/laboratori/checklist_sessione.html)
 - [Extract HTML Tool](https://aipact.github.io/laboratori/LABORATORIO_A/tools/extract_html.html)
 - [Token Show](https://aipact.github.io/laboratori/LABORATORIO_A/tools/token_show.html)
 
