@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist Sessione | AI-PACT</title>
+    <style>
+        :root {
+            --primary: #1a3a5c;
+            --primary-light: #2c5f8a;
+            --accent: #e67e22;
+            --success: #27ae60;
+            --bg: #f0f4f8;
+            --card-bg: #ffffff;
+            --text: #2c3e50;
+            --text-light: #7f8c8d;
+            --border: #e1e8ed;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7;
+            color: var(--text);
+            background: var(--bg);
+        }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        header .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+        header h1 { font-size: 1.8rem; font-weight: 700; }
+        .header-brand { font-size: 1rem; font-weight: 700; letter-spacing: 1px; opacity: 0.9; }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            padding: 30px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+        }
+
+        .steps { list-style: none; padding: 0; counter-reset: step; }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 18px 0;
+            border-bottom: 1px solid var(--border);
+            transition: opacity 0.3s;
+        }
+        .step:last-child { border-bottom: none; }
+
+        .step.done { opacity: 0.45; }
+        .step.done .step-title { text-decoration: line-through; }
+
+        .step-check {
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            border: 2px solid var(--primary-light);
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2px;
+            transition: all 0.2s;
+            background: white;
+        }
+        .step-check:hover { border-color: var(--success); background: #f0faf4; }
+        .step.done .step-check {
+            background: var(--success);
+            border-color: var(--success);
+        }
+        .step.done .step-check::after {
+            content: "\2713";
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .step-content { flex: 1; }
+
+        .step-number {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            line-height: 24px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        .step.done .step-number { background: var(--success); }
+
+        .step-title {
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: var(--text);
+        }
+
+        .step-desc {
+            margin-top: 4px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .step-skill {
+            display: inline-block;
+            margin-top: 6px;
+            background: #edf2f7;
+            color: var(--primary);
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: monospace;
+        }
+
+        .phase-label {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+        .phase-before { background: #e8f4fd; color: #2980b9; }
+        .phase-during { background: #fef3e2; color: #d35400; }
+        .phase-after { background: #e8f8f0; color: #1e8449; }
+
+        .progress-bar {
+            background: #e8ecf1;
+            border-radius: 10px;
+            height: 10px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-light), var(--success));
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+        .progress-text {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            text-align: right;
+        }
+
+        .reset-btn {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 8px 20px;
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .reset-btn:hover { border-color: #e74c3c; color: #e74c3c; }
+
+        footer {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 1.2rem;
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.4rem; }
+            .card { padding: 20px; }
+            .step { gap: 12px; padding: 14px 0; }
+        }
+
+        @media print {
+            body { background: white; }
+            .card { box-shadow: none; border: 1px solid #ddd; }
+            .step-check { border: 2px solid #999; }
+            .reset-btn { display: none; }
+            header, footer { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Checklist Sessione</h1>
+            <span class="header-brand">AI-PACT</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 0%"></div></div>
+            <div class="progress-text" id="progressText">0 / 11 completati</div>
+        </div>
+
+        <!-- FASE 1: RACCOLTA E SELEZIONE -->
+        <div class="card">
+            <span class="phase-label phase-before">Fase 1 — Raccolta e selezione</span>
+            <ul class="steps" id="steps">
+                <li class="step" data-step="1">
+                    <div class="step-check" role="checkbox" tabindex="0"></div>
+                    <div class="step-content">
+                        <div><span class="step-number">1</span><span class="step-title">Proiettare slides con QR code</span></div>
+                        <div class="step-desc">Mostrare il QR code che punta alla pagina istruzioni (contiene il form idee e il link al simulatore con credito)</div>
+                    </div>
+                </li>
+                <li class="step" data-step="2">
+                    <div class="step-check" role="checkbox" tabindex="0"></div>
+                    <div class="step-content">
+                        <div><span class="step-number">2</span><span class="step-title">Attendere la compilazione del form idee</span></div>
+                        <div class="step-desc">I partecipanti compilano il Modulo Idee dalla pagina istruzioni</div>
+                    </div>
+                </li>
+                <li class="step" data-step="3">
+                    <div class="step-check" role="checkbox" tabindex="0"></div>
+                    <div class="step-content">
+                        <div><span class="step-number">3</span><span class="step-title">Valutare le idee e formare i gruppi</span></div>
+                        <div class="step-desc">Scaricare LABORATORIO.xlsx in <code>valutazione_idee_progettuali/</code>, poi lanciare la skill</div>
+                        <span class="step-skill">/prepara-sessione</span>
+                    </div>
+                </li>
+                <li class="step" data-step="4">
+                    <div class="step-check" role="checkbox" tabindex="0"></div>
+                    <div class="step-content">
+                        <div><span class="step-number">4</span><span class="step-title">Mostrare i gruppi in plenaria</span></div>
+                        <div class="step-desc">Proiettare <code>selezione_gruppi.html</code> e dare tempo ai partecipanti per raggrupparsi</div>
+                    </div>
+                </li>
+                <li class="step" data-step="5">
+                    <div class="step-check" role="checkbox" tabindex="0"></div>
+                    <div class="step-content">
+                        <div><span class="step-number">5</span><span class="step-title">Inviare email ai gruppi</span></div>
+                        <div class="step-desc">Mandare a ogni gruppo la composizione, il tema assegnato e le indicazioni per il rompighiaccio</div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- FASE 2: LAVORO OPERATIVO -->
+        <div class="card">
+            <span class="phase-label phase-during">Fase 2 — Lavoro operativo</span>
+            <ul class="steps">
+                <li class="step" data-step="6">
+                    <div class="step-check" role="checkbox" tabindex="0"></div>
+                    <div class="step-content">
+                        <div><span class="step-number">6</span><span class="step-title">Spiegare il simulatore in plenaria</span></div>
+                        <div class="step-desc">Presentare le istruzioni, le track e il funzionamento del simulatore AI</div>
+                    </div>
+                </li>
+                <li class="step" data-step="7">
+                    <div class="step-check" role="checkbox" tabindex="0"></div>
+                    <div class="step-content">
+                        <div><span class="step-number">7</span><span class="step-title">Svolgere il laboratorio</span></div>
+                        <div class="step-desc">I gruppi lavorano ai loro progetti seguendo i 3 step (Intervista, Evidenze, Agente Risolutore)</div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- FASE 3: VALUTAZIONE -->
+        <div class="card">
+            <span class="phase-label phase-after">Fase 3 — Valutazione</span>
+            <ul class="steps">
+                <li class="step" data-step="8">
+                    <div class="step-check" role="checkbox" tabindex="0"></div>
+                    <div class="step-content">
+                        <div><span class="step-number">8</span><span class="step-title">Valutare i singoli progetti</span></div>
+                        <div class="step-desc">Analizzare il deliverable di ogni gruppo e generare la valutazione</div>
+                        <span class="step-skill">/valuta-progetto</span>
+                    </div>
+                </li>
+                <li class="step" data-step="9">
+                    <div class="step-check" role="checkbox" tabindex="0"></div>
+                    <div class="step-content">
+                        <div><span class="step-number">9</span><span class="step-title">Generare la classifica finale</span></div>
+                        <div class="step-desc">Confrontare tutti i gruppi e produrre il report con podio e vincitori</div>
+                        <span class="step-skill">/valuta-sessione</span>
+                    </div>
+                </li>
+                <li class="step" data-step="10">
+                    <div class="step-check" role="checkbox" tabindex="0"></div>
+                    <div class="step-content">
+                        <div><span class="step-number">10</span><span class="step-title">Mostrare i vincitori</span></div>
+                        <div class="step-desc">Proiettare <code>classifica_sessione.html</code> e proclamare il podio</div>
+                    </div>
+                </li>
+                <li class="step" data-step="11">
+                    <div class="step-check" role="checkbox" tabindex="0"></div>
+                    <div class="step-content">
+                        <div><span class="step-number">11</span><span class="step-title">Anonimizzare i dati</span></div>
+                        <div class="step-desc">Rimuovere i dati personali prima del commit su repository</div>
+                        <span class="step-skill">/anonimizza</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div style="text-align: center;">
+            <button class="reset-btn" onclick="resetAll()">Reset checklist</button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Progetto AI-PACT</p>
+        </div>
+    </footer>
+
+    <script>
+        const STORAGE_KEY = 'aipact-checklist';
+
+        function loadState() {
+            try {
+                return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+            } catch { return {}; }
+        }
+
+        function saveState(state) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        }
+
+        function updateProgress() {
+            const steps = document.querySelectorAll('.step');
+            const done = document.querySelectorAll('.step.done').length;
+            const total = steps.length;
+            document.getElementById('progressFill').style.width = ((done / total) * 100) + '%';
+            document.getElementById('progressText').textContent = done + ' / ' + total + ' completati';
+        }
+
+        function toggleStep(el) {
+            el.classList.toggle('done');
+            const state = {};
+            document.querySelectorAll('.step').forEach(s => {
+                state[s.dataset.step] = s.classList.contains('done');
+            });
+            saveState(state);
+            updateProgress();
+        }
+
+        // Init
+        const state = loadState();
+        document.querySelectorAll('.step').forEach(step => {
+            if (state[step.dataset.step]) step.classList.add('done');
+
+            const check = step.querySelector('.step-check');
+            check.addEventListener('click', () => toggleStep(step));
+            check.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleStep(step); }
+            });
+        });
+        updateProgress();
+
+        function resetAll() {
+            if (!confirm('Vuoi resettare la checklist?')) return;
+            localStorage.removeItem(STORAGE_KEY);
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('done'));
+            updateProgress();
+        }
+    </script>
+</body>
+</html>
