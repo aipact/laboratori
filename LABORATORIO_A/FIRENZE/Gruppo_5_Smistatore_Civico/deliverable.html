@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Report Sintetico Processo Gestione Segnalazioni URP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #f4f8fb;
+        }
+        h1 {
+            color: #205081;
+            font-size: 1.8em;
+        }
+        h2 {
+            color: #31639c;
+            font-size: 1.3em;
+        }
+        ul, ol {
+            margin-left: 25px;
+        }
+        .box {
+            background: #fff;
+            border: 1px solid #d9e2ef;
+            border-radius: 6px;
+            padding: 24px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(32, 80, 129, 0.04);
+        }
+        .chart-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 30px auto 0 auto;
+            background: #fff;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(32, 80, 129, 0.03);
+            padding: 20px;
+        }
+        canvas {
+            background: #ecf3fa;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Processo Gestione Segnalazioni dei Cittadini - Report Sintetico</h1>
+    
+    <div class="box">
+        <h2>Fasi del Processo</h2>
+        <ol>
+            <li>
+                <strong>Ricezione della Segnalazione</strong>
+                <ul>
+                    <li>Canali: Front office, E-mail, Sito web, WhatsApp, Telefonate</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Registrazione</strong>
+                <ul>
+                    <li>Inserimento della segnalazione nel registro segnalazioni (Excel o gestionale)</li>
+                    <li>Attribuzione di un identificativo univoco e data di ricezione</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Categorizzazione e Valutazione</strong>
+                <ul>
+                    <li>Categorizzazione della segnalazione (es: illuminazione, rifiuti, strade)</li>
+                    <li>Verifica della completezza delle informazioni</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Smistamento all’Ufficio Competente</strong>
+                <ul>
+                    <li>Assegnazione della segnalazione all’ufficio tematico appropriato</li>
+                    <li>Gestione coordinata per segnalazioni trasversali</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Presa in carico e Gestione</strong>
+                <ul>
+                    <li>Presa in carico formale dalla figura interna responsabile</li>
+                    <li>Intervento operativo o valutazione tecnica</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Chiusura della Segnalazione</strong>
+                <ul>
+                    <li>Comunicazione dell’esito e della chiusura all’URP</li>
+                    <li>Invio aggiornamento al cittadino</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Monitoraggio e Reportistica</strong>
+                <ul>
+                    <li>Rilevazione tempi medi di risposta e chiusura</li>
+                    <li>Elaborazione report mensili per l’Amministrazione</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <!-- SECTION: GRAFICO -->
+    <div class="chart-container">
+        <h2>Segnalazioni per Categoria - Mese Corrente</h2>
+        <canvas id="myChart" width="580" height="320"></canvas>
+    </div>
+    <!-- FINE GRAFICO -->
+
+    <!-- Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+    // Dati di esempio per il grafico a barre
+    const categorie = [
+        "Illuminazione pubblica",
+        "Rifiuti",
+        "Manutenzione strade",
+        "Verde pubblico",
+        "Traffico e viabilità"
+    ];
+    const valori = [35, 27, 20, 10, 8];
+
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: categorie,
+            datasets: [{
+                label: 'N° Segnalazioni',
+                data: valori,
+                backgroundColor: [
+                    '#205081', '#31639c', '#3f8abf', '#57ace2', '#b3d5f0'
+                ],
+                borderColor: [
+                    '#1a385a', '#24416b', '#276589', '#3b7aad', '#729fbc'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Numero di Segnalazioni'
+                    }
+                }
+            }
+        }
+    });
+    </script>
+</body>
+</html>

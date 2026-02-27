@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report - Ottimizzazione Protocollazione tramite AI</title>
+<style>
+body{font-family:'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;line-height:1.7;color:#2c3e50;background:#f0f4f8;margin:0}
+.container{max-width:900px;margin:0 auto;padding:0 20px}
+header{background:linear-gradient(135deg,#1a3a5c,#2c5f8a);color:#fff;padding:2.5rem 0;margin-bottom:2rem}
+header h1{font-size:1.6rem;font-weight:700}
+header .subtitle{opacity:.85;font-size:.95rem;margin-top:.5rem}
+.header-meta{display:flex;gap:1rem;margin-top:.8rem;flex-wrap:wrap}
+.header-badge{background:rgba(255,255,255,.15);padding:6px 14px;border-radius:8px;font-size:.85rem}
+.card{background:#fff;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,.08);padding:30px;margin-bottom:25px;border:1px solid #e1e8ed}
+.card h2{font-size:1.25rem;font-weight:600;color:#1a3a5c;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:2px solid #e1e8ed}
+.card h3{font-size:1.05rem;font-weight:600;color:#2c5f8a;margin:1.2rem 0 .6rem}
+ul,ol{padding-left:1.5rem;margin:.5rem 0 1rem}
+li{margin-bottom:.4rem}
+table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.85rem}
+thead th{background:#1a3a5c;color:#fff;padding:10px 12px;text-align:left;font-weight:600}
+tbody td{padding:10px 12px;border-bottom:1px solid #e1e8ed;vertical-align:top}
+tbody tr:nth-child(even){background:#f8fafc}
+.highlight-box{background:#edf2f7;border-left:4px solid #2c5f8a;padding:15px 20px;border-radius:0 8px 8px 0;margin:1rem 0}
+.article{background:#f8fafc;border:1px solid #e1e8ed;border-radius:8px;padding:20px;margin:1rem 0}
+.article-title{font-weight:700;color:#1a3a5c;font-size:1rem;margin-bottom:.5rem}
+.kpi-good{color:#27ae60;font-weight:700}
+.kpi-target{color:#2c5f8a;font-weight:600}
+footer{background:#1a3a5c;color:#fff;text-align:center;padding:1.5rem;margin-top:2rem;font-size:.9rem;opacity:.9}
+@media(max-width:768px){.card{padding:20px}header h1{font-size:1.3rem}table{font-size:.78rem}body{font-size:.9rem}}
+@media print{body{background:#fff}.card{box-shadow:none;border:1px solid #ddd;break-inside:avoid}header,footer{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<header><div class="container">
+<h1>Ottimizzazione della Protocollazione e Assegnazione Documentale tramite AI</h1>
+<p class="subtitle">Gruppo 2 - Team Leonardo &middot; Il Postino Intelligente</p>
+<div class="header-meta">
+<span class="header-badge">Firenze</span>
+<span class="header-badge">Lab: 26 febbraio 2026</span>
+<span class="header-badge">Fonte: Chat con Gemini 2.5 Flash</span>
+</div>
+</div></header>
+
+<div class="container">
+
+<!-- PARTE 1: REPORT -->
+<div class="card">
+<h2>1. Premesse e Contesto Attuale</h2>
+<p>Il Comune gestisce attualmente un volume elevato di protocollazioni in entrata, circa <strong>500 documenti al giorno</strong>, con un team dedicato di <strong>tre unit&agrave;</strong> per lo smistamento. L'infrastruttura attuale consente il download e la gestione delle PEC direttamente dal sistema di protocollo, che &egrave; <strong>integrabile tramite API</strong>. Tuttavia, si rilevano criticit&agrave; significative:</p>
+<ul>
+<li><strong>Percentuale di errore elevata:</strong> Circa il 20% delle assegnazioni iniziali risulta errata.</li>
+<li><strong>Tempi di correzione lunghi:</strong> L'individuazione e la correzione di un'assegnazione errata pu&ograve; richiedere fino a 30 giorni.</li>
+<li><strong>Rischi elevati:</strong> Le errate assegnazioni comportano rischi significativi in termini di responsabilit&agrave; amministrativa e contabile.</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>2. Obiettivi del Progetto</h2>
+<ul>
+<li><strong>Riduzione della percentuale di errore:</strong> Target di riduzione di almeno il 70% degli errori di assegnazione.</li>
+<li><strong>Accorciamento dei tempi di assegnazione:</strong> Processo di smistamento quasi in tempo reale.</li>
+<li><strong>Miglioramento della classificazione archivistica:</strong> Maggior precisione secondo il titolario ANCI/ANAI.</li>
+<li><strong>Riduzione del carico di lavoro manuale:</strong> Liberare risorse per attivit&agrave; a maggior valore aggiunto.</li>
+<li><strong>Mitigazione dei rischi:</strong> Diminuzione delle responsabilit&agrave; amministrative e contabili.</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>3. Ipotesi di Soluzione: Pipeline AI a 4 Fasi</h2>
+<table>
+<thead><tr><th>Fase</th><th>Funzionalit&agrave; AI</th><th>Beneficio Atteso</th></tr></thead>
+<tbody>
+<tr>
+<td><strong>1. Analisi Documentale</strong></td>
+<td>NLP e OCR: estrazione automatica metadati (mittente, oggetto, data, riferimenti normativi), classificazione preliminare, riconoscimento parole chiave.</td>
+<td>Velocizzazione analisi iniziale, riduzione errori di trascrizione.</td>
+</tr>
+<tr>
+<td><strong>2. Classificazione Archivistica</strong></td>
+<td>ML supervisionato: addestramento su titolario ANCI/ANAI e corpus storico, suggerimento automatico voce di titolario (Classe, Fascicolo, Sottofascicolo), auto-apprendimento.</td>
+<td>Accuratezza e standardizzazione della classificazione.</td>
+</tr>
+<tr>
+<td><strong>3. Assegnazione all'Ufficio</strong></td>
+<td>Modelli predittivi ML: incrocio metadati + classificazione + organigramma + storico assegnazioni, suggerimento con livello di confidenza, reindirizzamento automatico per alta confidenza.</td>
+<td>Riduzione errori di assegnazione, tempi quasi nulli per casi chiari.</td>
+</tr>
+<tr>
+<td><strong>4. Monitoraggio e Apprendimento</strong></td>
+<td>Feedback loop: registrazione accettazione/rifiuto suggerimenti, ri-addestramento periodico, dashboard di monitoraggio performance.</td>
+<td>Miglioramento continuo, adattamento a nuove esigenze.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="card">
+<h2>4. Impatto sul Personale</h2>
+<div class="highlight-box">
+<p>L'introduzione dell'AI non mira a sostituire il personale, ma a potenziarne le capacit&agrave;.</p>
+</div>
+<ul>
+<li><strong>Riduzione attivit&agrave; ripetitive:</strong> Il personale sar&agrave; liberato dalle mansioni pi&ugrave; gravose di smistamento manuale.</li>
+<li><strong>Ruolo di Supervisione e Validazione:</strong> Gli operatori diventano &ldquo;validatori&rdquo; delle proposte AI, intervenendo nei casi ambigui.</li>
+<li><strong>Focus su Documenti Complessi:</strong> Maggiore attenzione ai documenti di difficile interpretazione.</li>
+<li><strong>Formazione:</strong> Formazione specifica obbligatoria su nuovi strumenti e procedure di convalida/correzione.</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>5. Analisi Rischi e Mitigazione</h2>
+<table>
+<thead><tr><th>Rischio</th><th>Mitigazione</th></tr></thead>
+<tbody>
+<tr><td><strong>Qualit&agrave; dati addestramento insufficiente</strong></td><td>Ampio corpus storico, supervisione umana iniziale, audit periodici.</td></tr>
+<tr><td><strong>Bias nell'AI</strong></td><td>Revisione etica e tecnica, monitoraggio continuo, intervento umano correttivo.</td></tr>
+<tr><td><strong>Falsa percezione di automazione totale</strong></td><td>Formazione sui limiti dell'AI, soglie di confidenza per l'automazione.</td></tr>
+<tr><td><strong>Resistenza al cambiamento</strong></td><td>Coinvolgimento del personale, formazione continua, evidenziazione benefici.</td></tr>
+<tr><td><strong>Criticit&agrave; integrazione tecnica</strong></td><td>Analisi API approfondita, test rigorosi, collaborazione con fornitori.</td></tr>
+<tr><td><strong>Privacy e GDPR</strong></td><td>DPIA, conformit&agrave; GDPR, anonimizzazione/pseudonimizzazione.</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="card">
+<h2>6. Proposta di Integrazione nel Manuale di Gestione</h2>
+
+<div class="article">
+<div class="article-title">Art. X &mdash; Principi Generali dell'Integrazione AI</div>
+<p>L'AI opera in regime di supporto decisionale e automazione supervisionata. La responsabilit&agrave; finale della corretta protocollazione, classificazione e assegnazione spetta sempre all'operatore umano.</p>
+</div>
+
+<div class="article">
+<div class="article-title">Art. Y &mdash; Fasi del Processo con AI</div>
+<ol>
+<li><strong>Acquisizione e Pre-analisi:</strong> OCR e NLP per estrazione metadati e categorizzazione.</li>
+<li><strong>Classificazione Archivistica:</strong> Proposta AI di voce titolario, validata o corretta dall'operatore. Ogni correzione alimenta l'auto-apprendimento.</li>
+<li><strong>Assegnazione all'Ufficio:</strong>
+<ul>
+<li>Confidenza &gt;95%: assegnazione pre-validata, rapida verifica operatore.</li>
+<li>Confidenza media/bassa: verifica e conferma/modifica manuale.</li>
+<li>Casi complessi: assegnazione manuale standard.</li>
+</ul>
+</li>
+<li><strong>Registrazione e Storico:</strong> Tracciamento completo di ogni operazione (automatica e manuale).</li>
+</ol>
+</div>
+
+<div class="article">
+<div class="article-title">Art. Z &mdash; Ruoli e Responsabilit&agrave;</div>
+<ul>
+<li><strong>Responsabile Gestione Documentale:</strong> Policy, monitoraggio performance, conformit&agrave; normativa (CAD, DPR 445/2000, AgID).</li>
+<li><strong>Operatori di Protocollo:</strong> Responsabilit&agrave; ultima di classificazione e assegnazione, validazione suggerimenti AI, feedback tramite correzioni.</li>
+<li><strong>Uffici Destinatari:</strong> Accettazione o restituzione motivata dei documenti, feedback per apprendimento AI.</li>
+</ul>
+</div>
+
+<div class="article">
+<div class="article-title">Art. K &mdash; Formazione e Aggiornamento</div>
+<p>Formazione specifica obbligatoria per tutto il personale coinvolto. Cicli di aggiornamento periodici.</p>
+</div>
+
+<div class="article">
+<div class="article-title">Art. J &mdash; Monitoraggio e Miglioramento Continuo</div>
+<p>KPI istituiti per monitorare efficacia del sistema. Report periodici. Revisione del modello AI almeno ogni 6-12 mesi.</p>
+</div>
+</div>
+
+<!-- PARTE 2: OBIETTIVO PIAO -->
+<div class="card">
+<h2>7. Obiettivo PIAO con KPI Triennali</h2>
+<div class="highlight-box">
+<p><strong>Denominazione:</strong> Potenziamento e Intelligenza del Flusso Documentale in Entrata: Ottimizzazione della Protocollazione, Classificazione e Assegnazione tramite Intelligenza Artificiale.</p>
+</div>
+
+<table>
+<thead><tr><th>KPI</th><th>Baseline</th><th>Anno N</th><th>Anno N+1</th><th>Anno N+2</th></tr></thead>
+<tbody>
+<tr>
+<td><strong>% errata assegnazione</strong></td>
+<td>20%</td>
+<td class="kpi-target">10%</td>
+<td class="kpi-target">5%</td>
+<td class="kpi-good">2%</td>
+</tr>
+<tr>
+<td><strong>Tempo medio correzione errore</strong></td>
+<td>30 giorni</td>
+<td class="kpi-target">15 gg</td>
+<td class="kpi-target">5 gg</td>
+<td class="kpi-good">2 gg</td>
+</tr>
+<tr>
+<td><strong>Tempo medio prima assegnazione</strong></td>
+<td>da rilevare</td>
+<td class="kpi-target">8 ore</td>
+<td class="kpi-target">4 ore</td>
+<td class="kpi-good">2 ore</td>
+</tr>
+<tr>
+<td><strong>Accuratezza classificazione AI</strong></td>
+<td>~60-70%</td>
+<td class="kpi-target">85%</td>
+<td class="kpi-target">90%</td>
+<td class="kpi-good">95%</td>
+</tr>
+<tr>
+<td><strong>% assegnazioni AI validate senza intervento</strong></td>
+<td>da rilevare</td>
+<td class="kpi-target">70%</td>
+<td class="kpi-target">85%</td>
+<td class="kpi-good">90%</td>
+</tr>
+<tr>
+<td><strong>Soddisfazione personale (1-5)</strong></td>
+<td>da rilevare</td>
+<td class="kpi-target">3.5</td>
+<td class="kpi-target">4.0</td>
+<td class="kpi-good">4.5</td>
+</tr>
+<tr>
+<td><strong>Reclami per errata ricezione</strong></td>
+<td>da rilevare</td>
+<td class="kpi-target">-30%</td>
+<td class="kpi-target">-50%</td>
+<td class="kpi-good">-70%</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+</div>
+
+<footer><div class="container">
+<p>Deliverable estratto dalla sessione di laboratorio &mdash; Progetto AI-PACT</p>
+<p style="margin-top:.3rem;font-size:.8rem">26 febbraio 2026 &middot; Modello utilizzato: Gemini 2.5 Flash</p>
+<p style="margin-top:.3rem;font-size:.75rem;opacity:.7">Nota: il deliverable originale era in formato testuale (markdown). La restituzione grafica in HTML &egrave; stata realizzata in fase di valutazione/estrazione.</p>
+</div></footer>
+</body>
+</html>

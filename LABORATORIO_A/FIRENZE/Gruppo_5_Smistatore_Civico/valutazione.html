@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valutazione - Team Michelangelo | AI-PACT</title>
+<style>
+:root{--primary:#1a3a5c;--primary-light:#2c5f8a;--accent:#e67e22;--success:#27ae60;--warning:#f39c12;--danger:#e74c3c;--bg:#f0f4f8;--card-bg:#fff;--text:#2c3e50;--text-light:#7f8c8d;--border:#e1e8ed}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;line-height:1.7;color:var(--text);background:var(--bg)}
+.container{max-width:900px;margin:0 auto;padding:0 clamp(20px,5vw,40px)}
+header{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;padding:2.5rem 0;margin-bottom:2rem}
+header h1{font-size:1.8rem;font-weight:700}
+header .subtitle{opacity:.85;font-size:1rem;margin-top:.3rem}
+.header-meta{display:flex;gap:1rem;margin-top:.8rem;flex-wrap:wrap}
+.header-badge{background:rgba(255,255,255,.15);padding:6px 14px;border-radius:8px;font-size:.85rem}
+.card{background:var(--card-bg);border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,.08);padding:30px;margin-bottom:25px;border:1px solid var(--border)}
+.card h2{font-size:1.3rem;font-weight:600;color:var(--primary);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:2px solid var(--border)}
+.total-score{text-align:center;padding:2rem}
+.total-score .score-value{font-size:4rem;font-weight:800;line-height:1}
+.total-score .score-label{font-size:1rem;color:var(--text-light);margin-top:.5rem}
+.score-mid-text{color:var(--warning)}
+table{width:100%;border-collapse:collapse}
+thead th{background:var(--primary);color:#fff;padding:12px 15px;text-align:left;font-weight:600}
+tbody td{padding:12px 15px;border-bottom:1px solid var(--border)}
+tbody tr:nth-child(even){background:#f8fafc}
+.total-row{font-weight:700;background:#edf2f7!important}
+.score-bar{background:#e8ecf1;border-radius:10px;height:24px;position:relative;overflow:hidden;min-width:100px}
+.score-bar-fill{height:100%;border-radius:10px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px}
+.score-bar-fill span{font-size:.75rem;font-weight:700;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.3)}
+.score-high{background:linear-gradient(90deg,#2ecc71,#27ae60)}
+.score-mid{background:linear-gradient(90deg,#f39c12,#e67e22)}
+.score-low{background:linear-gradient(90deg,#e74c3c,#c0392b)}
+.point-list{list-style:none;padding:0}
+.point-list li{padding:10px 15px;margin-bottom:8px;border-radius:8px;border-left:4px solid;background:#f8fafc}
+.strengths li{border-left-color:var(--success)}
+.improvements li{border-left-color:var(--danger)}
+.suggestions li{border-left-color:var(--accent)}
+footer{background:var(--primary);color:#fff;text-align:center;padding:1.5rem;margin-top:2rem;font-size:.9rem;opacity:.9}
+@media(max-width:768px){header h1{font-size:1.4rem}.card{padding:20px}.total-score .score-value{font-size:3rem}body{font-size:.9rem}}
+@media print{body{background:#fff}.card{box-shadow:none;border:1px solid #ddd;break-inside:avoid}header,footer{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<header><div class="container">
+<h1>Valutazione Progetto: Lo Smistatore Civico</h1>
+<p class="subtitle">Gruppo 5 - Team Michelangelo · Segnalazioni cittadini con smistamento</p>
+<div class="header-meta">
+<span class="header-badge">Firenze</span>
+<span class="header-badge">Lab: 26 febbraio 2026</span>
+<span class="header-badge">Valutazione: 27 febbraio 2026</span>
+</div>
+</div></header>
+
+<div class="container">
+
+<div class="card">
+<div class="total-score">
+<div class="score-value score-mid-text">7.4</div>
+<div class="score-label">Punteggio Totale su 10 — Buono</div>
+</div>
+</div>
+
+<div class="card">
+<h2>Punteggi per Criterio</h2>
+<table>
+<thead><tr><th>Criterio</th><th>Peso</th><th>Voto</th><th style="min-width:150px">Barra</th></tr></thead>
+<tbody>
+<tr><td>Completezza dell'analisi</td><td>20%</td><td>7.5</td><td><div class="score-bar"><div class="score-bar-fill score-mid" style="width:75%"><span>7.5</span></div></div></td></tr>
+<tr><td>Qualit&agrave; della soluzione</td><td>20%</td><td>7.5</td><td><div class="score-bar"><div class="score-bar-fill score-mid" style="width:75%"><span>7.5</span></div></div></td></tr>
+<tr><td>Innovativit&agrave; e uso dell'IA</td><td>20%</td><td>6.5</td><td><div class="score-bar"><div class="score-bar-fill score-mid" style="width:65%"><span>6.5</span></div></div></td></tr>
+<tr><td>Presentabilit&agrave; del report</td><td>20%</td><td>7.5</td><td><div class="score-bar"><div class="score-bar-fill score-mid" style="width:75%"><span>7.5</span></div></div></td></tr>
+<tr><td>Impatto potenziale sulla PA</td><td>20%</td><td>8.0</td><td><div class="score-bar"><div class="score-bar-fill score-high" style="width:80%"><span>8.0</span></div></div></td></tr>
+<tr class="total-row"><td>Totale Ponderato</td><td>100%</td><td><strong>7.4</strong></td><td><div class="score-bar"><div class="score-bar-fill score-mid" style="width:74%"><span>7.4</span></div></div></td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="card">
+<h2>Punti di Forza</h2>
+<ul class="point-list strengths">
+<li><strong>Contesto AS-IS realistico e dettagliato:</strong> Ufficio con 3 dipendenti, ~100 segnalazioni/mese, canali multipli, tempo medio di risposta 7 giorni — dati concreti che hanno permesso un'analisi aderente alla realt&agrave;.</li>
+<li><strong>Identificazione precisa dei bottleneck:</strong> 3 colli di bottiglia principali e regole decisionali informali ("chi urla di pi&ugrave;", ping-pong tra uffici, procrastinazione dei casi complessi) — analisi organizzativa non scontata.</li>
+<li><strong>Roadmap operativa scalabile:</strong> KPI chiari, obiettivi a breve (1-3 mesi) e medio termine (4-12 mesi), approccio graduale da Excel a software — proposta realistica per la PA locale.</li>
+<li><strong>Uso multi-modello:</strong> Gemini 2.5 Flash + ChatGPT 4.1 in modo complementare, con prompting multi-turn coerente (analisi → approfondimento → deliverable).</li>
+<li><strong>Deliverable HTML orientato alla comunicazione:</strong> La scelta di richiedere un report web dimostra consapevolezza del destinatario finale (Amministrazione).</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>Aree di Miglioramento</h2>
+<ul class="point-list improvements">
+<li><strong>Automazione IA generica:</strong> Il cuore del tema — lo smistamento automatizzato con IA — resta implicito. Nessun classificatore NLP, chatbot multicanale o sistema di routing automatico proposto.</li>
+<li><strong>Assenza di architettura tecnica:</strong> Nessuna ipotesi su tecnologia (integrazione protocollo, API WhatsApp Business, piattaforme ticketing open source).</li>
+<li><strong>Stima quantitativa dell'impatto mancante:</strong> L'obiettivo di ridurre i tempi &egrave; citato ma non quantificato (es. "da 7 giorni a 48 ore").</li>
+<li><strong>Report HTML non finalizzato:</strong> Il codice resta nel log della sessione con dati placeholder nel grafico, non estratto come file autonomo.</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>Suggerimenti per il Gruppo</h2>
+<ul class="point-list suggestions">
+<li><strong>Progettare il classificatore:</strong> Chiedere all'IA: "Progetta un sistema di smistamento automatico basato su NLP del testo della segnalazione. Come gestire i casi ambigui?"</li>
+<li><strong>Template strutturato dall'inizio:</strong> Definire fin dal primo prompt la struttura del deliverable (AS-IS, TO-BE, soluzione IA, roadmap, KPI) per un output pi&ugrave; organizzato.</li>
+<li><strong>Prospettiva del cittadino:</strong> Includere la citizen experience come elemento centrale — il cittadino &egrave; l'attore principale, non solo il "mittente".</li>
+<li><strong>Aspetti normativi:</strong> Aggiungere cenni a GDPR, L. 241/90, requisiti CAD di accessibilit&agrave; digitale per completare il quadro.</li>
+</ul>
+</div>
+
+</div>
+
+<footer><div class="container">
+<p>Valutazione generata automaticamente - Progetto AI-PACT</p>
+<p style="margin-top:.3rem;font-size:.8rem">27 febbraio 2026</p>
+</div></footer>
+</body>
+</html>

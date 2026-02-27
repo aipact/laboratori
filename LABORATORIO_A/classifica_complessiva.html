@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Classifica Complessiva | AI-PACT Laboratorio A</title>
+<style>
+:root{--primary:#1a3a5c;--primary-light:#2c5f8a;--accent:#e67e22;--success:#27ae60;--warning:#f39c12;--danger:#e74c3c;--bg:#f0f4f8;--card-bg:#fff;--text:#2c3e50;--text-light:#7f8c8d;--border:#e1e8ed;--gold:#f1c40f;--silver:#bdc3c7;--bronze:#cd6133;--arezzo:#8e44ad;--livorno:#2980b9;--firenze:#c0392b}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;line-height:1.7;color:var(--text);background:var(--bg)}
+.container{max-width:1000px;margin:0 auto;padding:0 20px}
+header{background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);color:#fff;padding:3rem 0;margin-bottom:2rem;text-align:center}
+header h1{font-size:2.2rem;font-weight:800}
+header .subtitle{opacity:.85;font-size:1.1rem;margin-top:.5rem}
+.header-meta{display:flex;gap:1rem;margin-top:1rem;justify-content:center;flex-wrap:wrap}
+.header-badge{background:rgba(255,255,255,.15);padding:6px 14px;border-radius:8px;font-size:.85rem}
+.card{background:var(--card-bg);border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,.08);padding:30px;margin-bottom:25px;border:1px solid var(--border)}
+.card h2{font-size:1.3rem;font-weight:600;color:var(--primary);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:2px solid var(--border)}
+
+/* Sede badges */
+.sede-badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:.72rem;font-weight:700;color:#fff;letter-spacing:.5px}
+.sede-arezzo{background:var(--arezzo)}
+.sede-livorno{background:var(--livorno)}
+.sede-firenze{background:var(--firenze)}
+
+/* Podio */
+.podio{display:flex;align-items:flex-end;justify-content:center;gap:20px;padding:2rem 0 1rem;flex-wrap:wrap}
+.podio-item{text-align:center;border-radius:12px;padding:20px 15px;min-width:180px;flex:1;max-width:240px;text-decoration:none;color:inherit;transition:transform .3s}
+.podio-item:hover{transform:translateY(-5px)}
+.podio-item.gold{background:linear-gradient(135deg,#fff9e6,#fef3c7);border:2px solid var(--gold);order:2}
+.podio-item.silver{background:linear-gradient(135deg,#f8f9fa,#ecf0f1);border:2px solid var(--silver);order:1}
+.podio-item.bronze{background:linear-gradient(135deg,#fdf2e9,#fdebd0);border:2px solid var(--bronze);order:3}
+.podio-position{font-size:2.5rem;font-weight:800;line-height:1}
+.podio-position.p1{color:var(--gold)}
+.podio-position.p2{color:var(--silver)}
+.podio-position.p3{color:var(--bronze)}
+.podio-team{font-weight:700;font-size:1rem;margin:.5rem 0 .2rem;color:var(--primary)}
+.podio-project{font-size:.82rem;color:var(--text-light)}
+.podio-score{font-size:1.8rem;font-weight:800;margin-top:.5rem}
+.podio-score.s1{color:#d4a017}
+.podio-score.s2{color:#7f8c8d}
+.podio-score.s3{color:var(--bronze)}
+
+/* Tabelle */
+table{width:100%;border-collapse:collapse}
+thead th{background:var(--primary);color:#fff;padding:10px 12px;text-align:left;font-weight:600;font-size:.85rem}
+tbody td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:.85rem}
+tbody tr:nth-child(even){background:#f8fafc}
+tbody tr:hover{background:#edf2f7}
+.rank-cell{font-weight:800;font-size:1rem;width:35px;text-align:center}
+.rank-1{color:var(--gold)}
+.rank-2{color:var(--silver)}
+.rank-3{color:var(--bronze)}
+.rank-other{color:var(--text-light)}
+.score-bar{background:#e8ecf1;border-radius:10px;height:20px;position:relative;overflow:hidden;min-width:70px}
+.score-bar-fill{height:100%;border-radius:10px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px}
+.score-bar-fill span{font-size:.68rem;font-weight:700;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.3)}
+.score-high{background:linear-gradient(90deg,#2ecc71,#27ae60)}
+.score-mid{background:linear-gradient(90deg,#f39c12,#e67e22)}
+.score-low{background:linear-gradient(90deg,#e74c3c,#c0392b)}
+tbody td a{color:var(--primary);text-decoration:none;font-weight:600}
+tbody td a:hover{text-decoration:underline;color:var(--accent)}
+
+/* Sessioni */
+.session-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin:1rem 0}
+.session-card{padding:20px;border-radius:10px;text-align:center;border:1px solid var(--border)}
+.session-card.s-arezzo{border-left:4px solid var(--arezzo)}
+.session-card.s-livorno{border-left:4px solid var(--livorno)}
+.session-card.s-firenze{border-left:4px solid var(--firenze)}
+.session-card h3{font-size:1rem;font-weight:700;color:var(--primary);margin-bottom:.5rem}
+.session-stat{font-size:2rem;font-weight:800;color:var(--primary)}
+.session-label{font-size:.75rem;color:var(--text-light)}
+
+/* Stats */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin:1rem 0}
+.stat-box{background:#f8fafc;border-radius:10px;padding:15px;text-align:center;border:1px solid var(--border)}
+.stat-value{font-size:1.5rem;font-weight:800;color:var(--primary)}
+.stat-label{font-size:.72rem;color:var(--text-light);margin-top:4px}
+
+/* Menzioni */
+.mention-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:15px}
+.mention-card{padding:15px;border-radius:10px;border-left:4px solid;background:#f8fafc}
+.mention-card.m-gold{border-left-color:var(--gold)}
+.mention-card.m-green{border-left-color:var(--success)}
+.mention-card.m-blue{border-left-color:#3498db}
+.mention-card.m-orange{border-left-color:var(--accent)}
+.mention-card.m-purple{border-left-color:#9b59b6}
+.mention-card.m-red{border-left-color:var(--danger)}
+.mention-title{font-weight:700;font-size:.9rem;margin-bottom:4px}
+.mention-team{font-size:.8rem;color:var(--text-light)}
+.mention-desc{font-size:.85rem;margin-top:6px}
+
+/* Analysis */
+.analysis-section{margin-top:1rem}
+.analysis-section h3{font-size:1.05rem;font-weight:600;color:var(--primary);margin-bottom:.8rem}
+.analysis-section p,.analysis-section li{font-size:.92rem;line-height:1.7}
+.analysis-section ul{padding-left:1.2rem;margin-bottom:1rem}
+.analysis-section li{margin-bottom:.5rem}
+
+footer{background:var(--primary);color:#fff;text-align:center;padding:1.5rem;margin-top:2rem;font-size:.9rem;opacity:.9}
+@media(max-width:768px){header h1{font-size:1.5rem}.card{padding:20px}.podio{flex-direction:column;align-items:center}.podio-item{order:unset!important}.session-grid{grid-template-columns:1fr}body{font-size:.9rem}}
+@media print{body{background:#fff}.card{box-shadow:none;border:1px solid #ddd;break-inside:avoid}header,footer{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<header>
+<div class="container">
+<h1>Classifica Complessiva &mdash; Laboratorio A</h1>
+<p class="subtitle">3 Sessioni &middot; 13 Gruppi &middot; 3 Sedi Toscane</p>
+<div class="header-meta">
+<span class="header-badge">Arezzo &middot; 20 gen 2026</span>
+<span class="header-badge">Livorno &middot; 11 feb 2026</span>
+<span class="header-badge">Firenze &middot; 26 feb 2026</span>
+</div>
+</div>
+</header>
+
+<div class="container">
+
+<!-- INTRODUZIONE -->
+<div class="card">
+<h2>Introduzione</h2>
+<div class="analysis-section">
+<p>Questo documento raccoglie i risultati complessivi del <strong>Laboratorio A &mdash; Design Thinking e Problem Solving per l'IA</strong>, condotto nell'ambito dell'Azione Territoriale AI-PACT promossa da IFEL &ndash; Fondazione ANCI e ANCI Toscana.</p>
+<p style="margin-top:.8rem">Tra gennaio e febbraio 2026, <strong>13 gruppi di lavoro</strong> composti da funzionari e dirigenti comunali hanno affrontato una sfida concreta: partire da un problema reale del proprio ente e, in 45 minuti di lavoro collaborativo con strumenti di IA generativa, produrre un'analisi strutturata con proposta di soluzione.</p>
+<p style="margin-top:.8rem">Il percorso si &egrave; articolato in <strong>tre sessioni laboratoriali</strong> &mdash; Arezzo, Livorno e Firenze &mdash; precedute ciascuna da un webinar introduttivo. Ogni sessione ha seguito lo stesso format: brainstorming collettivo, selezione delle idee progettuali, lavoro in gruppo con l'IA, e restituzione finale con valutazione.</p>
+<p style="margin-top:.8rem">I progetti sono stati valutati su 5 criteri equipesati: completezza dell'analisi, qualit&agrave; della soluzione, innovativit&agrave; nell'uso dell'IA, presentabilit&agrave; del report e impatto potenziale sulla PA.</p>
+</div>
+</div>
+
+<!-- VALUTAZIONE COMPLESSIVA DELL'ESPERIENZA -->
+<div class="card">
+<h2>Valutazione Complessiva dell'Esperienza</h2>
+<div class="analysis-section">
+<p>Tutti i 13 gruppi hanno prodotto output significativi, con una media complessiva di <strong>8.08/10</strong> e nessun progetto sotto il 7.0. Un risultato che parla chiaro: la competenza di dominio che ciascuno di voi porta dal proprio lavoro quotidiano &egrave; il vero ingrediente che fa funzionare l'IA come strumento operativo.</p>
+
+<h3>Cosa emerge dai vostri lavori</h3>
+<ul>
+<li><strong>L'IA funziona meglio quando la guidate voi:</strong> I migliori risultati sono emersi quando i gruppi hanno usato l'IA per strutturare e approfondire le proprie idee, non per delegare il pensiero. L'interazione critica e multi-turno &egrave; stata il fattore discriminante tra i progetti buoni e quelli eccellenti.</li>
+<li><strong>Il system prompt fa la differenza:</strong> I progetti sopra l'8.0 avevano tutti un prompt strutturato con ruolo, contesto e formato output ben definiti. &Egrave; la competenza pi&ugrave; trasferibile che potete portarvi a casa: definire con chiarezza cosa volete dall'IA prima di iniziare a dialogarci.</li>
+<li><strong>La revisione critica &egrave; un'arma potente:</strong> Solo 1 team su 13 (Mary Oliver, Firenze) ha chiesto all'IA di criticare il proprio lavoro &mdash; e il risultato si &egrave; visto. Chiedere &ldquo;cosa c'&egrave; di sbagliato in quello che ho scritto?&rdquo; &egrave; un passaggio semplice che pu&ograve; migliorare significativamente qualsiasi output.</li>
+<li><strong>Il confronto tra colleghi moltiplica il valore:</strong> Lavorare insieme con competenze diverse ha arricchito l'analisi ben oltre ci&ograve; che un singolo utente avrebbe ottenuto dialogando con l'IA da solo. Questo vale anche tornando in ufficio: condividere prompt e approcci tra colleghi accelera l'apprendimento di tutti.</li>
+<li><strong>Sostanza prima della forma:</strong> I deliverable migliori non sono necessariamente i pi&ugrave; belli graficamente, ma quelli con il contenuto pi&ugrave; strutturato e operativo. L'IA pu&ograve; sempre &ldquo;vestire&rdquo; un contenuto solido &mdash; il contrario &egrave; molto pi&ugrave; difficile.</li>
+</ul>
+
+<p style="margin-top:1rem">Ciascuno dei 13 progetti rappresenta un punto di partenza concreto: un template, un'analisi, un flusso operativo che potete riprendere e adattare al vostro contesto. Il passo successivo &egrave; vostro &mdash; portare queste competenze nel lavoro di tutti i giorni.</p>
+</div>
+</div>
+
+<!-- CONFRONTO SESSIONI -->
+<div class="card">
+<h2>Le Tre Sessioni a Confronto</h2>
+<div class="session-grid">
+<div class="session-card s-arezzo">
+<h3><span class="sede-badge sede-arezzo">AREZZO</span></h3>
+<div class="session-stat">7.97</div>
+<div class="session-label">Media sessione</div>
+<p style="margin-top:.5rem;font-size:.82rem"><strong>3</strong> gruppi &middot; Vincitore: <strong>8.5</strong></p>
+<p style="font-size:.78rem;color:var(--text-light)">Range: 1.4</p>
+</div>
+<div class="session-card s-livorno">
+<h3><span class="sede-badge sede-livorno">LIVORNO</span></h3>
+<div class="session-stat">8.42</div>
+<div class="session-label">Media sessione</div>
+<p style="margin-top:.5rem;font-size:.82rem"><strong>5</strong> gruppi &middot; Vincitore: <strong>9.0</strong></p>
+<p style="font-size:.78rem;color:var(--text-light)">Range: 0.9</p>
+</div>
+<div class="session-card s-firenze">
+<h3><span class="sede-badge sede-firenze">FIRENZE</span></h3>
+<div class="session-stat">7.70</div>
+<div class="session-label">Media sessione</div>
+<p style="margin-top:.5rem;font-size:.82rem"><strong>5</strong> gruppi &middot; Vincitore: <strong>8.0</strong></p>
+<p style="font-size:.78rem;color:var(--text-light)">Range: 0.6</p>
+</div>
+</div>
+</div>
+
+<!-- PODIO COMPLESSIVO -->
+<div class="card">
+<h2>Podio Complessivo</h2>
+<div class="podio">
+<div class="podio-item silver">
+<div class="podio-position p2">2&deg;</div>
+<span class="sede-badge sede-livorno">LIVORNO</span>
+<div class="podio-team">Gruppo 4</div>
+<div class="podio-project">Comunicazione Social</div>
+<div class="podio-score s2">8.6</div>
+</div>
+<div class="podio-item gold">
+<div class="podio-position p1">1&deg;</div>
+<span class="sede-badge sede-livorno">LIVORNO</span>
+<div class="podio-team">Gruppo 1</div>
+<div class="podio-project">Atti Amministrativi</div>
+<div class="podio-score s1">9.0</div>
+</div>
+<div class="podio-item bronze">
+<div class="podio-position p3">3&deg;</div>
+<span class="sede-badge sede-arezzo">AREZZO</span>
+<div class="podio-team">Gruppo 2</div>
+<div class="podio-project">Gestione Segnalazioni</div>
+<div class="podio-score s3">8.5</div>
+</div>
+</div>
+</div>
+
+<!-- CLASSIFICA COMPLETA 13 GRUPPI -->
+<div class="card">
+<h2>Classifica Completa &mdash; 13 Gruppi</h2>
+<table>
+<thead><tr><th>#</th><th>Sede</th><th>Gruppo</th><th>Progetto</th><th>Valutazione</th><th>Deliverable</th><th>Voto</th><th style="min-width:90px">Barra</th></tr></thead>
+<tbody>
+<tr>
+<td class="rank-cell rank-1">1</td>
+<td><span class="sede-badge sede-livorno">LI</span></td>
+<td><strong>Gruppo 1</strong></td>
+<td>Atti Amministrativi</td>
+<td><a href="LIVORNO/Gruppo_1_Atti_Amministrativi/valutazione.html">scheda</a></td>
+<td><a href="LIVORNO/Gruppo_1_Atti_Amministrativi/deliverable.html">deliverable</a></td>
+<td><strong>9.0</strong></td>
+<td><div class="score-bar"><div class="score-bar-fill score-high" style="width:90%"><span>9.0</span></div></div></td>
+</tr>
+<tr>
+<td class="rank-cell rank-2">2</td>
+<td><span class="sede-badge sede-livorno">LI</span></td>
+<td><strong>Gruppo 4</strong></td>
+<td>Comunicazione Social</td>
+<td><a href="LIVORNO/Gruppo_4_Comunicazione_Social/valutazione.html">scheda</a></td>
+<td><a href="LIVORNO/Gruppo_4_Comunicazione_Social/dashboard_moderazione_social.html">dashboard</a></td>
+<td><strong>8.6</strong></td>
+<td><div class="score-bar"><div class="score-bar-fill score-high" style="width:86%"><span>8.6</span></div></div></td>
+</tr>
+<tr>
+<td class="rank-cell rank-3">3</td>
+<td><span class="sede-badge sede-arezzo">AR</span></td>
+<td><strong>Gruppo 2</strong></td>
+<td>Gestione Segnalazioni</td>
+<td><a href="AREZZO/Gruppo_2_Gestione_Segnalazioni/valutazione.html">scheda</a></td>
+<td><a href="AREZZO/Gruppo_2_Gestione_Segnalazioni/gruppo2.html">gruppo2.html</a></td>
+<td><strong>8.5</strong></td>
+<td><div class="score-bar"><div class="score-bar-fill score-high" style="width:85%"><span>8.5</span></div></div></td>
+</tr>
+<tr>
+<td class="rank-cell rank-other">4</td>
+<td><span class="sede-badge sede-arezzo">AR</span></td>
+<td><strong>Gruppo 3</strong></td>
+<td>Revisione Regolamenti</td>
+<td><a href="AREZZO/Gruppo_3_Revisione_Regolamenti/valutazione.html">scheda</a></td>
+<td><a href="AREZZO/Gruppo_3_Revisione_Regolamenti/index.html">index.html</a></td>
+<td><strong>8.3</strong></td>
+<td><div class="score-bar"><div class="score-bar-fill score-high" style="width:83%"><span>8.3</span></div></div></td>
+</tr>
+<tr>
+<td class="rank-cell rank-other">4</td>
+<td><span class="sede-badge sede-livorno">LI</span></td>
+<td><strong>Gruppo 5</strong></td>
+<td>Protocollo Segnalazioni</td>
+<td><a href="LIVORNO/Gruppo_5_Protocollo_Segnalazioni/valutazione.html">scheda</a></td>
+<td><a href="LIVORNO/Gruppo_5_Protocollo_Segnalazioni/Gruppo5-Output.html">output.html</a></td>
+<td><strong>8.3</strong></td>
+<td><div class="score-bar"><div class="score-bar-fill score-high" style="width:83%"><span>8.3</span></div></div></td>
+</tr>
+<tr>
+<td class="rank-cell rank-other">6</td>
+<td><span class="sede-badge sede-livorno">LI</span></td>
+<td><strong>Gruppo 3</strong></td>
+<td>Tributi e Allegati</td>
+<td><a href="LIVORNO/Gruppo_3_Tributi_Allegati/valutazione.html">scheda</a></td>
+<td><a href="LIVORNO/Gruppo_3_Tributi_Allegati/report_bando_tari.html">report</a></td>
+<td><strong>8.1</strong></td>
+<td><div class="score-bar"><div class="score-bar-fill score-high" style="width:81%"><span>8.1</span></div></div></td>
+</tr>
+<tr>
+<td class="rank-cell rank-other">6</td>
+<td><span class="sede-badge sede-livorno">LI</span></td>
+<td><strong>Gruppo 7</strong></td>
+<td>Rifiuti e Territorio</td>
+<td><a href="LIVORNO/Gruppo_7_Rifiuti_Territorio/valutazione.html">scheda</a></td>
+<td><a href="LIVORNO/Gruppo_7_Rifiuti_Territorio/report_rifiuti.html">report</a></td>
+<td><strong>8.1</strong></td>
+<td><div class="score-bar"><div class="score-bar-fill score-high" style="width:81%"><span>8.1</span></div></div></td>
+</tr>
+<tr>
+<td class="rank-cell rank-other">8</td>
+<td><span class="sede-badge sede-firenze">FI</span></td>
+<td><strong>Team Mary Oliver</strong></td>
+<td>I Cantieri Trasparenti</td>
+<td><a href="FIRENZE/Gruppo_4_Cantieri_Trasparenti/valutazione.html">scheda</a></td>
+<td><a href="FIRENZE/Gruppo_4_Cantieri_Trasparenti/deliverable.html">deliverable</a></td>
+<td><strong>8.0</strong></td>
+<td><div class="score-bar"><div class="score-bar-fill score-high" style="width:80%"><span>8.0</span></div></div></td>
+</tr>
+<tr>
+<td class="rank-cell rank-other">9</td>
+<td><span class="sede-badge sede-firenze">FI</span></td>
+<td><strong>Team Leonardo</strong></td>
+<td>Il Postino Intelligente</td>
+<td><a href="FIRENZE/Gruppo_2_Postino_Intelligente/valutazione.html">scheda</a></td>
+<td><a href="FIRENZE/Gruppo_2_Postino_Intelligente/deliverable.html">deliverable *</a></td>
+<td><strong>7.9</strong></td>
+<td><div class="score-bar"><div class="score-bar-fill score-mid" style="width:79%"><span>7.9</span></div></div></td>
+</tr>
+<tr>
+<td class="rank-cell rank-other">10</td>
+<td><span class="sede-badge sede-firenze">FI</span></td>
+<td><strong>Team Dante</strong></td>
+<td>L'Oracolo dell'Ufficio</td>
+<td><a href="FIRENZE/Gruppo_1_Oracolo_Ufficio/valutazione.html">scheda</a></td>
+<td><a href="FIRENZE/Gruppo_1_Oracolo_Ufficio/deliverable.html">deliverable</a></td>
+<td><strong>7.8</strong></td>
+<td><div class="score-bar"><div class="score-bar-fill score-mid" style="width:78%"><span>7.8</span></div></div></td>
+</tr>
+<tr>
+<td class="rank-cell rank-other">11</td>
+<td><span class="sede-badge sede-firenze">FI</span></td>
+<td><strong>Team Machiavelli</strong></td>
+<td>Gli Acchiappabug</td>
+<td><a href="FIRENZE/Gruppo_3_Acchiappabug/valutazione.html">scheda</a></td>
+<td><a href="FIRENZE/Gruppo_3_Acchiappabug/deliverable.php">deliverable</a></td>
+<td><strong>7.4</strong></td>
+<td><div class="score-bar"><div class="score-bar-fill score-mid" style="width:74%"><span>7.4</span></div></div></td>
+</tr>
+<tr>
+<td class="rank-cell rank-other">11</td>
+<td><span class="sede-badge sede-firenze">FI</span></td>
+<td><strong>Team Michelangelo</strong></td>
+<td>Lo Smistatore Civico</td>
+<td><a href="FIRENZE/Gruppo_5_Smistatore_Civico/valutazione.html">scheda</a></td>
+<td><a href="FIRENZE/Gruppo_5_Smistatore_Civico/deliverable.html">deliverable</a></td>
+<td><strong>7.4</strong></td>
+<td><div class="score-bar"><div class="score-bar-fill score-mid" style="width:74%"><span>7.4</span></div></div></td>
+</tr>
+<tr>
+<td class="rank-cell rank-other">13</td>
+<td><span class="sede-badge sede-arezzo">AR</span></td>
+<td><strong>Gruppo 1</strong></td>
+<td>VAS Sintesi Normativa</td>
+<td><a href="AREZZO/Gruppo_1_VAS_Sintesi_Normativa/valutazione.html">scheda</a></td>
+<td><a href="AREZZO/Gruppo_1_VAS_Sintesi_Normativa/gruppo1.html">gruppo1.html</a></td>
+<td><strong>7.1</strong></td>
+<td><div class="score-bar"><div class="score-bar-fill score-mid" style="width:71%"><span>7.1</span></div></div></td>
+</tr>
+</tbody>
+</table>
+<p style="font-size:.75rem;color:var(--text-light);margin-top:.8rem">* Restituzione grafica HTML realizzata in fase di valutazione/estrazione (deliverable originale in formato testuale).</p>
+</div>
+
+<!-- STATISTICHE COMPLESSIVE -->
+<div class="card">
+<h2>Statistiche Complessive</h2>
+<div class="stat-grid">
+<div class="stat-box">
+<div class="stat-value">8.08</div>
+<div class="stat-label">Media complessiva</div>
+</div>
+<div class="stat-box">
+<div class="stat-value">9.0</div>
+<div class="stat-label">Voto massimo</div>
+</div>
+<div class="stat-box">
+<div class="stat-value">7.1</div>
+<div class="stat-label">Voto minimo</div>
+</div>
+<div class="stat-box">
+<div class="stat-value">1.9</div>
+<div class="stat-label">Range</div>
+</div>
+<div class="stat-box">
+<div class="stat-value">8.1</div>
+<div class="stat-label">Mediana</div>
+</div>
+<div class="stat-box">
+<div class="stat-value">10/13</div>
+<div class="stat-label">Sopra il 7.5</div>
+</div>
+</div>
+</div>
+
+<!-- MENZIONI TRASVERSALI -->
+<div class="card">
+<h2>Riconoscimenti Trasversali</h2>
+<div class="mention-grid">
+<div class="mention-card m-gold">
+<div class="mention-title">Miglior Progetto Assoluto</div>
+<div class="mention-team"><span class="sede-badge sede-livorno">LI</span> Gruppo 1 &mdash; Atti Amministrativi (9.0)</div>
+<div class="mention-desc">Uso iterativo e critico di Gemini 2.5 Flash con correzione degli errori del modello. 4 template di atti reali pronti all'uso e piano di adozione RAG su 12 mesi.</div>
+</div>
+<div class="mention-card m-green">
+<div class="mention-title">Miglior Analisi di Contesto</div>
+<div class="mention-team"><span class="sede-badge sede-firenze">FI</span> Team Mary Oliver &mdash; Cantieri Trasparenti (8.0)</div>
+<div class="mention-desc">12 categorie di stakeholder, registri comunicativi per canale, conformit&agrave; GDPR con DPIA. Il team che ha colto meglio lo spirito del laboratorio, mettendo al centro la sostanza.</div>
+</div>
+<div class="mention-card m-blue">
+<div class="mention-title">Miglior Prototipo Funzionante</div>
+<div class="mention-team"><span class="sede-badge sede-arezzo">AR</span> Gruppo 2 &mdash; Gestione Segnalazioni (8.5)</div>
+<div class="mention-desc">Dashboard operativa split-screen con simulazione di scenari, meccanismo anti-contraddizione tra uffici e architettura con requisiti funzionali codificati.</div>
+</div>
+<div class="mention-card m-purple">
+<div class="mention-title">Miglior Deliverable Tecnico</div>
+<div class="mention-team"><span class="sede-badge sede-livorno">LI</span> Gruppo 4 &mdash; Comunicazione Social (8.6)</div>
+<div class="mention-desc">Dashboard di moderazione con Voice Chart multi-canale, template differenziati per tono, dark mode e persistenza dati localStorage.</div>
+</div>
+<div class="mention-card m-orange">
+<div class="mention-title">Miglior Metariflessione</div>
+<div class="mention-team"><span class="sede-badge sede-firenze">FI</span> Team Mary Oliver &mdash; Cantieri Trasparenti</div>
+<div class="mention-desc">Unico team su 13 ad aver chiesto all'IA di criticare il proprio lavoro &mdash; revisione critica autonoma che dimostra maturit&agrave; metodologica.</div>
+</div>
+<div class="mention-card m-red">
+<div class="mention-title">Miglior Lavoro di Squadra</div>
+<div class="mention-team"><span class="sede-badge sede-firenze">FI</span> Team Machiavelli &mdash; Acchiappabug (7.4)</div>
+<div class="mention-desc">Discussione tecnica costruttiva tra 5 professionisti CED. Il confronto tra pari come valore aggiunto nell'analisi del problema.</div>
+</div>
+</div>
+</div>
+
+<!-- TEMI RICORRENTI -->
+<div class="card">
+<h2>Mappa Tematica</h2>
+<div class="analysis-section">
+<p>I 13 progetti si distribuiscono su <strong>5 macro-aree</strong> della PA locale, con alcune sovrapposizioni significative:</p>
+<table>
+<thead><tr><th>Macro-area</th><th>Progetti</th><th>Sedi</th><th>Media voti</th></tr></thead>
+<tbody>
+<tr><td><strong>Gestione documentale e protocollo</strong></td><td>Atti Amministrativi (LI), Postino Intelligente (FI), Protocollo Segnalazioni (LI)</td><td>LI, FI</td><td>8.4</td></tr>
+<tr><td><strong>Segnalazioni e ticketing</strong></td><td>Gestione Segnalazioni (AR), Smistatore Civico (FI), Acchiappabug (FI)</td><td>AR, FI</td><td>7.8</td></tr>
+<tr><td><strong>Comunicazione istituzionale</strong></td><td>Comunicazione Social (LI), Cantieri Trasparenti (FI)</td><td>LI, FI</td><td>8.3</td></tr>
+<tr><td><strong>Normativa e regolamenti</strong></td><td>Revisione Regolamenti (AR), Oracolo dell'Ufficio (FI), VAS (AR)</td><td>AR, FI</td><td>7.7</td></tr>
+<tr><td><strong>Servizi territoriali</strong></td><td>Tributi e Allegati (LI), Rifiuti e Territorio (LI)</td><td>LI</td><td>8.1</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<!-- LE TRE SESSIONI -->
+<div class="card">
+<h2>Le Tre Sessioni</h2>
+<div class="analysis-section">
+<ul>
+<li><strong>Arezzo (20 gennaio):</strong> Tre gruppi con approcci molto diversi tra loro, dalla sintesi normativa alla gestione segnalazioni. Il Gruppo 2 ha prodotto il prototipo pi&ugrave; avanzato dell'intero percorso: una dashboard operativa split-screen con simulazione di scenari reali.</li>
+<li><strong>Livorno (11 febbraio):</strong> Cinque gruppi tutti sopra l'8.0, con il miglior punteggio assoluto (9.0) assegnato al Gruppo 1 per un uso iterativo e critico dell'IA nella redazione di atti amministrativi. La sessione con la qualit&agrave; media pi&ugrave; alta.</li>
+<li><strong>Firenze (26 febbraio):</strong> Cinque gruppi con la massima omogeneit&agrave; (tutti tra 7.4 e 8.0). Particolare attenzione alla sostanza e all'analisi di processo. Il Team Mary Oliver ha colto lo spirito del laboratorio mettendo al centro la mappatura operativa e la revisione critica.</li>
+</ul>
+</div>
+</div>
+
+<!-- LINK SESSIONI -->
+<div class="card">
+<h2>Classifiche delle Singole Sessioni</h2>
+<div class="session-grid">
+<div class="session-card s-arezzo">
+<h3>Arezzo</h3>
+<p style="font-size:.85rem">20 gennaio 2026</p>
+<p style="margin-top:.5rem"><a href="AREZZO/classifica_sessione.html" style="color:var(--arezzo);font-weight:700">Vai alla classifica &rarr;</a></p>
+</div>
+<div class="session-card s-livorno">
+<h3>Livorno</h3>
+<p style="font-size:.85rem">11 febbraio 2026</p>
+<p style="margin-top:.5rem"><a href="LIVORNO/classifica_sessione.html" style="color:var(--livorno);font-weight:700">Vai alla classifica &rarr;</a></p>
+</div>
+<div class="session-card s-firenze">
+<h3>Firenze</h3>
+<p style="font-size:.85rem">26 febbraio 2026</p>
+<p style="margin-top:.5rem"><a href="FIRENZE/classifica_sessione.html" style="color:var(--firenze);font-weight:700">Vai alla classifica &rarr;</a></p>
+</div>
+</div>
+</div>
+
+</div>
+
+<footer><div class="container">
+<p>Classifica complessiva generata automaticamente &mdash; Progetto AI-PACT</p>
+<p style="margin-top:.3rem;font-size:.8rem">Laboratorio A &middot; Design Thinking e Problem Solving per l'IA &middot; Febbraio 2026</p>
+</div></footer>
+</body>
+</html>

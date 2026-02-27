@@ -33,7 +33,14 @@ LABORATORIO_A/
 │   ├── Gruppo_7_Rifiuti_Territorio/
 │   └── divisione_in_gruppi.md
 │
-├── FIRENZE/                         # 26 febbraio 2026 (in arrivo)
+├── FIRENZE/                         # 26 febbraio 2026
+│   ├── Gruppo_1_Oracolo_Ufficio/
+│   ├── Gruppo_2_Postino_Intelligente/
+│   ├── Gruppo_3_Acchiappabug/
+│   ├── Gruppo_4_Cantieri_Trasparenti/
+│   ├── Gruppo_5_Smistatore_Civico/
+│   ├── classifica_sessione.html
+│   └── divisione_in_gruppi.md
 │
 └── tools/                           # Strumenti di supporto
 ```
@@ -76,7 +83,7 @@ Assistente IA alla redazione di atti amministrativi. Uso iterativo e critico di 
 
 | Punteggio | Valutazione | Deliverable |
 |-----------|-------------|-------------|
-| 9.0/10 | [Scheda valutazione](LIVORNO/Gruppo_1_Atti_Amministrativi/valutazione.html) | Template atti (.txt) |
+| 9.0/10 | [Scheda valutazione](LIVORNO/Gruppo_1_Atti_Amministrativi/valutazione.html) | [deliverable.html](LIVORNO/Gruppo_1_Atti_Amministrativi/deliverable.html) * |
 
 ### Gruppo 3 — Tributi e Allegati
 Screening automatico di conformita per istruttorie tributarie. Due report HTML: un calcolatore interattivo per il Bando Contributi TARI e un'analisi completa del processo di autorizzazione pubblicitaria con mappatura di tutti gli uffici coinvolti.
@@ -112,7 +119,44 @@ Piano di raccolta e spazzamento rifiuti data-driven per comuni costieri con fort
 
 ## FIRENZE - 26 febbraio 2026
 
-> Materiali in arrivo dopo lo svolgimento del laboratorio.
+5 gruppi | Vincitore: Gruppo 4 (8.0/10) | 📊 **[Classifica completa](FIRENZE/classifica_sessione.html)**
+
+### Gruppo 1 — L'Oracolo dell'Ufficio
+Chatbot RAG sui regolamenti interni dell'ente. FAQ interattiva CCNL Funzioni Locali 2022-2024 con ricerca per keyword, scoring per rilevanza e link alle fonti ARAN/CCNL. Approccio multi-modello (Gemini 2.5 Flash, Mistral Small, Perplexity Sonar) con tracking dei costi.
+
+| Punteggio | Valutazione | Deliverable |
+|-----------|-------------|-------------|
+| 7.8/10 | [Scheda valutazione](FIRENZE/Gruppo_1_Oracolo_Ufficio/valutazione.html) | [deliverable.html](FIRENZE/Gruppo_1_Oracolo_Ufficio/deliverable.html) |
+
+### Gruppo 2 — Il Postino Intelligente
+Smistamento automatico del protocollo con pipeline AI a 4 fasi (OCR+NLP, classificazione ML, assegnazione predittiva, feedback loop). System prompt professionale con normativa esatta (CAD, DPR 445/2000, AgID). Proposta di integrazione nel Manuale di Gestione con obiettivo PIAO e 7 KPI triennali.
+
+| Punteggio | Valutazione | Deliverable |
+|-----------|-------------|-------------|
+| 7.9/10 | [Scheda valutazione](FIRENZE/Gruppo_2_Postino_Intelligente/valutazione.html) | [deliverable.html](FIRENZE/Gruppo_2_Postino_Intelligente/deliverable.html) * |
+
+*\* Deliverable originale in formato testuale (markdown). Restituzione grafica HTML realizzata in fase di valutazione/estrazione.*
+
+### Gruppo 3 — Gli Acchiappabug
+Ticketing CED con risposte automatiche. Form web-based per acquisizione richieste di assistenza con validazione client+server, upload sicuro file e export CSV. Discussione tecnica costruttiva tra 5 professionisti CED che ha arricchito l'analisi del problema.
+
+| Punteggio | Valutazione | Deliverable |
+|-----------|-------------|-------------|
+| 7.4/10 | [Scheda valutazione](FIRENZE/Gruppo_3_Acchiappabug/valutazione.html) | [deliverable.php](FIRENZE/Gruppo_3_Acchiappabug/deliverable.php) |
+
+### Gruppo 4 — I Cantieri Trasparenti 🏆
+Comunicazione proattiva cantieri con piano strutturato multicanale. Mappatura di 12 categorie di stakeholder, iterazione a 8 cicli con revisione critica autonoma, conformità GDPR approfondita (Art. 6.1.e, ANPR, DPIA). Il team che ha colto meglio lo spirito del laboratorio, mettendo al centro la sostanza operativa.
+
+| Punteggio | Valutazione | Deliverable |
+|-----------|-------------|-------------|
+| 8.0/10 | [Scheda valutazione](FIRENZE/Gruppo_4_Cantieri_Trasparenti/valutazione.html) | [deliverable.html](FIRENZE/Gruppo_4_Cantieri_Trasparenti/deliverable.html) |
+
+### Gruppo 5 — Lo Smistatore Civico
+Smistamento segnalazioni cittadini con analisi AS-IS dettagliata (3 dipendenti, ~100 segnalazioni/mese, 7 giorni di risposta). Report sintetico con grafico Chart.js, identificazione di 3 colli di bottiglia e roadmap operativa scalabile.
+
+| Punteggio | Valutazione | Deliverable |
+|-----------|-------------|-------------|
+| 7.4/10 | [Scheda valutazione](FIRENZE/Gruppo_5_Smistatore_Civico/valutazione.html) | [deliverable.html](FIRENZE/Gruppo_5_Smistatore_Civico/deliverable.html) |
 
 ---
 

@@ -1,238 +1,115 @@
 <!DOCTYPE html>
-<html lang=\"it\">
+<html lang="it">
 <head>
-    <meta charset=\"UTF-8\">
-    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
-    <title>Valutazione - Gruppo 7 Rifiuti Territorio | AI-PACT</title>
-    <style>
-        :root {
-            --primary: #1a3a5c;
-            --primary-light: #2c5f8a;
-            --accent: #e67e22;
-            --success: #27ae60;
-            --warning: #f39c12;
-            --danger: #e74c3c;
-            --bg: #f0f4f8;
-            --card-bg: #ffffff;
-            --text: #2c3e50;
-            --text-light: #7f8c8d;
-            --border: #e1e8ed;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.7; color: var(--text); background: var(--bg); }
-        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
-        header { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; padding: 2.5rem 0; margin-bottom: 2rem; }
-        header h1 { font-size: 1.8rem; font-weight: 700; }
-        header .subtitle { opacity: 0.85; font-size: 1rem; margin-top: 0.3rem; }
-        .header-meta { display: flex; gap: 1rem; margin-top: 0.8rem; flex-wrap: wrap; }
-        .header-badge { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 8px; font-size: 0.85rem; }
-        .card { background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); padding: 30px; margin-bottom: 25px; border: 1px solid var(--border); }
-        .card h2 { font-size: 1.3rem; font-weight: 600; color: var(--primary); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border); }
-        .total-score { text-align: center; padding: 2rem; }
-        .total-score .score-value { font-size: 4rem; font-weight: 800; line-height: 1; }
-        .total-score .score-label { font-size: 1rem; color: var(--text-light); margin-top: 0.5rem; }
-        .score-high-text { color: var(--success); }
-        .score-mid-text { color: var(--warning); }
-        .score-low-text { color: var(--danger); }
-        table { width: 100%; border-collapse: collapse; }
-        thead th { background: var(--primary); color: white; padding: 12px 15px; text-align: left; font-weight: 600; }
-        tbody td { padding: 12px 15px; border-bottom: 1px solid var(--border); }
-        tbody tr:nth-child(even) { background: #f8fafc; }
-        .total-row { font-weight: 700; background: #edf2f7 !important; }
-        .score-bar { background: #e8ecf1; border-radius: 10px; height: 24px; position: relative; overflow: hidden; min-width: 100px; }
-        .score-bar-fill { height: 100%; border-radius: 10px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; }
-        .score-bar-fill span { font-size: 0.75rem; font-weight: 700; color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
-        .score-high { background: linear-gradient(90deg, #2ecc71, #27ae60); }
-        .score-mid { background: linear-gradient(90deg, #f39c12, #e67e22); }
-        .score-low { background: linear-gradient(90deg, #e74c3c, #c0392b); }
-        .point-list { list-style: none; padding: 0; }
-        .point-list li { padding: 10px 15px; margin-bottom: 8px; border-radius: 8px; border-left: 4px solid; background: #f8fafc; }
-        .strengths li { border-left-color: var(--success); }
-        .improvements li { border-left-color: var(--danger); }
-        .suggestions li { border-left-color: var(--accent); }
-        footer { background: var(--primary); color: white; text-align: center; padding: 1.5rem; margin-top: 2rem; font-size: 0.9rem; opacity: 0.9; }
-        @media (max-width: 768px) { header h1 { font-size: 1.4rem; } .card { padding: 20px; } .total-score .score-value { font-size: 3rem; } body { font-size: 0.9rem; } .table-wrap { overflow-x: auto; } }
-        @media print { body { background: white; } .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; } header { -webkit-print-color-adjust: exact; print-color-adjust: exact; } footer { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valutazione - Gruppo 7 Rifiuti Territorio | AI-PACT</title>
+<style>
+:root{--primary:#1a3a5c;--primary-light:#2c5f8a;--accent:#e67e22;--success:#27ae60;--warning:#f39c12;--danger:#e74c3c;--bg:#f0f4f8;--card-bg:#fff;--text:#2c3e50;--text-light:#7f8c8d;--border:#e1e8ed}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;line-height:1.7;color:var(--text);background:var(--bg)}
+.container{max-width:900px;margin:0 auto;padding:0 clamp(20px,5vw,40px)}
+header{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;padding:2.5rem 0;margin-bottom:2rem}
+header h1{font-size:1.8rem;font-weight:700}
+header .subtitle{opacity:.85;font-size:1rem;margin-top:.3rem}
+.header-meta{display:flex;gap:1rem;margin-top:.8rem;flex-wrap:wrap}
+.header-badge{background:rgba(255,255,255,.15);padding:6px 14px;border-radius:8px;font-size:.85rem}
+.card{background:var(--card-bg);border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,.08);padding:30px;margin-bottom:25px;border:1px solid var(--border)}
+.card h2{font-size:1.3rem;font-weight:600;color:var(--primary);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:2px solid var(--border)}
+.total-score{text-align:center;padding:2rem}
+.total-score .score-value{font-size:4rem;font-weight:800;line-height:1}
+.total-score .score-label{font-size:1rem;color:var(--text-light);margin-top:.5rem}
+.score-mid-text{color:var(--warning)}
+.score-high-text{color:var(--success)}
+table{width:100%;border-collapse:collapse}
+thead th{background:var(--primary);color:#fff;padding:12px 15px;text-align:left;font-weight:600}
+tbody td{padding:12px 15px;border-bottom:1px solid var(--border)}
+tbody tr:nth-child(even){background:#f8fafc}
+.total-row{font-weight:700;background:#edf2f7!important}
+.score-bar{background:#e8ecf1;border-radius:10px;height:24px;position:relative;overflow:hidden;min-width:100px}
+.score-bar-fill{height:100%;border-radius:10px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px}
+.score-bar-fill span{font-size:.75rem;font-weight:700;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.3)}
+.score-high{background:linear-gradient(90deg,#2ecc71,#27ae60)}
+.score-mid{background:linear-gradient(90deg,#f39c12,#e67e22)}
+.score-low{background:linear-gradient(90deg,#e74c3c,#c0392b)}
+.point-list{list-style:none;padding:0}
+.point-list li{padding:10px 15px;margin-bottom:8px;border-radius:8px;border-left:4px solid;background:#f8fafc}
+.strengths li{border-left-color:var(--success)}
+.improvements li{border-left-color:var(--danger)}
+.suggestions li{border-left-color:var(--accent)}
+footer{background:var(--primary);color:#fff;text-align:center;padding:1.5rem;margin-top:2rem;font-size:.9rem;opacity:.9}
+@media(max-width:768px){header h1{font-size:1.4rem}.card{padding:20px}.total-score .score-value{font-size:3rem}body{font-size:.9rem}}
+@media print{body{background:#fff}.card{box-shadow:none;border:1px solid #ddd;break-inside:avoid}header,footer{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
 </head>
 <body>
-    <header>
-        <div class=\"container\">
-            <h1>Valutazione Progetto: Piano Raccolta Rifiuti Data-Driven</h1>
-            <p class=\"subtitle\">Gruppo 7 - Rifiuti Territorio</p>
-            <div class=\"header-meta\">
-                <span class=\"header-badge\">Livorno</span>
-                <span class=\"header-badge\">Lab: Laboratorio A</span>
-                <span class=\"header-badge\">Valutazione: 17 febbraio 2026</span>
-            </div>
-        </div>
-    </header>
+<header><div class="container">
+<h1>Valutazione Progetto: Piano Raccolta Rifiuti Data-Driven</h1>
+<p class="subtitle">Gruppo 7 - Rifiuti e Territorio</p>
+<div class="header-meta">
+<span class="header-badge">Livorno</span>
+<span class="header-badge">Lab: 11 febbraio 2026</span>
+<span class="header-badge">Valutazione: 17 febbraio 2026</span>
+</div>
+</div></header>
 
-    <div class=\"container\">
+<div class="container">
 
-        <!-- Punteggio Totale -->
-        <div class=\"card\">
-            <div class=\"total-score\">
-                <div class=\"score-value score-high-text\">8.1</div>
-                <div class=\"score-label\">Punteggio Totale (media pesata su 10)</div>
-            </div>
-        </div>
+<div class="card">
+<div class="total-score">
+<div class="score-value score-high-text">8.1</div>
+<div class="score-label">Punteggio Totale su 10 &mdash; Molto Buono</div>
+</div>
+</div>
 
-        <!-- Sintesi del Progetto -->
-        <div class=\"card\">
-            <h2>Sintesi del Progetto</h2>
-            <p>Il Gruppo 7 ha affrontato la revisione del piano di raccolta e spazzamento rifiuti per comuni costieri toscani con forte vocazione turistica. Hanno prodotto due deliverable HTML: un template generico riutilizzabile per qualsiasi comune e un piano specifico e dettagliato per il Comune di Orbetello, corredato da un README ben strutturato. Il progetto si distingue per la profondita dell'analisi territoriale, l'attenzione alla stagionalita turistica e l'integrazione dell'IA come strumento di comunicazione e monitoraggio.</p>
-        </div>
+<div class="card">
+<h2>Punteggi per Criterio</h2>
+<table>
+<thead><tr><th>Criterio</th><th>Peso</th><th>Voto</th><th style="min-width:150px">Barra</th></tr></thead>
+<tbody>
+<tr><td>Completezza dell'analisi</td><td>20%</td><td>8.5</td><td><div class="score-bar"><div class="score-bar-fill score-high" style="width:85%"><span>8.5</span></div></div></td></tr>
+<tr><td>Qualit&agrave; della soluzione</td><td>20%</td><td>8.0</td><td><div class="score-bar"><div class="score-bar-fill score-high" style="width:80%"><span>8.0</span></div></div></td></tr>
+<tr><td>Innovativit&agrave; e uso dell'IA</td><td>20%</td><td>7.5</td><td><div class="score-bar"><div class="score-bar-fill score-mid" style="width:75%"><span>7.5</span></div></div></td></tr>
+<tr><td>Presentabilit&agrave; del report</td><td>20%</td><td>7.8</td><td><div class="score-bar"><div class="score-bar-fill score-mid" style="width:78%"><span>7.8</span></div></div></td></tr>
+<tr><td>Impatto potenziale sulla PA</td><td>20%</td><td>8.5</td><td><div class="score-bar"><div class="score-bar-fill score-high" style="width:85%"><span>8.5</span></div></div></td></tr>
+<tr class="total-row"><td>Totale Ponderato</td><td>100%</td><td><strong>8.1</strong> (media aritmetica: 8.1)</td><td><div class="score-bar"><div class="score-bar-fill score-high" style="width:81%"><span>8.1</span></div></div></td></tr>
+</tbody>
+</table>
+</div>
 
-        <!-- Tabella Criteri -->
-        <div class=\"card\">
-            <h2>Dettaglio Criteri di Valutazione</h2>
-            <div class=\"table-wrap\">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Criterio</th>
-                            <th>Peso</th>
-                            <th>Voto</th>
-                            <th>Barra</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Completezza dell'analisi</td>
-                            <td>20%</td>
-                            <td>8.5</td>
-                            <td>
-                                <div class=\"score-bar\">
-                                    <div class=\"score-bar-fill score-high\" style=\"width: 85%;\">
-                                        <span>8.5</span>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Qualita della soluzione</td>
-                            <td>20%</td>
-                            <td>8.0</td>
-                            <td>
-                                <div class=\"score-bar\">
-                                    <div class=\"score-bar-fill score-high\" style=\"width: 80%;\">
-                                        <span>8.0</span>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Innovativita e uso dell'IA</td>
-                            <td>20%</td>
-                            <td>7.5</td>
-                            <td>
-                                <div class=\"score-bar\">
-                                    <div class=\"score-bar-fill score-mid\" style=\"width: 75%;\">
-                                        <span>7.5</span>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Presentabilita del report</td>
-                            <td>20%</td>
-                            <td>7.8</td>
-                            <td>
-                                <div class=\"score-bar\">
-                                    <div class=\"score-bar-fill score-mid\" style=\"width: 78%;\">
-                                        <span>7.8</span>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Impatto potenziale sulla PA</td>
-                            <td>20%</td>
-                            <td>8.5</td>
-                            <td>
-                                <div class=\"score-bar\">
-                                    <div class=\"score-bar-fill score-high\" style=\"width: 85%;\">
-                                        <span>8.5</span>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class=\"total-row\">
-                            <td>Totale Pesato</td>
-                            <td>100%</td>
-                            <td>8.1</td>
-                            <td>
-                                <div class=\"score-bar\">
-                                    <div class=\"score-bar-fill score-high\" style=\"width: 81%;\">
-                                        <span>8.1</span>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+<div class="card">
+<h2>Punti di Forza</h2>
+<ul class="point-list strengths">
+<li><strong>Doppio deliverable strategico:</strong> La produzione sia di un template generico riutilizzabile sia di un piano specifico per Orbetello dimostra capacit&agrave; di astrazione e concretizzazione. Il template pu&ograve; essere riutilizzato da altri comuni, mentre il piano Orbetello mostra come calare la teoria nella realt&agrave;.</li>
+<li><strong>Gestione eccellente della stagionalit&agrave;:</strong> Il progetto affronta con grande consapevolezza la sfida principale dei comuni costieri: la modulazione dei servizi tra inverno ed estate. Le frequenze differenziate, il personale stagionale aggiuntivo e la comunicazione multilingue per i turisti sono soluzioni concrete e realistiche.</li>
+<li><strong>Analisi territoriale di qualit&agrave;:</strong> La suddivisione del territorio in zone omogenee (centro storico, frazioni costiere, aree residenziali periferiche) con modelli di raccolta differenziati dimostra una comprensione profonda delle dinamiche locali. L'attenzione a specificit&agrave; come la laguna, le dune costiere e il settore della pesca aggiunge valore.</li>
+<li><strong>Visione sistemica della comunicazione:</strong> Il piano di comunicazione in 4 fasi (preparazione, pre-lancio, lancio, mantenimento) con target differenziati (residenti, turisti, commercianti, operatori turistici) e strumenti specifici per ciascuno &egrave; particolarmente maturo e ben strutturato.</li>
+</ul>
+</div>
 
-        <!-- Motivazione per criterio -->
-        <div class=\"card\">
-            <h2>Motivazione per Criterio</h2>
+<div class="card">
+<h2>Aree di Miglioramento</h2>
+<ul class="point-list improvements">
+<li><strong>Template generico troppo grezzo:</strong> Il file report_rifiuti.html contiene ancora numerosi placeholder non compilati (&laquo;[Nome Comune]&raquo;, &laquo;[Es. 2024-2029]&raquo;, &laquo;[Zona X]&raquo;) e un errore HTML strutturale (un &lt;/div&gt; che chiude prematuramente una lista al posto di &lt;/ul&gt;&lt;/li&gt;). Come deliverable autonomo, risulta una bozza incompleta pi&ugrave; che un template immediatamente riutilizzabile.</li>
+<li><strong>Assenza di dati quantitativi operativi:</strong> Nonostante gli obiettivi siano ben quantificati, mancano stime sui costi di implementazione, sul numero di mezzi e operatori necessari, e su un cronoprogramma anche di massima. Un piano operativo beneficerebbe di almeno un ordine di grandezza delle risorse richieste.</li>
+<li><strong>IA descritta ma non dimostrata:</strong> L'uso dell'IA &egrave; ampiamente descritto a livello concettuale, ma nessuno degli strumenti AI proposti (chatbot, mappe interattive, sentiment analysis) &egrave; stato prototipato, nemmeno in forma semplificata. Un piccolo mockup interattivo avrebbe rafforzato significativamente il progetto.</li>
+</ul>
+</div>
 
-            <h3 style=\"margin-top: 1rem; color: #1a3a5c; font-size: 1.1rem;\">1. Completezza dell'analisi - 8.5/10</h3>
-            <p>L'analisi del contesto di Orbetello e molto approfondita: dati demografici precisi (14.500 residenti, picco estivo oltre 40.000), identificazione puntuale delle criticita (centro storico, abbandoni nelle pinete, gestione stabilimenti balneari), e nuove esigenze ben articolate (seconde case, campeggi, scarti della pesca). Il gruppo ha dimostrato una comprensione eccellente della complessita di un comune costiero-lagunare con forte stagionalita turistica. Obiettivi quantificati con target temporali (75% RD entro 2027, -20% secco residuo, -50% abbandoni).</p>
+<div class="card">
+<h2>Suggerimenti per il Gruppo</h2>
+<ul class="point-list suggestions">
+<li><strong>Prototipo chatbot rifiuti:</strong> Realizzare un semplice chatbot dimostrativo (anche con un form HTML e risposte predefinite) che mostri come un turista potrebbe interagire con il sistema per capire dove e quando conferire i rifiuti nel proprio alloggio a Orbetello. Questo trasformerebbe l'idea da descrittiva a tangibile.</li>
+<li><strong>Dashboard KPI interattiva:</strong> Creare una pagina HTML con grafici (anche statici con dati simulati) che visualizzi la dashboard di monitoraggio proposta: produzione rifiuti per zona, confronto inverno/estate, percentuali RD. Questo renderebbe immediatamente comprensibile il valore della piattaforma digitale proposta.</li>
+<li><strong>Mappa interattiva delle zone:</strong> Aggiungere una mappa (anche schematica) del territorio di Orbetello con le diverse zone di raccolta evidenziate e le relative frequenze. Questo elemento visivo migliorerebbe notevolmente la comunicabilit&agrave; del piano ai decisori politici.</li>
+</ul>
+</div>
 
-            <h3 style=\"margin-top: 1.2rem; color: #1a3a5c; font-size: 1.1rem;\">2. Qualita della soluzione - 8.0/10</h3>
-            <p>Soluzione molto articolata con modello \"a moduli\" differenziato per zona: isole ecologiche interrate per il centro storico, porta a porta con frequenze stagionali per le frazioni costiere, sistema standard ottimizzato per le aree residenziali. La modulazione stagionale delle frequenze (es. organico da 3x/settimana in inverno a 4-5x in estate) dimostra concretezza operativa. Il piano di comunicazione in 4 fasi e ben strutturato. Piccola penalizzazione per i numerosi placeholder rimasti nel template generico e per il refuso \"Rimostulazione\" (probabilmente \"Rimodulazione\") presente in entrambi i file.</p>
+</div>
 
-            <h3 style=\"margin-top: 1.2rem; color: #1a3a5c; font-size: 1.1rem;\">3. Innovativita e uso dell'IA - 7.5/10</h3>
-            <p>Buona integrazione concettuale dell'IA: chatbot multilingue 24/7, mappe interattive personalizzate con scheduling dinamico estivo/invernale, sentiment analysis sui social, video animati generati automaticamente per spiegare i cambiamenti di rotta. L'idea dell'IA che spiega al cittadino il \"perche\" del cambio di orario e particolarmente interessante. Tuttavia, l'uso dell'IA resta a livello progettuale-descrittivo: i deliverable prodotti sono HTML statici e non includono prototipi funzionanti delle soluzioni AI proposte.</p>
-
-            <h3 style=\"margin-top: 1.2rem; color: #1a3a5c; font-size: 1.1rem;\">4. Presentabilita del report - 7.8/10</h3>
-            <p>Il piano di Orbetello e visivamente curato: header con logo comunale, disclaimer sui dati, sezioni ben organizzate con \"section-header\" colorati, design responsive. Il README e chiaro e sintetico con tabelle informative. Piccole criticita: il nome del file contiene una doppia estensione (.html.html), un tag &lt;/div&gt; erroneamente chiude una lista nel template generico (riga 153), e il template generico mantiene molti placeholder non compilati che ne riducono l'utilita come deliverable autonomo.</p>
-
-            <h3 style=\"margin-top: 1.2rem; color: #1a3a5c; font-size: 1.1rem;\">5. Impatto potenziale sulla PA - 8.5/10</h3>
-            <p>Tema ad altissima rilevanza per la PA toscana: la gestione dei rifiuti in comuni turistici costieri e una sfida concreta e attualissima. Il modello proposto e direttamente replicabile in contesti simili (Castiglione della Pescaia, Follonica, Piombino, Isola d'Elba). L'approccio multi-stakeholder (operatori turistici, pescatori, agricoltori, scuole, associazioni ambientali) e la comunicazione multilingue dimostrano maturita nella comprensione del contesto. La proposta di tariffa puntuale con microchip e la gamification per stabilimenti balneari sono elementi innovativi con impatto reale.</p>
-        </div>
-
-        <!-- Punti di Forza -->
-        <div class=\"card\">
-            <h2>Punti di Forza</h2>
-            <ul class=\"point-list strengths\">
-                <li><strong>Doppio deliverable strategico:</strong> La produzione sia di un template generico riutilizzabile sia di un piano specifico per Orbetello dimostra capacita di astrazione e concretizzazione. Il template puo essere riutilizzato da altri comuni, mentre il piano Orbetello mostra come calare la teoria nella realta.</li>
-                <li><strong>Gestione eccellente della stagionalita:</strong> Il progetto affronta con grande consapevolezza la sfida principale dei comuni costieri: la modulazione dei servizi tra inverno ed estate. Le frequenze differenziate, il personale stagionale aggiuntivo e la comunicazione multilingue per i turisti sono soluzioni concrete e realistiche.</li>
-                <li><strong>Analisi territoriale di qualita:</strong> La suddivisione del territorio in zone omogenee (centro storico, frazioni costiere, aree residenziali periferiche) con modelli di raccolta differenziati dimostra una comprensione profonda delle dinamiche locali. L'attenzione a specificita come la laguna, le dune costiere e il settore della pesca aggiunge valore.</li>
-                <li><strong>Visione sistemica della comunicazione:</strong> Il piano di comunicazione in 4 fasi (preparazione, pre-lancio, lancio, mantenimento) con target differenziati (residenti, turisti, commercianti, operatori turistici) e strumenti specifici per ciascuno e particolarmente maturo e ben strutturato.</li>
-            </ul>
-        </div>
-
-        <!-- Aree di Miglioramento -->
-        <div class=\"card\">
-            <h2>Aree di Miglioramento</h2>
-            <ul class=\"point-list improvements\">
-                <li><strong>Template generico troppo grezzo:</strong> Il file report_rifiuti.html contiene ancora numerosi placeholder non compilati (\"[Nome Comune]\", \"[Es. 2024-2029]\", \"[Zona X]\") e un errore HTML strutturale (un &lt;/div&gt; che chiude prematuramente una lista al posto di &lt;/ul&gt;&lt;/li&gt;). Come deliverable autonomo, risulta una bozza incompleta piu che un template immediatamente riutilizzabile.</li>
-                <li><strong>Assenza di dati quantitativi operativi:</strong> Nonostante gli obiettivi siano ben quantificati, mancano stime sui costi di implementazione, sul numero di mezzi e operatori necessari, e su un cronoprogramma anche di massima. Un piano operativo beneficerebbe di almeno un ordine di grandezza delle risorse richieste.</li>
-                <li><strong>IA descritta ma non dimostrata:</strong> L'uso dell'IA e ampiamente descritto a livello concettuale, ma nessuno degli strumenti AI proposti (chatbot, mappe interattive, sentiment analysis) e stato prototipato, nemmeno in forma semplificata. Un piccolo mockup interattivo avrebbe rafforzato significativamente il progetto.</li>
-            </ul>
-        </div>
-
-        <!-- Suggerimenti -->
-        <div class=\"card\">
-            <h2>Suggerimenti per Sviluppi Futuri</h2>
-            <ul class=\"point-list suggestions\">
-                <li><strong>Prototipo chatbot rifiuti:</strong> Realizzare un semplice chatbot dimostrativo (anche con un form HTML e risposte predefinite) che mostri come un turista potrebbe interagire con il sistema per capire dove e quando conferire i rifiuti nel proprio alloggio a Orbetello. Questo trasformerebbe l'idea da descrittiva a tangibile.</li>
-                <li><strong>Dashboard KPI interattiva:</strong> Creare una pagina HTML con grafici (anche statici con dati simulati) che visualizzi la dashboard di monitoraggio proposta: produzione rifiuti per zona, confronto inverno/estate, percentuali RD. Questo renderebbe immediatamente comprensibile il valore della piattaforma digitale proposta.</li>
-                <li><strong>Mappa interattiva delle zone:</strong> Aggiungere una mappa (anche schematica) del territorio di Orbetello con le diverse zone di raccolta evidenziate e le relative frequenze. Questo elemento visivo migliorerebbe notevolmente la comunicabilita del piano ai decisori politici.</li>
-            </ul>
-        </div>
-
-    </div>
-
-    <footer>
-        <div class=\"container\">
-            <p>Valutazione generata automaticamente - Progetto AI-PACT</p>
-            <p style=\"margin-top: 0.3rem; font-size: 0.8rem;\">17 febbraio 2026</p>
-        </div>
-    </footer>
+<footer><div class="container">
+<p>Valutazione generata automaticamente - Progetto AI-PACT</p>
+<p style="margin-top:.3rem;font-size:.8rem">17 febbraio 2026</p>
+</div></footer>
 </body>
 </html>

@@ -43,3 +43,6 @@ valutazione_idee_progettuali/
 
 # Test preparazione sessione
 _test_prepara_sessione/
+
+# Checklist stampabile (uso locale)
+checklist_sessione_print.html

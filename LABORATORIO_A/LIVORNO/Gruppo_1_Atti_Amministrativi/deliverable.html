@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assistente IA per Atti Amministrativi | Gruppo 1 - Livorno</title>
+<style>
+:root{--primary:#1a3a5c;--primary-light:#2c5f8a;--accent:#e67e22;--bg:#f0f4f8;--card:#fff;--text:#2c3e50;--text-light:#7f8c8d;--border:#e1e8ed}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;line-height:1.7;color:var(--text);background:var(--bg)}
+.container{max-width:960px;margin:0 auto;padding:0 20px}
+
+header{background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);color:#fff;padding:3rem 0;text-align:center}
+header h1{font-size:2rem;font-weight:800;margin-bottom:.5rem}
+header .subtitle{opacity:.85;font-size:1.05rem}
+header .meta{margin-top:1rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+header .badge{background:rgba(255,255,255,.15);padding:5px 12px;border-radius:8px;font-size:.82rem}
+
+/* Tabs */
+.tabs{background:var(--card);border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,.08);margin:2rem auto;border:1px solid var(--border);overflow:hidden}
+.tab-nav{display:flex;flex-wrap:wrap;background:var(--primary);gap:0}
+.tab-btn{padding:12px 18px;background:none;border:none;color:rgba(255,255,255,.7);font-size:.82rem;font-weight:600;cursor:pointer;transition:all .3s;flex:1;min-width:140px;text-align:center}
+.tab-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.tab-btn.active{background:var(--card);color:var(--primary)}
+.tab-content{display:none;padding:30px}
+.tab-content.active{display:block}
+.tab-content h3{font-size:1.1rem;font-weight:700;color:var(--primary);margin-bottom:1rem}
+
+/* Template rendering */
+.template-doc{background:#fafbfc;border:1px solid var(--border);border-radius:8px;padding:25px 30px;font-family:'Courier New',Courier,monospace;font-size:.82rem;line-height:1.8;white-space:pre-wrap;word-wrap:break-word;max-height:none;overflow-y:auto}
+
+footer{background:var(--primary);color:#fff;text-align:center;padding:1.5rem;margin-top:2rem;font-size:.85rem;opacity:.9}
+footer .note{font-size:.75rem;margin-top:.5rem;opacity:.7}
+
+@media(max-width:640px){header h1{font-size:1.4rem}.tab-btn{font-size:.75rem;padding:10px 8px}.template-doc{padding:15px;font-size:.75rem}.container{padding:0 12px}}
+@media print{.tab-content{display:block!important}.tab-nav{display:none}body{background:#fff}.tabs{box-shadow:none;border:1px solid #ddd;break-inside:avoid}}
+</style>
+</head>
+<body>
+
+<header>
+<div class="container">
+<h1>Assistente IA per la Redazione di Atti Amministrativi</h1>
+<p class="subtitle">Template di determine e pareri per concessioni pubblicitarie in centro storico</p>
+<div class="meta">
+<span class="badge">Gruppo 1 &mdash; Livorno</span>
+<span class="badge">11 febbraio 2026</span>
+<span class="badge">Modello: Gemini 2.5 Flash</span>
+</div>
+</div>
+</header>
+
+<div class="container">
+
+<div class="tabs">
+<div class="tab-nav">
+<button class="tab-btn active" onclick="switchTab(event,'tab-auth')">Determina di Autorizzazione</button>
+<button class="tab-btn" onclick="switchTab(event,'tab-diniego')">Determina di Diniego</button>
+<button class="tab-btn" onclick="switchTab(event,'tab-rev')">Autorizzazione (versione rivista)</button>
+</div>
+
+<!-- TAB 1: Autorizzazione -->
+<div id="tab-auth" class="tab-content active">
+<h3>Determina di Autorizzazione</h3>
+<div class="template-doc">[INTESTAZIONE COMUNE]
+
+CITT&Agrave; DI [Nome Comune] UFFICIO CONCESSIONI
+
+DETERMINAZIONE DIRIGENZIALE N. [Numero Determinazione] DEL [Data]
+
+OGGETTO: Autorizzazione per esposizione pubblicitaria in centro storico (vincolo architettonico e ZTL) &ndash; Ditta [Ragione Sociale Esercente] &ndash; Art. 21 Regolamento Comunale per l'applicazione del Canone Unico Patrimoniale.
+
+IL DIRIGENTE DELL'AREA [Nome Area, es. &ldquo;Tecnica/Urbanistica&rdquo;] (con i poteri di cui all'art. 107 del D.Lgs. 18 agosto 2000, n. 267)
+
+PREMESSO CHE:
+
+    In data [Data Istanza], la Ditta [Ragione Sociale Esercente], con sede in [Indirizzo Sede Legale], Via [Via], n. [Civico], Partita IVA [P.IVA], C.F. [C.F.], esercente attivit&agrave; commerciale di [Tipo Attivit&agrave;] presso l'immobile sito in [Indirizzo Intervento, es. Via Roma, n. 10], ha presentato istanza acquisita al Protocollo Comunale con n. [Numero Protocollo], per la concessione di autorizzazione all'installazione di una esposizione pubblicitaria di dimensioni superiori a 5 mq nel centro storico, sottoposto a vincolo architettonico e ricadente in zona a traffico limitato (ZTL).
+    L'esposizione pubblicitaria oggetto della richiesta consiste in [Breve descrizione della tipologia: es. &ldquo;una insegna a bandiera/targhetta luminosa/vetrina espositiva&rdquo;] delle dimensioni di cm [Lunghezza] x cm [Altezza], per una superficie complessiva di [Superficie in mq preciso] mq, da installare sulla facciata/all'interno della vetrina/su apposita struttura [specificare la collocazione] dell'edificio sito in [Indirizzo Intervento].
+
+RICHIAMATI:
+
+    Il D.Lgs. 18 agosto 2000, n. 267 e ss.mm.ii., recante &ldquo;Testo unico delle leggi sull'ordinamento degli enti locali&rdquo;, ed in particolare l'art. 107;
+    Il D.Lgs. 22 gennaio 2004, n. 42 e ss.mm.ii., recante &ldquo;Codice dei beni culturali e del paesaggio&rdquo;, per quanto attiene i vincoli architettonici e paesaggistici;
+    Il Regolamento Comunale per la disciplina delle attivit&agrave; pubblicitarie e degli impianti pubblicitari, approvato con Delibera C.C. n. [Numero Delibera] del [Data Delibera];
+    Il Regolamento Comunale per l'applicazione del Canone Unico Patrimoniale di cui alla Legge n. 160/2019, cos&igrave; come modificato dalla Legge n. 160/2019, approvato con Delibera C.C. n. [Numero Delibera] del [Data Delibera];
+    Il Piano di Governo del Territorio (PGT)/Piano Regolatore Generale (PRG) Parte [Specificare Parte] approvato con Delibera C.C. n. [Numero Delibera] del [Data Delibera].
+
+ACQUISITI I SEGUENTI PARERI OBBLIGATORI:
+
+    Parere favorevole dell'Ufficio Urbanistica / Edilizia Privata, prot. n. [Numero Protocollo] del [Data Parere], attestante la conformit&agrave; dell'impianto pubblicitario alle norme urbanistiche e edilizie vigenti e ai regolamenti comunali, con specifica prescrizione circa [eventuale prescrizione, es: &ldquo;l'utilizzo di materiali opachi e non riflettenti&rdquo;] che l'istante si &egrave; impegnato ad osservare.
+    Parere favorevole dalla Soprintendenza Archeologia, Belle Arti e Paesaggio per la Provincia di [Nome Provincia] / Ufficio Tutela Beni Culturali, prot. n. [Numero Protocollo] del [Data Parere], che, valutato il progetto in relazione al vincolo architettonico gravante sull'edificio e la collocazione in zona di pregio ambientale, ha espresso nulla osta all'installazione, condizionato alla prescrizione di [eventuale prescrizione, es: &ldquo;un sistema di illuminazione a basso impatto visivo e luce calda, direzionata unicamente sull'insegna, senza dispersione di flusso luminoso verso l'alto o verso l'esterno dell'area occupata dal manufatto&rdquo;].
+    Parere favorevole dall'Ufficio Traffico / Comando di Polizia Locale, prot. n. [Numero Protocollo] del [Data Parere], il quale ha verificato che l'installazione non comporta intralcio alla circolazione stradale o pedonale, n&eacute; pericoli per la pubblica incolumit&agrave;, e risulta compatibile con la disciplina della ZTL.
+    Parere dell'Ufficio Tributi / Servizio Entrate, prot. n. [Numero Protocollo] del [Data Parere], attestante il calcolo del Canone Unico Patrimoniale dovuto per l'occupazione del suolo pubblico/esposizione pubblicitaria di [Superficie in mq] mq per l'anno [Anno] pari a Euro [Importo in cifre] (Euro [Importo in lettere]/00), con indicazione delle modalit&agrave; di versamento.
+    Parere favorevole dell'Ufficio Gestione Patrimonio / Demanio, prot. n. [Numero Protocollo] del [Data Parere], che ha accertato la disponibilit&agrave; dell'area e la compatibilit&agrave; con l'utilizzo del suolo pubblico.
+
+CONSIDERATO ANCHE CHE:
+
+    Il richiedente ha espressamente dichiarato di accettare e di voler ottemperare a tutte le prescrizioni contenute nei pareri favorevoli e nel presente atto.
+    L'istante ha provveduto al versamento del Canone Unico Patrimoniale, come da ricevuta/attestazione prot. n. [Numero Protocollo Ricevuta Pagamento] del [Data Pagamento].
+
+DETERMINA
+
+Per le motivazioni in premessa esposte e a seguito dei pareri favorevoli espressi da tutti gli uffici competenti:
+
+    Di concedere alla Ditta [Ragione Sociale Esercente], C.F. [C.F.], P.IVA [P.IVA], con sede in [Indirizzo Sede Legale], l'Autorizzazione per l'installazione e la gestione di una esposizione pubblicitaria avente le caratteristiche descritte in premessa, da collocarsi presso l'immobile sito in [Indirizzo Intervento, es. Via Roma, n. 10].
+
+    L'autorizzazione &egrave; rilasciata con le seguenti prescrizioni vincolanti, il cui mancato rispetto comporter&agrave; la revoca del presente atto e l'applicazione delle sanzioni previste dalla normativa vigente:
+        L'esposizione dovr&agrave; essere realizzata e mantenuta nel pieno rispetto delle specifiche tecniche, dimensionali e cromatiche indicate nel progetto presentato e approvato.
+        L'illuminazione dovr&agrave; essere a basso impatto visivo e luce calda, direzionata unicamente sull'insegna, senza dispersione di flusso luminoso verso l'alto o verso l'esterno dell'area occupata dal manufatto (come da parere Soprintendenza).
+        Dovranno essere utilizzati materiali opachi e non riflettenti, in coerenza con il contesto architettonico e storico (come da parere Ufficio Urbanistica).
+        L'impianto dovr&agrave; essere mantenuto in perfetto stato di manutenzione, pulizia e decoro, provvedendo alla rimozione in caso di deterioramento o dismissione dell'attivit&agrave;.
+        L'autorizzazione non esonera da eventuali ulteriori permessi o comunicazioni a carico del titolare per l'installazione di impianti elettrici o altre opere pertinenziali.
+
+    L'efficacia del presente atto &egrave; subordinata al mantenimento del versamento annuale del Canone Unico Patrimoniale, la cui scadenza &egrave; fissata al [Giorno] [Mese] di ogni anno, nelle modalit&agrave; indicate dall'Ufficio Tributi. Il mancato o ritardato pagamento comporter&agrave; l'applicazione delle sanzioni previste dal Regolamento Comunale sul Canone Unico Patrimoniale.
+
+    La presente autorizzazione ha validit&agrave; fino al [Data, es. &ldquo;rimanere valida finch&eacute; sussistono le condizioni di fatto e di diritto, fatti salvi eventuali aggiornamenti normativi o modifiche al contesto urbanistico/paesaggistico&rdquo; oppure &ldquo;una durata di anni X, rinnovabile previa richiesta e nuova istruttoria&rdquo;].
+
+    Il soggetto autorizzato &egrave; responsabile di eventuali danni a terzi o al patrimonio pubblico derivanti dall'installazione o dalla manutenzione dell'esposizione.
+
+    Copia della presente Determinazione sar&agrave; trasmessa alla Polizia Locale per i controlli di competenza e all'Ufficio Tributi.
+
+IL DIRIGENTE DELL'AREA [Nome Area] [Firma]</div>
+</div>
+
+<!-- TAB 2: Diniego -->
+<div id="tab-diniego" class="tab-content">
+<h3>Determina di Diniego</h3>
+<div class="template-doc">DETERMINAZIONE DIRIGENZIALE N. [Numero Determinazione] DEL [Data]
+
+OGGETTO: Diniego di Autorizzazione per esposizione pubblicitaria in centro storico (vincolo architettonico e ZTL) &ndash; Ditta [Ragione Sociale Esercente].
+
+IL DIRIGENTE DELL'AREA [Nome Area, es. &ldquo;Tecnica/Urbanistica&rdquo;] (con i poteri di cui all'art. 107 del D.Lgs. 18 agosto 2000, n. 267)
+
+PREMESSO CHE:
+
+    In data [Data Istanza], la Ditta [Ragione Sociale Esercente], con sede in [Indirizzo Sede Legale], Via [Via], n. [Civico], Partita IVA [P.IVA], C.F. [C.F.], esercente attivit&agrave; commerciale di [Tipo Attivit&agrave;] presso l'immobile sito in [Indirizzo Intervento, es. Via Roma, n. 10], ha presentato istanza acquisita al Protocollo Comunale con n. [Numero Protocollo], per la concessione di autorizzazione all'installazione di una esposizione pubblicitaria di dimensioni superiori a 5 mq nel centro storico, sottoposto a vincolo architettonico e ricadente in zona a traffico limitato (ZTL).
+    L'esposizione pubblicitaria oggetto della richiesta consiste in [Breve descrizione della tipologia: es. &ldquo;una insegna a bandiera/targhetta luminosa/vetrina espositiva&rdquo;] delle dimensioni di cm [Lunghezza] x cm [Altezza], per una superficie complessiva di [Superficie in mq preciso] mq, da installare sulla facciata/all'interno della vetrina/su apposita struttura [specificare la collocazione] dell'edificio sito in [Indirizzo Intervento].
+
+RICHIAMATI: ([Elenco normativo come sopra])
+
+ACQUISITI I SEGUENTI PARERI OBBLIGATORI:
+
+    Parere negativo della Soprintendenza Archeologia, Belle Arti e Paesaggio per la Provincia di [Nome Provincia] / Ufficio Tutela Beni Culturali, prot. n. [Numero Protocollo] del [Data Parere], il quale, esaminato il progetto, ha espresso giudizio sfavorevole e vincolante all'installazione, in quanto [specificare la motivazione del diniego, es: &ldquo;l'impianto pubblicitario proposto, per le sue dimensioni eccessive e la scelta di materiali stridenti, altererebbe in modo significativo la percezione e l'integrit&agrave; del bene vincolato e del contesto storico di pregio, in contrasto con le finalit&agrave; di tutela stabilite dal D.Lgs. 42/2004&rdquo;].
+        [Potrebbero seguire gli esiti degli altri pareri, anche se positivi, ma quello negativo vincolante &egrave; sufficiente per il diniego]
+
+CONSIDERATO CHE:
+
+    Il parere della Soprintendenza Archeologia, Belle Arti e Paesaggio &egrave; vincolante ed insuperabile, ai sensi del D.Lgs. 42/2004 e ss.mm.ii.
+    La valutazione negativa da parte dell'organo preposto alla tutela dei beni culturali e del paesaggio preclude il rilascio dell'autorizzazione richiesta.
+
+DETERMINA
+
+Per le motivazioni in premessa esposte e a seguito del parere negativo vincolante espresso dalla Soprintendenza competente:
+
+    Di non accogliere l'istanza presentata dalla Ditta [Ragione Sociale Esercente], C.F. [C.F.], P.IVA [P.IVA], con sede in [Indirizzo Sede Legale], prot. n. [Numero Protocollo Istanza], per il rilascio dell'autorizzazione all'installazione di esposizione pubblicitaria in Via [Indirizzo Intervento].
+
+    Il presente provvedimento &egrave; impugnabile, entro 60 giorni dalla notifica, avanti al Tribunale Amministrativo Regionale di [Nome TAR], oppure, in via alternativa, con ricorso straordinario al Presidente della Repubblica entro 120 giorni dalla notifica.
+
+IL DIRIGENTE DELL'AREA [Nome Area] [Firma]</div>
+</div>
+
+<!-- TAB 3: Versione rivista -->
+<div id="tab-rev" class="tab-content">
+<h3>Determina di Autorizzazione &mdash; Versione rivista</h3>
+<p style="font-size:.88rem;color:var(--text-light);margin-bottom:1rem">Versione prodotta dopo la correzione del gruppo sul Canone Unico Patrimoniale (L. 160/2019, commi 816-836): il CUP comprende sia la componente pubblicitaria che l'occupazione di suolo pubblico.</p>
+<div class="template-doc">[INTESTAZIONE COMUNE]
+
+CITT&Agrave; DI [Nome Comune] UFFICIO CONCESSIONI
+
+DETERMINAZIONE DIRIGENZIALE N. [Numero Determinazione] DEL [Data]
+
+OGGETTO: Autorizzazione per esposizione pubblicitaria in centro storico (vincolo architettonico e ZTL) &ndash; Ditta [Ragione Sociale Esercente] &ndash; Art. 21 Regolamento Comunale per l'applicazione del Canone Unico Patrimoniale.
+
+IL DIRIGENTE DELL'AREA [Nome Area, es. &ldquo;Tecnica/Urbanistica&rdquo;] (con i poteri di cui all'art. 107 del D.Lgs. 18 agosto 2000, n. 267)
+
+PREMESSO CHE:
+
+    ... (invariato)
+
+RICHIAMATI:
+
+    ... (invariato, con aggiunta:)
+    La Legge 27 dicembre 2019, n. 160, art. 1, commi da 816 a 836 e ss.mm.ii., istitutiva del Canone Unico Patrimoniale;
+    Il Regolamento Comunale per l'applicazione del Canone Unico Patrimoniale di cui alla Legge n. 160/2019, cos&igrave; come modificato dalla Legge n. 160/2019, approvato con Delibera C.C. n. [Numero Delibera] del [Data Delibera];
+    ... (resto invariato)
+
+ACQUISITI I SEGUENTI PARERI OBBLIGATORI:
+
+    Parere favorevole dell'Ufficio Urbanistica / Edilizia Privata, prot. n. [Numero Protocollo] del [Data Parere], attestante la conformit&agrave; dell'impianto pubblicitario alle norme urbanistiche e edilizie vigenti e ai regolamenti comunali, con specifica prescrizione circa [eventuale prescrizione, es: &ldquo;l'utilizzo di materiali opachi e non riflettenti&rdquo;] che l'istante si &egrave; impegnato ad osservare.
+    Parere favorevole dalla Soprintendenza Archeologia, Belle Arti e Paesaggio per la Provincia di [Nome Provincia] / Ufficio Tutela Beni Culturali, prot. n. [Numero Protocollo] del [Data Parere], che, valutato il progetto in relazione al vincolo architettonico gravante sull'edificio e la collocazione in zona di pregio ambientale, ha espresso nulla osta all'installazione, condizionato alla prescrizione di [eventuale prescrizione, es: &ldquo;un sistema di illuminazione a basso impatto visivo e luce calda, direzionata unicamente sull'insegna, senza dispersione di flusso luminoso verso l'alto o verso l'esterno dell'area occupata dal manufatto&rdquo;].
+    Parere favorevole dall'Ufficio Traffico / Comando di Polizia Locale, prot. n. [Numero Protocollo] del [Data Parere], il quale ha verificato che l'installazione non comporta intralcio alla circolazione stradale o pedonale, n&eacute; pericoli per la pubblica incolumit&agrave;, e risulta compatibile con la disciplina della ZTL.
+    Parere dell'Ufficio Tributi / Servizio Entrate, prot. n. [Numero Protocollo] del [Data Parere], attestante il calcolo del Canone Unico Patrimoniale dovuto, che comprende sia la componente relativa all'occupazione di suolo pubblico che quella relativa all'esposizione pubblicitaria, per [Superficie in mq] mq per l'anno [Anno] pari a Euro [Importo in cifre] (Euro [Importo in lettere]/00), con indicazione delle modalit&agrave; di versamento.
+    Parere favorevole dell'Ufficio Patrimonio / Demanio, prot. n. [Numero Protocollo] del [Data Parere], che ha accertato la disponibilit&agrave; dell'area di installazione e la compatibilit&agrave; dell'opera con la gestione del bene comunale.
+
+CONSIDERATO ANCHE CHE:
+
+    ... (invariato)
+    L'istante ha provveduto al versamento del Canone Unico Patrimoniale, come da ricevuta/attestazione prot. n. [Numero Protocollo Ricevuta Pagamento] del [Data Pagamento].
+
+DETERMINA Per le motivazioni in premessa esposte e a seguito dei pareri favorevoli espressi da tutti gli uffici competenti:
+
+    Di concedere alla Ditta [Ragione Sociale Esercente], C.F. [C.F.], P.IVA [P.IVA], con sede in [Indirizzo Sede Legale], l'Autorizzazione per l'installazione e la gestione di una esposizione pubblicitaria avente le caratteristiche descritte in premessa, da collocarsi presso l'immobile sito in [Indirizzo Intervento, es. Via Roma, n. 10].
+
+    L'autorizzazione &egrave; rilasciata con le seguenti prescrizioni vincolanti, il cui mancato rispetto comporter&agrave; la revoca del presente atto e l'applicazione delle sanzioni previste dalla normativa vigente:
+        ... (invariato)
+
+    L'efficacia del presente atto &egrave; subordinata al mantenimento del versamento annuale del Canone Unico Patrimoniale, la cui scadenza &egrave; fissata al [Giorno] [Mese] di ogni anno, nelle modalit&agrave; indicate dall'Ufficio Tributi. Il mancato o ritardato pagamento comporter&agrave; l'applicazione delle sanzioni previste dal Regolamento Comunale sul Canone Unico Patrimoniale.
+
+    La presente autorizzazione ha validit&agrave; fino al [Data, es. &ldquo;rimanere valida finch&eacute; sussistono le condizioni di fatto e di diritto, fatti salvi eventuali aggiornamenti normativi o modifiche al contesto urbanistico/paesaggistico&rdquo; oppure &ldquo;una durata di anni X, rinnovabile previa richiesta e nuova istruttoria&rdquo;].
+
+    Il soggetto autorizzato &egrave; responsabile di eventuali danni a terzi o al patrimonio pubblico derivanti dall'installazione o dalla manutenzione dell'esposizione.
+
+    Copia della presente Determinazione sar&agrave; trasmessa alla Polizia Locale per i controlli di competenza e all'Ufficio Tributi.
+
+IL DIRIGENTE DELL'AREA [Nome Area] [Firma]</div>
+</div>
+
+</div><!-- /tabs -->
+
+</div><!-- /container -->
+
+<footer>
+<div class="container">
+<p>Gruppo 1 &mdash; Atti Amministrativi | Laboratorio A &mdash; AI-PACT | Livorno, 11 febbraio 2026</p>
+<p class="note">Restituzione grafica HTML realizzata in fase di valutazione/estrazione. Deliverable originale in formato testuale.</p>
+</div>
+</footer>
+
+<script>
+function switchTab(e,id){
+document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+e.target.classList.add('active');
+document.getElementById(id).classList.add('active');
+}
+</script>
+</body>
+</html>

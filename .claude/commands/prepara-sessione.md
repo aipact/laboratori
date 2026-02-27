@@ -75,7 +75,25 @@ Se l'xlsx non esiste o non è leggibile, cerca altri file nella cartella (CSV, T
 | **Valore didattico** | 25% | Mostra le capacità dell'IA in modo chiaro? Richiede vera intelligenza (analisi, sintesi, strategia)? |
 
 4. **Classifica le idee** e seleziona le migliori (tante quanti i gruppi)
-5. **Categorizza ogni idea** in una delle 4 aree di lavoro:
+5. **Assegna un nome a ogni gruppo** composto da due parti:
+   - **Archetipo**: uno degli 8 personaggi della lezione base (vedi tabella sotto), scelto per affinità tematica col problema del gruppo
+   - **Nome creativo**: un nome breve, evocativo e memorabile che descriva il problema/missione del gruppo
+   - Formato: **"Team [Archetipo] - [Nome Creativo]"** (es. "Team Galilei - I Previsori del Bilancio", "Team Dante - Gli Semplificatori")
+
+   | Archetipo | Concetto IA | Affinità tematica | Colore |
+   |-----------|-------------|-------------------|--------|
+   | **Galilei** | Analisi Predittiva | Progetti su dati, previsioni, KPI, statistiche | #3498db (blu) |
+   | **Machiavelli** | Alberi Decisionali | Progetti su regole, procedure, decisioni binarie, burocrazia | #e67e22 (arancione) |
+   | **Michelangelo** | Deep Learning | Progetti su classificazione, pattern, dati non strutturati | #27ae60 (verde) |
+   | **Dante** | LLM / Generazione testi | Progetti su scrittura, comunicazione, sintesi, traduzione | #9b59b6 (viola) |
+   | **Leonardo** | Agente Autonomo | Progetti su automazione, workflow, orchestrazione multi-step | #e74c3c (rosso) |
+   | **Ada Lovelace** | Visione / Input | Progetti su strategia, pianificazione, definizione obiettivi | #1abc9c (teal) |
+   | **Simone Weil** | Processo / Senso | Progetti su ottimizzazione del lavoro, riduzione fatica, dignità | #f39c12 (giallo) |
+   | **Mary Oliver** | Output / Cura | Progetti su servizi al cittadino, qualità, attenzione, verifica | #2c3e50 (antracite) |
+
+   **Regole di assegnazione**: scegli l'archetipo la cui affinità tematica è più vicina al problema del gruppo. Ogni archetipo può essere usato una sola volta. Se ci sono meno di 8 gruppi, usa solo quelli più pertinenti. Se un gruppo ha un tema davvero lontano da tutti gli archetipi, usa solo il nome creativo senza forzare un archetipo fuori contesto (es. "Gli Esploratori del Territorio" invece di "Team Galilei - Gli Esploratori del Territorio").
+
+6. **Categorizza ogni idea** in una delle 4 aree di lavoro:
    - **SOS Burocrazia** → Semplificare comunicazioni, atti, procedure
    - **Sfera di Cristallo** → Decisioni strategiche basate su dati
    - **Pompiere** → Gestione crisi, polemiche, comunicazione
@@ -140,8 +158,9 @@ Il file HTML DEVE essere ottimizzato per **proiezione in plenaria su schermo ori
 **2. Dashboard Gruppi (vista principale)** — Griglia di card, una per gruppo:
 ```
 ┌─────────────────────────┐
-│ 📊 GRUPPO 1             │
-│ Nome Tema               │
+│ 📊 Team Galilei         │
+│ "I Previsori del        │
+│  Bilancio"              │
 │ ─────────────────────── │
 │ 👤 Team Leader: Nome    │
 │ • Membro 1 (Ruolo)     │

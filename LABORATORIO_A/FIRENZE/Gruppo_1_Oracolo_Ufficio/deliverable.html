@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ CCNL Funzioni Locali 2022-2024 | Vigente 2026</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            line-height: 1.7;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f1f5f9;
+            min-height: 100vh;
+            scroll-behavior: smooth;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, rgba(15,23,42,0.95), rgba(30,41,59,0.95));
+            backdrop-filter: blur(20px);
+            padding: 2.5rem 2rem 1.5rem;
+            border-bottom: 4px solid #3b82f6;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        
+        .header h1 {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.8rem;
+            text-align: center;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(59,130,246,0.5);
+        }
+        
+        .ccnl-status {
+            text-align: center;
+            background: linear-gradient(90deg, #059669, #10b981);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(5,150,105,0.4);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 10px 30px rgba(5,150,105,0.4); }
+            50% { box-shadow: 0 10px 40px rgba(5,150,105,0.6); }
+        }
+        
+        .search-container {
+            max-width: 800px;
+            margin: 0 auto 2.5rem;
+        }
+        
+        .search-box {
+            position: relative;
+            display: flex;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 50px;
+            border: 2px solid rgba(255,255,255,0.2);
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .search-box:focus-within {
+            border-color: #3b82f6;
+            box-shadow: 0 20px 50px rgba(59,130,246,0.4);
+            transform: scale(1.02);
+        }
+        
+        #searchInput {
+            flex: 1;
+            padding: 20px 20px 20px 60px;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.15rem;
+            outline: none;
+        }
+        
+        #searchInput::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 22px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.3rem;
+            color: #94a3b8;
+        }
+        
+        .clear-btn {
+            background: #ef4444;
+            border: none;
+            color: white;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            margin-right: 10px;
+            display: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .clear-btn:hover { 
+            background: #dc2626;
+            transform: rotate(90deg) scale(1.1);
+        }
+        
+        .results-header {
+            max-width: 1000px;
+            margin: 0 auto 2rem;
+            padding: 0 2rem;
+        }
+        
+        .results-count {
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            color: white;
+            padding: 16px 30px;
+            border-radius: 20px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 15px 40px rgba(139,92,246,0.4);
+            display: none;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .results-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+            display: grid;
+            gap: 2rem;
+        }
+        
+        .faq-card {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(40px) scale(0.95);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .faq-card.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            animation: cardAppear 0.6s ease-out forwards;
+        }
+        
+        @keyframes cardAppear {
+            0% { opacity: 0; transform: translateY(40px) scale(0.95); }
+            50% { opacity: 0.7; transform: translateY(10px) scale(0.98); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        
+        .faq-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+            border-color: rgba(59,130,246,0.4);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+        
+        .article-ref {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        .question {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #f8fafc;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1.4;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .question:hover {
+            color: #3b82f6;
+            text-shadow: 0 0 20px rgba(59,130,246,0.5);
+        }
+        
+        .question::after {
+            content: "▼";
+            position: absolute;
+            right: 0;
+            top: 0;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .question.active::after {
+            transform: rotate(180deg);
+            color: #10b981;
+        }
+        
+        .answer {
+            display: none;
+            margin-top: 1.5rem;
+            padding: 0;
+            line-height: 1.8;
+            color: #e2e8f0;
+        }
+        
+        .answer.visible {
+            display: block;
+            animation: answerSlide 0.4s ease-out;
+        }
+        
+        @keyframes answerSlide {
+            from { opacity: 0; max-height: 0; }
+            to { opacity: 1; max-height: 1000px; }
+        }
+        
+        .highlight {
+            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+            color: #1e293b;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-weight: 700;
+            box-shadow: 0 2px 10px rgba(251,191,36,0.5);
+            animation: highlightPulse 1s ease-out;
+        }
+        
+        @keyframes highlightPulse {
+            0% { box-shadow: 0 2px 10px rgba(251,191,36,0.5); }
+            50% { box-shadow: 0 4px 20px rgba(251,191,36,0.8); }
+            100% { box-shadow: 0 2px 10px rgba(251,191,36,0.5); }
+        }
+        
+        .official-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 700;
+            margin-top: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 25px rgba(16,185,129,0.4);
+        }
+        
+        .official-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(16,185,129,0.6);
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .results-grid { padding: 0 1rem 2rem; grid-template-columns: 1fr; }
+            .faq-card { padding: 2rem 1.5rem; }
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 6rem 2rem;
+            color: #94a3b8;
+        }
+        
+        .empty-state h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #64748b;
+        }
+        
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .suggestion-tag {
+            background: rgba(255,255,255,0.1);
+            color: #cbd5e1;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .suggestion-tag:hover {
+            background: rgba(59,130,246,0.3);
+            color: white;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>📋 CCNL FUNZIONI LOCALI 2022-2024</h1>
+        <div class="ccnl-status">
+            ✅ VIGENTE AL 26 FEBBRAIO 2026 - Firmato ARAN 23/02/2026
+        </div>
+        
+        <div class="search-container">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Cerca nel CCNL vigente (ferie, orario 4 giorni, aumenti €136, progressioni...)">
+                <button class="clear-btn" id="clearBtn">✕</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="results-header">
+        <div id="resultsCount" class="results-count"></div>
+    </div>
+
+    <main class="results-grid" id="resultsGrid">
+        <div class="faq-card" data-keywords="aumenti,retribuzione,stipendio,136,140,5.78%" data-article="Art. Economico">
+            <div class="card-header">
+                <div class="article-ref">€136,76 MENSILI</div>
+            </div>
+            <div class="question" onclick="toggleAnswer(this)">Quali sono gli aumenti retributivi del CCNL 2022-2024?</div>
+            <div class="answer">
+                <p><strong>Incrementi medi lordi:</strong> €136,76/mese per 13 mensilità (+5,78% monte salari 2021). Con trattamento accessorio: ~€140/mese.</p>
+                <a href="https://www.aranagenzia.it/wp-content/uploads/2026/02/CCNL-Comparto-2022-2024-siglato-23-02-26.pdf" target="_blank" class="official-link">
+                    📄 PDF Ufficiale ARAN <span>→</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="faq-card" data-keywords="orario 4 giorni,orario flessibile,sperimentale,36 ore,quattro giorni" data-article="Art. 20">
+            <div class="card-header">
+                <div class="article-ref">ORARIO 4 GIORNI</div>
+            </div>
+            <div class="question" onclick="toggleAnswer(this)">È possibile lavorare 36 ore su 4 giorni?</div>
+            <div class="answer">
+                <p><strong>Novità Principale:</strong> Articolazione sperimentale/volontaria delle 36 ore settimanali su 4 giorni. Base volontaria per tutto il personale.</p>
+            </div>
+        </div>
+
+        <div class="faq-card" data-keywords="buono pasto,smart working,lavoro agile,ticket restaurant" data-article="Art. 21">
+            <div class="card-header">
+                <div class="article-ref">SMART WORKING</div>
+            </div>
+            <div class="question" onclick="toggleAnswer(this)">Buono pasto anche in smart working?</div>
+            <div class="answer">
+                <p><strong>SÌ:</strong> Riconosciuto il buono pasto per il personale in lavoro agile (smart working).</p>
+            </div>
+        </div>
+
+        <div class="faq-card" data-keywords="progressioni,aree,proroga,31 dicembre 2026" data-article="Art. 22">
+            <div class="card-header">
+                <div class="article-ref">PROGRESSIONI</div>
+            </div>
+            <div class="question" onclick="toggleAnswer(this)">Quali novità sulle progressioni di carriera?</div>
+            <div class="answer">
+                <p><strong>Proroga:</strong> Procedure in deroga per progressioni tra aree estese al 31 dicembre 2026.</p>
+            </div>
+        </div>
+
+        <div class="faq-card" data-keywords="ferie,giorni ferie,30 giorni" data-article="Art. 15">
+            <div class="card-header">
+                <div class="article-ref">FERIE</div>
+            </div>
+            <div class="question" onclick="toggleAnswer(this)">Quanti giorni di ferie spettano?</div>
+            <div class="answer">
+                <p><strong>30 giorni lavorativi annui</strong>. Accumulo max 3 anni, fruizione entro 30/06 anno successivo (confermato CCNL 2022-2024).</p>
+            </div>
+        </div>
+
+        <div class="faq-card" data-keywords="permessi,lutto,matrimonio,esami,donazione sangue" data-article="Art. 16">
+            <div class="card-header">
+                <div class="article-ref">PERMESSI</div>
+            </div>
+            <div class="question" onclick="toggleAnswer(this)">Quali permessi retribuiti sono previsti?</div>
+            <div class="answer">
+                <p><strong>Art. 16 (confermato):</strong> Lutto 3gg, Matrimonio 15gg, Esami max 15gg/anno, Donazione sangue 1gg/anno, Visite mediche max 3gg/anno.</p>
+            </div>
+        </div>
+
+        <div class="faq-card" data-keywords="sanzioni disciplinari,licenziamento,sospensione" data-article="Art. 24">
+            <div class="card-header">
+                <div class="article-ref">DISCIPLINA</div>
+            </div>
+            <div class="question" onclick="toggleAnswer(this)">Quali sanzioni disciplinari?</div>
+            <div class="answer">
+                <p><strong>Art. 24 (confermato):</strong> Richiamo, Multa (max 4h), Sospensione (max 15gg), Demansionamento, Licenziamento.</p>
+            </div>
+        </div>
+
+        <div class="faq-card" data-keywords="RSU,sindacati,rappresentanze" data-article="Art. 5">
+            <div class="card-header">
+                <div class="article-ref">RSU</div>
+            </div>
+            <div class="question" onclick="toggleAnswer(this)">Ruolo delle RSU?</div>
+            <div class="answer">
+                <p><strong>Art. 5:</strong> Rappresentanza lavoratori nelle relazioni sindacali e contrattazione integrativa (confermato vigente).</p>
+            </div>
+        </div>
+
+        <div class="faq-card" data-keywords="pdf,documento ufficiale,testo ccnl,scarica" data-article="TESTI UFFICIALI">
+            <div class="card-header">
+                <div class="article-ref">📄 PDF UFFICIALI</div>
+            </div>
+            <div class="question" onclick="toggleAnswer(this)">Dove scaricare i testi ufficiali CCNL 2022-2024?</div>
+            <div class="answer">
+                <div style="display: grid; gap: 1rem; margin-top: 1rem;">
+                    <a href="https://www.aranagenzia.it/wp-content/uploads/2026/02/CCNL-Comparto-2022-2024-siglato-23-02-26.pdf" target="_blank" class="official-link">
+                        📄 ARAN Ufficiale Comparto
+                    </a>
+                    <a href="https://www.aranagenzia.it/wp-content/uploads/2026/02/CCNL-Area-FL-2022-2024-firmato.pdf" target="_blank" class="official-link">
+                        📄 ARAN Ufficiale Area FL
+                    </a>
+                    <a href="https://cislfp.it/2026/02/23/nuovo-ccnl-funzioni-locali-aumenti-arretrati/" target="_blank" class="official-link">
+                        📊 Tabelle Aumenti CISL FP
+                    </a>
+                </div>
+                <p style="margin-top: 1.5rem; font-size: 0.95rem; color: #94a3b8;">
+                    Fonti: Firmato ARAN 23/02/2026
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <div id="emptyState" class="empty-state" style="display: none;">
+        <h2>🔍 Nessun Risultato Trovato</h2>
+        <p>Prova una di queste parole chiave dal CCNL vigente:</p>
+        <div class="suggestions">
+            <span class="suggestion-tag" onclick="setSearch('aumenti')">aumenti</span>
+            <span class="suggestion-tag" onclick="setSearch('orario 4 giorni')">4 giorni</span>
+            <span class="suggestion-tag" onclick="setSearch('ferie')">ferie</span>
+            <span class="suggestion-tag" onclick="setSearch('progressioni')">progressioni</span>
+            <span class="suggestion-tag" onclick="setSearch('smart working')">smart working</span>
+            <span class="suggestion-tag" onclick="setSearch('136')">€136</span>
+        </div>
+    </div>
+
+    <script>
+        const cards = document.querySelectorAll('.faq-card');
+        let currentResults = [];
+
+        function toggleAnswer(q) {
+            const answer = q.nextElementSibling;
+            const isOpen = answer.classList.contains('visible');
+            
+            cards.forEach(card => {
+                const otherQ = card.querySelector('.question');
+                const otherA = otherQ?.nextElementSibling;
+                if (otherA && otherA !== answer) {
+                    otherA.classList.remove('visible');
+                    otherQ.classList.remove('active');
+                }
+            });
+            
+            if (isOpen) {
+                answer.classList.remove('visible');
+                q.classList.remove('active');
+            } else {
+                answer.classList.add('visible');
+                q.classList.add('active');
+            }
+        }
+
+        function performSearch(query) {
+            const q = query.toLowerCase().trim();
+            currentResults = [];
+            
+            cards.forEach(card => {
+                const keywords = card.dataset.keywords.toLowerCase();
+                const question = card.querySelector('.question').textContent.toLowerCase();
+                const article = card.dataset.article.toLowerCase();
+                
+                let score = 0;
+                if (keywords.includes(q)) score += 4;
+                if (question.includes(q)) score += 3;
+                if (article.includes(q)) score += 2;
+                
+                if (score > 0) {
+                    currentResults.push({ card, score });
+                }
+            });
+            
+            currentResults.sort((a, b) => b.score - a.score);
+            displayResults();
+        }
+
+        function displayResults() {
+            const resultsCount = document.getElementById('resultsCount');
+            const emptyState = document.getElementById('emptyState');
+            
+            cards.forEach(card => {
+                card.classList.remove('visible');
+                card.style.display = 'none';
+            });
+            
+            if (currentResults.length === 0) {
+                resultsCount.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            resultsCount.style.display = 'block';
+            resultsCount.innerHTML = `✨ ${currentResults.length} risultato/i per "${document.getElementById('searchInput').value}" | <strong>CCNL 2022-2024 VIGENTE</strong>`;
+            emptyState.style.display = 'none';
+            
+            currentResults.slice(0, 15).forEach((result, i) => {
+                const card = result.card;
+                card.style.display = 'block';
+                setTimeout(() => card.classList.add('visible'), i * 100);
+            });
+        }
+
+        function setSearch(term) {
+            document.getElementById('searchInput').value = term;
+            performSearch(term);
+        }
+
+        document.getElementById('searchInput').addEventListener('input', e => {
+            const query = e.target.value;
+            document.getElementById('clearBtn').style.display = query ? 'block' : 'none';
+            if (query.length > 1) performSearch(query);
+            else showAll();
+        });
+
+        document.getElementById('clearBtn').onclick = () => {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('clearBtn').style.display = 'none';
+            showAll();
+        };
+
+        function showAll() {
+            document.getElementById('resultsCount').style.display = 'none';
+            document.getElementById('emptyState').style.display = 'none';
+            cards.forEach(card => {
+                card.style.display = 'block';
+                card.classList.remove('visible'); 
+                setTimeout(() => card.classList.add('visible'), 50); 
+            });
+        }
+    </script>
+</body>
+</html>

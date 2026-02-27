@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Classifica Sessione Firenze | AI-PACT</title>
+<style>
+:root{--primary:#1a3a5c;--primary-light:#2c5f8a;--accent:#e67e22;--success:#27ae60;--warning:#f39c12;--danger:#e74c3c;--bg:#f0f4f8;--card-bg:#fff;--text:#2c3e50;--text-light:#7f8c8d;--border:#e1e8ed;--gold:#f1c40f;--silver:#bdc3c7;--bronze:#cd6133}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;line-height:1.7;color:var(--text);background:var(--bg)}
+.container{max-width:960px;margin:0 auto;padding:0 20px}
+header{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;padding:3rem 0;margin-bottom:2rem;text-align:center}
+header h1{font-size:2rem;font-weight:800}
+header .subtitle{opacity:.85;font-size:1.1rem;margin-top:.5rem}
+.header-meta{display:flex;gap:1rem;margin-top:1rem;justify-content:center;flex-wrap:wrap}
+.header-badge{background:rgba(255,255,255,.15);padding:6px 14px;border-radius:8px;font-size:.85rem}
+.card{background:var(--card-bg);border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,.08);padding:30px;margin-bottom:25px;border:1px solid var(--border)}
+.card h2{font-size:1.3rem;font-weight:600;color:var(--primary);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:2px solid var(--border)}
+
+/* Podio */
+.podio{display:flex;align-items:flex-end;justify-content:center;gap:20px;padding:2rem 0 1rem;flex-wrap:wrap}
+.podio-item{text-align:center;border-radius:12px;padding:20px 15px;position:relative;min-width:160px;flex:1;max-width:220px}
+.podio-item.gold{background:linear-gradient(135deg,#fff9e6,#fef3c7);border:2px solid var(--gold);order:2}
+.podio-item.silver{background:linear-gradient(135deg,#f8f9fa,#ecf0f1);border:2px solid var(--silver);order:1}
+.podio-item.bronze{background:linear-gradient(135deg,#fdf2e9,#fdebd0);border:2px solid var(--bronze);order:3}
+.podio-position{font-size:2.5rem;font-weight:800;line-height:1}
+.podio-position.p1{color:var(--gold)}
+.podio-position.p2{color:var(--silver)}
+.podio-position.p3{color:var(--bronze)}
+.podio-team{font-weight:700;font-size:1rem;margin:.5rem 0 .2rem;color:var(--primary)}
+.podio-project{font-size:.85rem;color:var(--text-light)}
+.podio-score{font-size:1.8rem;font-weight:800;margin-top:.5rem}
+.podio-score.s1{color:#d4a017}
+.podio-score.s2{color:#7f8c8d}
+.podio-score.s3{color:var(--bronze)}
+.podio-bar{height:6px;border-radius:3px;margin-top:8px}
+.podio-bar.b1{background:var(--gold)}
+.podio-bar.b2{background:var(--silver)}
+.podio-bar.b3{background:var(--bronze)}
+.podio-item a{text-decoration:none;color:inherit}
+.podio-item a:hover .podio-project{text-decoration:underline}
+tbody td a{color:var(--primary);text-decoration:none;font-weight:600}
+tbody td a:hover{text-decoration:underline;color:var(--accent)}
+
+/* Classifica completa */
+table{width:100%;border-collapse:collapse}
+thead th{background:var(--primary);color:#fff;padding:12px 15px;text-align:left;font-weight:600;font-size:.9rem}
+tbody td{padding:12px 15px;border-bottom:1px solid var(--border);font-size:.9rem}
+tbody tr:nth-child(even){background:#f8fafc}
+tbody tr:hover{background:#edf2f7}
+.rank-cell{font-weight:800;font-size:1.1rem;width:40px;text-align:center}
+.rank-1{color:var(--gold)}
+.rank-2{color:var(--silver)}
+.rank-3{color:var(--bronze)}
+.rank-4,.rank-5{color:var(--text-light)}
+.score-bar{background:#e8ecf1;border-radius:10px;height:22px;position:relative;overflow:hidden;min-width:80px}
+.score-bar-fill{height:100%;border-radius:10px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px}
+.score-bar-fill span{font-size:.7rem;font-weight:700;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.3)}
+.score-high{background:linear-gradient(90deg,#2ecc71,#27ae60)}
+.score-mid{background:linear-gradient(90deg,#f39c12,#e67e22)}
+.score-low{background:linear-gradient(90deg,#e74c3c,#c0392b)}
+
+/* Radar / Confronto criterio */
+.criteria-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:1rem}
+.criteria-col{text-align:center}
+.criteria-label{font-size:.75rem;font-weight:600;color:var(--primary);margin-bottom:8px;min-height:36px;display:flex;align-items:center;justify-content:center}
+.criteria-bar-v{display:flex;flex-direction:column;gap:4px}
+.criteria-entry{display:flex;align-items:center;gap:6px;font-size:.72rem}
+.criteria-entry .bar{flex:1;height:14px;border-radius:7px;background:#e8ecf1;overflow:hidden}
+.criteria-entry .bar-fill{height:100%;border-radius:7px}
+.criteria-entry .val{font-weight:700;min-width:24px;text-align:right}
+
+/* Menzioni */
+.mention-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px}
+.mention-card{padding:15px;border-radius:10px;border-left:4px solid;background:#f8fafc}
+.mention-card.m-gold{border-left-color:var(--gold)}
+.mention-card.m-green{border-left-color:var(--success)}
+.mention-card.m-blue{border-left-color:#3498db}
+.mention-card.m-orange{border-left-color:var(--accent)}
+.mention-card.m-purple{border-left-color:#9b59b6}
+.mention-title{font-weight:700;font-size:.9rem;margin-bottom:4px}
+.mention-team{font-size:.8rem;color:var(--text-light)}
+.mention-desc{font-size:.85rem;margin-top:6px}
+
+/* Winner */
+.winner-card{background:linear-gradient(135deg,#fff9e6,#fef3c7);border:2px solid var(--gold);text-align:center;padding:2.5rem}
+.winner-card h2{border-bottom-color:var(--gold)}
+.winner-trophy{font-size:3rem;margin-bottom:.5rem}
+.winner-name{font-size:1.5rem;font-weight:800;color:var(--primary)}
+.winner-project{font-size:1rem;color:var(--text-light);margin:.3rem 0}
+.winner-score{font-size:2.5rem;font-weight:800;color:#d4a017;margin:.5rem 0}
+.winner-motivation{font-size:.95rem;max-width:600px;margin:1rem auto 0;line-height:1.6}
+
+/* Analisi */
+.analysis-section{margin-top:1rem}
+.analysis-section h3{font-size:1.05rem;font-weight:600;color:var(--primary);margin-bottom:.8rem}
+.analysis-section p,.analysis-section li{font-size:.92rem;line-height:1.7}
+.analysis-section ul{padding-left:1.2rem;margin-bottom:1rem}
+.analysis-section li{margin-bottom:.4rem}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:1rem 0}
+.stat-box{background:#f8fafc;border-radius:10px;padding:15px;text-align:center;border:1px solid var(--border)}
+.stat-value{font-size:1.6rem;font-weight:800;color:var(--primary)}
+.stat-label{font-size:.75rem;color:var(--text-light);margin-top:4px}
+
+footer{background:var(--primary);color:#fff;text-align:center;padding:1.5rem;margin-top:2rem;font-size:.9rem;opacity:.9}
+@media(max-width:768px){header h1{font-size:1.4rem}.card{padding:20px}.podio{flex-direction:column;align-items:center}.podio-item{order:unset!important}.criteria-grid{grid-template-columns:1fr}body{font-size:.9rem}}
+@media print{body{background:#fff}.card{box-shadow:none;border:1px solid #ddd;break-inside:avoid}header,footer{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<header>
+<div class="container">
+<h1>Classifica Sessione &mdash; Firenze</h1>
+<p class="subtitle">Laboratorio A &middot; 5 Gruppi &middot; 22 Partecipanti</p>
+<div class="header-meta">
+<span class="header-badge">Firenze</span>
+<span class="header-badge">Lab: 26 febbraio 2026</span>
+<span class="header-badge">Valutazione: 27 febbraio 2026</span>
+</div>
+</div>
+</header>
+
+<div class="container">
+
+<!-- PODIO -->
+<div class="card">
+<h2>Podio</h2>
+<div class="podio">
+<a href="Gruppo_2_Postino_Intelligente/deliverable.html" class="podio-item silver">
+<div class="podio-position p2">2&deg;</div>
+<div class="podio-team">Team Leonardo</div>
+<div class="podio-project">Il Postino Intelligente</div>
+<div class="podio-score s2">7.9</div>
+<div class="podio-bar b2"></div>
+</a>
+<a href="Gruppo_4_Cantieri_Trasparenti/deliverable.html" class="podio-item gold">
+<div class="podio-position p1">1&deg;</div>
+<div class="podio-team">Team Mary Oliver</div>
+<div class="podio-project">I Cantieri Trasparenti</div>
+<div class="podio-score s1">8.0</div>
+<div class="podio-bar b1"></div>
+</a>
+<a href="Gruppo_1_Oracolo_Ufficio/deliverable.html" class="podio-item bronze">
+<div class="podio-position p3">3&deg;</div>
+<div class="podio-team">Team Dante</div>
+<div class="podio-project">L'Oracolo dell'Ufficio</div>
+<div class="podio-score s3">7.8</div>
+<div class="podio-bar b3"></div>
+</a>
+</div>
+</div>
+
+<!-- CLASSIFICA COMPLETA -->
+<div class="card">
+<h2>Classifica Completa</h2>
+<table>
+<thead><tr><th>#</th><th>Gruppo</th><th>Progetto</th><th>Punteggio</th><th style="min-width:120px">Barra</th></tr></thead>
+<tbody>
+<tr>
+<td class="rank-cell rank-1">1</td>
+<td><strong>Team Mary Oliver</strong><br><small>Gruppo 4</small></td>
+<td><a href="Gruppo_4_Cantieri_Trasparenti/deliverable.html">I Cantieri Trasparenti</a></td>
+<td><strong>8.0</strong></td>
+<td><div class="score-bar"><div class="score-bar-fill score-high" style="width:80%"><span>8.0</span></div></div></td>
+</tr>
+<tr>
+<td class="rank-cell rank-2">2</td>
+<td><strong>Team Leonardo</strong><br><small>Gruppo 2</small></td>
+<td><a href="Gruppo_2_Postino_Intelligente/deliverable.html">Il Postino Intelligente</a></td>
+<td><strong>7.9</strong></td>
+<td><div class="score-bar"><div class="score-bar-fill score-mid" style="width:79%"><span>7.9</span></div></div></td>
+</tr>
+<tr>
+<td class="rank-cell rank-3">3</td>
+<td><strong>Team Dante</strong><br><small>Gruppo 1</small></td>
+<td><a href="Gruppo_1_Oracolo_Ufficio/deliverable.html">L'Oracolo dell'Ufficio</a></td>
+<td><strong>7.8</strong></td>
+<td><div class="score-bar"><div class="score-bar-fill score-mid" style="width:78%"><span>7.8</span></div></div></td>
+</tr>
+<tr>
+<td class="rank-cell rank-4">4</td>
+<td><strong>Team Machiavelli</strong><br><small>Gruppo 3</small></td>
+<td><a href="Gruppo_3_Acchiappabug/deliverable.php">Gli Acchiappabug</a></td>
+<td><strong>7.4</strong></td>
+<td><div class="score-bar"><div class="score-bar-fill score-mid" style="width:74%"><span>7.4</span></div></div></td>
+</tr>
+<tr>
+<td class="rank-cell rank-4">4</td>
+<td><strong>Team Michelangelo</strong><br><small>Gruppo 5</small></td>
+<td><a href="Gruppo_5_Smistatore_Civico/deliverable.html">Lo Smistatore Civico</a></td>
+<td><strong>7.4</strong></td>
+<td><div class="score-bar"><div class="score-bar-fill score-mid" style="width:74%"><span>7.4</span></div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<!-- CONFRONTO PER CRITERIO -->
+<div class="card">
+<h2>Confronto per Criterio</h2>
+<div class="criteria-grid">
+<div class="criteria-col">
+<div class="criteria-label">Completezza analisi</div>
+<div class="criteria-bar-v">
+<div class="criteria-entry"><span class="val">8.5</span><div class="bar"><div class="bar-fill score-high" style="width:85%"></div></div><small>G4</small></div>
+<div class="criteria-entry"><span class="val">8.0</span><div class="bar"><div class="bar-fill score-high" style="width:80%"></div></div><small>G1</small></div>
+<div class="criteria-entry"><span class="val">8.0</span><div class="bar"><div class="bar-fill score-high" style="width:80%"></div></div><small>G2</small></div>
+<div class="criteria-entry"><span class="val">7.5</span><div class="bar"><div class="bar-fill score-mid" style="width:75%"></div></div><small>G3</small></div>
+<div class="criteria-entry"><span class="val">7.5</span><div class="bar"><div class="bar-fill score-mid" style="width:75%"></div></div><small>G5</small></div>
+</div>
+</div>
+<div class="criteria-col">
+<div class="criteria-label">Qualit&agrave; soluzione</div>
+<div class="criteria-bar-v">
+<div class="criteria-entry"><span class="val">8.0</span><div class="bar"><div class="bar-fill score-high" style="width:80%"></div></div><small>G1</small></div>
+<div class="criteria-entry"><span class="val">8.0</span><div class="bar"><div class="bar-fill score-high" style="width:80%"></div></div><small>G2</small></div>
+<div class="criteria-entry"><span class="val">8.0</span><div class="bar"><div class="bar-fill score-high" style="width:80%"></div></div><small>G4</small></div>
+<div class="criteria-entry"><span class="val">7.5</span><div class="bar"><div class="bar-fill score-mid" style="width:75%"></div></div><small>G3</small></div>
+<div class="criteria-entry"><span class="val">7.5</span><div class="bar"><div class="bar-fill score-mid" style="width:75%"></div></div><small>G5</small></div>
+</div>
+</div>
+<div class="criteria-col">
+<div class="criteria-label">Innovativit&agrave; e uso IA</div>
+<div class="criteria-bar-v">
+<div class="criteria-entry"><span class="val">8.0</span><div class="bar"><div class="bar-fill score-high" style="width:80%"></div></div><small>G2</small></div>
+<div class="criteria-entry"><span class="val">7.5</span><div class="bar"><div class="bar-fill score-mid" style="width:75%"></div></div><small>G1</small></div>
+<div class="criteria-entry"><span class="val">7.5</span><div class="bar"><div class="bar-fill score-mid" style="width:75%"></div></div><small>G4</small></div>
+<div class="criteria-entry"><span class="val">7.0</span><div class="bar"><div class="bar-fill score-mid" style="width:70%"></div></div><small>G3</small></div>
+<div class="criteria-entry"><span class="val">6.5</span><div class="bar"><div class="bar-fill score-mid" style="width:65%"></div></div><small>G5</small></div>
+</div>
+</div>
+<div class="criteria-col">
+<div class="criteria-label">Presentabilit&agrave; report</div>
+<div class="criteria-bar-v">
+<div class="criteria-entry"><span class="val">8.0</span><div class="bar"><div class="bar-fill score-high" style="width:80%"></div></div><small>G4</small></div>
+<div class="criteria-entry"><span class="val">7.5</span><div class="bar"><div class="bar-fill score-mid" style="width:75%"></div></div><small>G2</small></div>
+<div class="criteria-entry"><span class="val">7.5</span><div class="bar"><div class="bar-fill score-mid" style="width:75%"></div></div><small>G5</small></div>
+<div class="criteria-entry"><span class="val">7.0</span><div class="bar"><div class="bar-fill score-mid" style="width:70%"></div></div><small>G1</small></div>
+<div class="criteria-entry"><span class="val">7.0</span><div class="bar"><div class="bar-fill score-mid" style="width:70%"></div></div><small>G3</small></div>
+</div>
+</div>
+<div class="criteria-col">
+<div class="criteria-label">Impatto sulla PA</div>
+<div class="criteria-bar-v">
+<div class="criteria-entry"><span class="val">8.5</span><div class="bar"><div class="bar-fill score-high" style="width:85%"></div></div><small>G1</small></div>
+<div class="criteria-entry"><span class="val">8.5</span><div class="bar"><div class="bar-fill score-high" style="width:85%"></div></div><small>G2</small></div>
+<div class="criteria-entry"><span class="val">8.0</span><div class="bar"><div class="bar-fill score-high" style="width:80%"></div></div><small>G3</small></div>
+<div class="criteria-entry"><span class="val">8.0</span><div class="bar"><div class="bar-fill score-high" style="width:80%"></div></div><small>G4</small></div>
+<div class="criteria-entry"><span class="val">8.0</span><div class="bar"><div class="bar-fill score-high" style="width:80%"></div></div><small>G5</small></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- STATISTICHE SESSIONE -->
+<div class="card">
+<h2>Statistiche della Sessione</h2>
+<div class="stat-grid">
+<div class="stat-box">
+<div class="stat-value">7.70</div>
+<div class="stat-label">Media sessione</div>
+</div>
+<div class="stat-box">
+<div class="stat-value">8.0</div>
+<div class="stat-label">Voto massimo</div>
+</div>
+<div class="stat-box">
+<div class="stat-value">7.4</div>
+<div class="stat-label">Voto minimo</div>
+</div>
+<div class="stat-box">
+<div class="stat-value">0.6</div>
+<div class="stat-label">Range</div>
+</div>
+<div class="stat-box">
+<div class="stat-value">7.8</div>
+<div class="stat-label">Mediana</div>
+</div>
+<div class="stat-box">
+<div class="stat-value">3/5</div>
+<div class="stat-label">Sopra il 7.5</div>
+</div>
+</div>
+</div>
+
+<!-- VINCITORE -->
+<div class="card winner-card">
+<h2>Vincitore della Sessione</h2>
+<div class="winner-trophy">&#127942;</div>
+<div class="winner-name">Team Mary Oliver &mdash; Gruppo 4</div>
+<div class="winner-project">I Cantieri Trasparenti</div>
+<div class="winner-score">8.0 / 10</div>
+<p class="winner-motivation">Il Team Mary Oliver si distingue per la <strong>mappatura stakeholder pi&ugrave; completa della sessione</strong> (12 categorie), un'<strong>iterazione profonda a 8 cicli</strong> che include una revisione critica autonoma del proprio lavoro, e un'<strong>analisi GDPR approfondita</strong> rara in un laboratorio di 90 minuti. Il deliverable HTML &egrave; autonomo e immediatamente pubblicabile. Un lavoro maturo, strutturato e consapevole del contesto istituzionale.</p>
+</div>
+
+<!-- MENZIONI SPECIALI -->
+<div class="card">
+<h2>Menzioni Speciali</h2>
+<div class="mention-grid">
+<div class="mention-card m-green">
+<div class="mention-title">Miglior Impatto sulla PA</div>
+<div class="mention-team">Team Dante &amp; Team Leonardo (8.5)</div>
+<div class="mention-desc">Entrambi i team hanno identificato problemi con il massimo potenziale di impatto trasformativo sulla PA: il protocollo automatizzato e la knowledge base normativa.</div>
+</div>
+<div class="mention-card m-blue">
+<div class="mention-title">Miglior Uso dell'IA</div>
+<div class="mention-team">Team Leonardo (8.0)</div>
+<div class="mention-desc">Pipeline a 4 fasi (OCR+NLP, classificazione ML, assegnazione predittiva, feedback loop) con system prompt professionale e KPI PIAO triennali.</div>
+</div>
+<div class="mention-card m-orange">
+<div class="mention-title">Miglior Analisi di Contesto</div>
+<div class="mention-team">Team Mary Oliver (8.5)</div>
+<div class="mention-desc">12 categorie di stakeholder, registri comunicativi per canale, conformit&agrave; GDPR con citazione Art. 6.1.e e DPIA &mdash; il contesto pi&ugrave; ricco della sessione.</div>
+</div>
+<div class="mention-card m-purple">
+<div class="mention-title">Miglior Metariflessione</div>
+<div class="mention-team">Team Mary Oliver</div>
+<div class="mention-desc">Unico team ad aver chiesto all'IA di individuare i punti deboli del proprio lavoro &mdash; un momento di revisione critica autonoma che dimostra maturit&agrave; metodologica.</div>
+</div>
+<div class="mention-card m-gold">
+<div class="mention-title">Miglior Lavoro di Squadra</div>
+<div class="mention-team">Team Machiavelli</div>
+<div class="mention-desc">Discussione tecnica costruttiva tra 5 professionisti CED che ha prodotto un'analisi del problema radicata nell'esperienza quotidiana &mdash; il confronto tra pari come valore aggiunto.</div>
+</div>
+</div>
+</div>
+
+<!-- ANALISI COMPARATIVA -->
+<div class="card">
+<h2>Analisi Comparativa</h2>
+<div class="analysis-section">
+<h3>Pattern emersi dalla sessione</h3>
+<ul>
+<li><strong>Iterazione = qualit&agrave;:</strong> I team con pi&ugrave; cicli di interazione con l'IA (Mary Oliver: 8 cicli, Dante: multi-modello, Leonardo: system prompt strutturato) hanno ottenuto i risultati migliori nel deliverable finale.</li>
+<li><strong>La discussione tra pari ha valore:</strong> Il Team Machiavelli ha investito molto tempo in un confronto tecnico costruttivo tra professionisti CED. Questo ha ridotto il tempo per iterare con l'IA, ma ha prodotto un'analisi del problema solida e radicata nell'esperienza reale.</li>
+<li><strong>Il dominio &egrave; forte, l'automazione inizia a emergere:</strong> Tutti i team hanno identificato problemi reali e rilevanti per la PA. Il Team Dante ha fatto un passo avanti producendo un prototipo funzionante (FAQ interattiva con ricerca e scoring), dimostrando che &egrave; possibile passare dall'analisi a un deliverable operativo anche in 90 minuti.</li>
+<li><strong>Impatto sulla PA uniformemente alto:</strong> Il criterio con la media pi&ugrave; alta (8.2) &mdash; i temi scelti dai partecipanti sono genuinamente rilevanti per la PA locale.</li>
+</ul>
+
+<h3>Distribuzione dei punteggi</h3>
+<p>La sessione mostra una <strong>distribuzione compatta e omogenea</strong>: tutti i gruppi si collocano tra 7.4 e 8.0, con un range di soli 0.6 punti. Questo indica un livello di competenza e impegno uniformemente alto tra tutti i partecipanti, con differenze legate pi&ugrave; all'approccio metodologico che alla qualit&agrave; del lavoro di fondo.</p>
+
+<h3>Raccomandazioni per la prossima sessione</h3>
+<ul>
+<li><strong>Enfatizzare l'iterazione:</strong> Mostrare ai partecipanti il valore del multi-turn &mdash; il salto qualitativo tra 1 prompt e 8 cicli &egrave; evidente nei risultati.</li>
+<li><strong>Template di deliverable:</strong> Fornire una struttura minima (AS-IS, TO-BE, soluzione IA, roadmap, KPI) per evitare output non strutturati.</li>
+<li><strong>Sostanza prima della forma:</strong> Il successo del Team Mary Oliver dimostra che investire tutto il tempo sulla qualit&agrave; dell'analisi, la mappatura degli stakeholder e la conformit&agrave; normativa produce risultati migliori rispetto a rincorrere un prototipo tecnico negli ultimi minuti.</li>
+<li><strong>Revisione critica come step obbligatorio:</strong> Il modello Mary Oliver (chiedere all'IA di criticare il proprio lavoro) dovrebbe essere suggerito a tutti i team.</li>
+</ul>
+</div>
+</div>
+
+</div>
+
+<footer><div class="container">
+<p>Classifica generata automaticamente &mdash; Progetto AI-PACT</p>
+<p style="margin-top:.3rem;font-size:.8rem">27 febbraio 2026</p>
+</div></footer>
+</body>
+</html>

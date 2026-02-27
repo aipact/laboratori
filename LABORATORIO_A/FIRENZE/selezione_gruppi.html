@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-PACT Firenze - Gruppi di Lavoro</title>
+<style>
+:root {
+  --primary: #1a3a5c;
+  --primary-light: #2c5f8a;
+  --accent: #e67e22;
+  --success: #27ae60;
+  --warning: #f39c12;
+  --danger: #e74c3c;
+  --bg: #f0f4f8;
+  --card-bg: #ffffff;
+  --text: #2c3e50;
+  --text-light: #7f8c8d;
+  --border: #e1e8ed;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+.container { max-width: 1400px; margin: 0 auto; padding: 1rem 1.5rem; }
+
+/* HEADER */
+header {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white;
+  padding: 1.2rem 2rem;
+  text-align: center;
+}
+header h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.2rem; }
+header .subtitle { font-size: 1rem; opacity: 0.9; }
+header .meta {
+  display: flex; justify-content: center; gap: 2rem;
+  margin-top: 0.5rem; font-size: 0.95rem; opacity: 0.85;
+}
+.nav-bar {
+  background: var(--primary);
+  padding: 0.5rem 2rem;
+  display: flex; justify-content: center; gap: 1rem;
+}
+.nav-bar button {
+  background: rgba(255,255,255,0.15);
+  color: white; border: 1px solid rgba(255,255,255,0.3);
+  padding: 0.4rem 1.2rem; border-radius: 6px;
+  cursor: pointer; font-size: 0.9rem; transition: all 0.2s;
+}
+.nav-bar button:hover, .nav-bar button.active {
+  background: rgba(255,255,255,0.3);
+}
+
+/* VIEWS */
+.view { display: none; }
+.view.active { display: block; }
+
+/* DASHBOARD */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+  margin-top: 1.2rem;
+}
+.card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+.card-accent { height: 6px; }
+.card-body { padding: 0.9rem 1rem; }
+.card-icon { font-size: 1.4rem; margin-bottom: 0.2rem; }
+.card-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.1rem; }
+.card-subtitle {
+  font-size: 0.8rem; color: var(--text-light);
+  font-style: italic; margin-bottom: 0.5rem;
+}
+.card-divider { border: none; border-top: 1px solid var(--border); margin: 0.4rem 0; }
+.card-members { list-style: none; }
+.card-members li { font-size: 0.85rem; padding: 0.1rem 0; }
+.card-members li.leader { font-weight: 700; }
+.card-members li .role { color: var(--text-light); font-size: 0.75rem; }
+.card-footer {
+  margin-top: 0.5rem; padding-top: 0.4rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.75rem; color: var(--text-light);
+}
+.card-footer .track { font-weight: 600; color: var(--text); }
+
+/* DETAIL VIEW */
+.detail-card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+.detail-accent { height: 6px; }
+.detail-body { padding: 1.5rem 2rem; }
+.detail-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+.detail-header .icon { font-size: 2rem; }
+.detail-header h2 { font-size: 1.5rem; }
+.detail-header .sub { font-size: 0.95rem; color: var(--text-light); font-style: italic; }
+.detail-section { margin-bottom: 1.2rem; }
+.detail-section h3 {
+  font-size: 1.05rem; color: var(--primary);
+  margin-bottom: 0.4rem;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 0.2rem;
+}
+.detail-section ul { padding-left: 1.2rem; }
+.detail-section li { margin-bottom: 0.3rem; font-size: 0.95rem; }
+.prompt-box {
+  background: #f7f9fb;
+  border-left: 4px solid var(--primary-light);
+  padding: 0.8rem 1rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.9rem;
+  font-style: italic;
+  margin-top: 0.5rem;
+}
+.btn-back {
+  display: inline-block; background: var(--primary); color: white;
+  padding: 0.6rem 1.5rem; border-radius: 8px; border: none;
+  cursor: pointer; font-size: 1rem; margin-bottom: 1rem; transition: background 0.2s;
+}
+.btn-back:hover { background: var(--primary-light); }
+
+/* CLASSIFICA TABLE */
+.rank-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
+.rank-table th { background: var(--primary); color: white; padding: 0.6rem 0.8rem; text-align: left; }
+.rank-table td { padding: 0.5rem 0.8rem; border-bottom: 1px solid var(--border); }
+.rank-table tr.selected { background: #eaf6ec; font-weight: 600; }
+.rank-table tr.not-selected { color: var(--text-light); }
+.rank-table .score { text-align: center; font-weight: 600; }
+.badge {
+  display: inline-block; padding: 0.15rem 0.5rem; border-radius: 10px;
+  font-size: 0.75rem; font-weight: 600; color: white;
+}
+
+/* FOOTER */
+footer { text-align: center; padding: 1rem; color: var(--text-light); font-size: 0.8rem; margin-top: 1rem; }
+
+@media (max-width: 1100px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 700px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+@media print { .nav-bar { display: none; } .card { break-inside: avoid; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Laboratorio AI-PACT - Firenze</h1>
+  <p class="subtitle">Sessione Laboratoriale di Innovazione con l'Intelligenza Artificiale</p>
+  <div class="meta">
+    <span>26 febbraio 2026</span>
+    <span>22 partecipanti</span>
+    <span>5 gruppi</span>
+  </div>
+</header>
+
+<div class="nav-bar">
+  <button class="active" onclick="showView('dashboard')">Dashboard Gruppi</button>
+  <button onclick="showView('classifica')">Classifica Idee</button>
+  <button onclick="showView('dettaglio')">Dettaglio Gruppi</button>
+</div>
+
+<div class="container">
+
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="view active">
+    <div class="grid">
+
+      <!-- GRUPPO 1 -->
+      <div class="card" onclick="showDetail(1)">
+        <div class="card-accent" style="background:#9b59b6"></div>
+        <div class="card-body">
+          <div class="card-icon">📜</div>
+          <div class="card-title">Team Dante</div>
+          <div class="card-subtitle">"L'Oracolo dell'Ufficio"</div>
+          <hr class="card-divider">
+          <ul class="card-members">
+            <li class="leader">👤 Partecipante_01 <span class="role">CED</span></li>
+            <li>Partecipante_02 <span class="role">Sist. Informativi</span></li>
+            <li>Partecipante_03 <span class="role">Assessore</span></li>
+            <li>Partecipante_04 <span class="role">Area Amm.</span></li>
+            <li>Partecipante_05 <span class="role">Sist. Informativo</span></li>
+          </ul>
+          <div class="card-footer">
+            <span class="track">📜 Normativa</span> · Segretario Perfetto
+          </div>
+        </div>
+      </div>
+
+      <!-- GRUPPO 2 -->
+      <div class="card" onclick="showDetail(2)">
+        <div class="card-accent" style="background:#e74c3c"></div>
+        <div class="card-body">
+          <div class="card-icon">⚙️</div>
+          <div class="card-title">Team Leonardo</div>
+          <div class="card-subtitle">"Il Postino Intelligente"</div>
+          <hr class="card-divider">
+          <ul class="card-members">
+            <li class="leader">👤 Partecipante_06 <span class="role">Trans. Digitale</span></li>
+            <li>Partecipante_07 <span class="role">Ufficio Tributi</span></li>
+            <li>Partecipante_08 <span class="role">IT</span></li>
+            <li>Partecipante_09 <span class="role">CED</span></li>
+            <li>Partecipante_10 <span class="role">CED</span></li>
+          </ul>
+          <div class="card-footer">
+            <span class="track">⚙️ Processo</span> · Segretario Perfetto
+          </div>
+        </div>
+      </div>
+
+      <!-- GRUPPO 3 -->
+      <div class="card" onclick="showDetail(3)">
+        <div class="card-accent" style="background:#e67e22"></div>
+        <div class="card-body">
+          <div class="card-icon">⚙️</div>
+          <div class="card-title">Team Machiavelli</div>
+          <div class="card-subtitle">"Gli Acchiappabug"</div>
+          <hr class="card-divider">
+          <ul class="card-members">
+            <li class="leader">👤 Partecipante_11 <span class="role">CED</span></li>
+            <li>Partecipante_12 <span class="role">CED</span></li>
+            <li>Partecipante_13 <span class="role">CED</span></li>
+            <li>Partecipante_14 <span class="role">CED</span></li>
+            <li>Partecipante_15 <span class="role">CED</span></li>
+          </ul>
+          <div class="card-footer">
+            <span class="track">⚙️ Processo</span> · Segretario Perfetto
+          </div>
+        </div>
+      </div>
+
+      <!-- GRUPPO 4 -->
+      <div class="card" onclick="showDetail(4)">
+        <div class="card-accent" style="background:#2c3e50"></div>
+        <div class="card-body">
+          <div class="card-icon">📣</div>
+          <div class="card-title">Team Mary Oliver</div>
+          <div class="card-subtitle">"I Cantieri Trasparenti"</div>
+          <hr class="card-divider">
+          <ul class="card-members">
+            <li class="leader">👤 Partecipante_16 <span class="role">CED / Area Tecnica</span></li>
+            <li>Partecipante_17 <span class="role">Cultura / Stampa</span></li>
+            <li>Partecipante_18 <span class="role">Comunicazione</span></li>
+            <li>Partecipante_19 <span class="role">Polizia locale</span></li>
+          </ul>
+          <div class="card-footer">
+            <span class="track">📣 Comunicazione</span> · Pompiere
+          </div>
+        </div>
+      </div>
+
+      <!-- GRUPPO 5 -->
+      <div class="card" onclick="showDetail(5)">
+        <div class="card-accent" style="background:#27ae60"></div>
+        <div class="card-body">
+          <div class="card-icon">⚙️</div>
+          <div class="card-title">Team Michelangelo</div>
+          <div class="card-subtitle">"Lo Smistatore Civico"</div>
+          <hr class="card-divider">
+          <ul class="card-members">
+            <li class="leader">👤 Partecipante_20 <span class="role">RTD</span></li>
+            <li>Partecipante_21 <span class="role">Sociale / Comunicazione</span></li>
+            <li>Partecipante_22 <span class="role">Affari legali</span></li>
+          </ul>
+          <div class="card-footer">
+            <span class="track">⚙️ Processo</span> · Segretario Perfetto
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CLASSIFICA -->
+  <div id="classifica" class="view">
+    <button class="btn-back" onclick="showView('dashboard')">← Torna alla Dashboard</button>
+    <h2 style="margin-bottom:0.5rem">Classifica Idee Progettuali</h2>
+    <p style="color:var(--text-light);margin-bottom:0.5rem;font-size:0.9rem">Punteggio pesato: Realizzabilit&agrave; 40% · Impatto 35% · Valore Didattico 25%</p>
+    <table class="rank-table">
+      <thead>
+        <tr><th>#</th><th>Proponente</th><th>Idea</th><th class="score">R</th><th class="score">I</th><th class="score">D</th><th class="score">Tot</th><th>Gruppo</th></tr>
+      </thead>
+      <tbody>
+        <tr class="selected"><td>1</td><td>Partecipante_01</td><td>Chatbot regolamenti interni per dipendenti</td><td class="score">9</td><td class="score">8</td><td class="score">9</td><td class="score">8.65</td><td><span class="badge" style="background:#9b59b6">Dante</span></td></tr>
+        <tr class="selected"><td>2</td><td>Partecipante_06</td><td>Smistamento automatico protocollo + classificazione</td><td class="score">8</td><td class="score">9</td><td class="score">8</td><td class="score">8.35</td><td><span class="badge" style="background:#e74c3c">Leonardo</span></td></tr>
+        <tr class="selected"><td>3</td><td>Sq. Partecipante_11 / Partecipante_12</td><td>Ticketing CED con risposte automatiche da storico</td><td class="score">8</td><td class="score">8</td><td class="score">8</td><td class="score">8.00</td><td><span class="badge" style="background:#e67e22">Machiavelli</span></td></tr>
+        <tr class="selected"><td>4</td><td>Partecipante_16</td><td>Comunicazione proattiva cantieri in citt&agrave;</td><td class="score">8</td><td class="score">8</td><td class="score">8</td><td class="score">8.00</td><td><span class="badge" style="background:#2c3e50">Mary Oliver</span></td></tr>
+        <tr class="selected"><td>5</td><td>Partecipante_20</td><td>Segnalazioni cittadini con smistamento automatico</td><td class="score">8</td><td class="score">8</td><td class="score">7</td><td class="score">7.75</td><td><span class="badge" style="background:#27ae60">Michelangelo</span></td></tr>
+        <tr class="not-selected"><td>6</td><td>Partecipante_07</td><td>Controllo performance concessionario TARI</td><td class="score">7</td><td class="score">8</td><td class="score">8</td><td class="score">7.60</td><td>—</td></tr>
+        <tr class="not-selected"><td>7</td><td>Sq. Partecipante_21 / Partecipante_22</td><td>Revisione regolamenti comunali + moderazione social</td><td class="score">7</td><td class="score">8</td><td class="score">8</td><td class="score">7.60</td><td>—</td></tr>
+        <tr class="not-selected"><td>8</td><td>Partecipante_02</td><td>Riorganizzazione e sintesi documenti amministrativi</td><td class="score">7</td><td class="score">8</td><td class="score">8</td><td class="score">7.60</td><td>—</td></tr>
+        <tr class="not-selected"><td>9</td><td>Partecipante_03</td><td>Assistente IA per uffici (atti, norme, determine)</td><td class="score">7</td><td class="score">8</td><td class="score">8</td><td class="score">7.60</td><td>—</td></tr>
+        <tr class="not-selected"><td>10</td><td>Partecipante_09</td><td>Assistente analisi bandi (obblighi, roadmap, offerte)</td><td class="score">7</td><td class="score">8</td><td class="score">8</td><td class="score">7.60</td><td>—</td></tr>
+        <tr class="not-selected"><td>11</td><td>Partecipante_17</td><td>Piano comunicazione evento giochi da tavolo</td><td class="score">8</td><td class="score">7</td><td class="score">7</td><td class="score">7.40</td><td>—</td></tr>
+        <tr class="not-selected"><td>12</td><td>Partecipante_15</td><td>Raccolta strutturata segnalazioni IT</td><td class="score">8</td><td class="score">7</td><td class="score">7</td><td class="score">7.40</td><td>—</td></tr>
+        <tr class="not-selected"><td>13</td><td>Sq. Partecipante_13 / Partecipante_14</td><td>Gestione automatizzata ticket assistenza IT</td><td class="score">8</td><td class="score">7</td><td class="score">7</td><td class="score">7.40</td><td>—</td></tr>
+        <tr class="not-selected"><td>14</td><td>Partecipante_08</td><td>Rassegna stampa automatica + sentiment social</td><td class="score">7</td><td class="score">7</td><td class="score">8</td><td class="score">7.25</td><td>—</td></tr>
+        <tr class="not-selected"><td>15</td><td>Partecipante_18</td><td>Comunicazione smart con target giovane</td><td class="score">7</td><td class="score">7</td><td class="score">7</td><td class="score">7.00</td><td>—</td></tr>
+        <tr class="not-selected"><td>16</td><td>Partecipante_19</td><td>Gestione sicurezza parchi pubblici</td><td class="score">6</td><td class="score">7</td><td class="score">7</td><td class="score">6.60</td><td>—</td></tr>
+        <tr class="not-selected"><td>17</td><td>Partecipante_05</td><td>Uniformare comunicazione e task tra uffici</td><td class="score">5</td><td class="score">8</td><td class="score">6</td><td class="score">6.30</td><td>—</td></tr>
+        <tr class="not-selected"><td>18</td><td>Partecipante_10</td><td>Gestione parco macchine (inventario HW/SW)</td><td class="score">6</td><td class="score">5</td><td class="score">5</td><td class="score">5.40</td><td>—</td></tr>
+        <tr class="not-selected"><td>19</td><td>Partecipante_04</td><td>Gestione procedure amministrative (generico)</td><td class="score">5</td><td class="score">6</td><td class="score">5</td><td class="score">5.35</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- DETTAGLIO -->
+  <div id="dettaglio" class="view">
+    <button class="btn-back" onclick="showView('dashboard')">← Torna alla Dashboard</button>
+
+    <!-- GRUPPO 1 -->
+    <div class="detail-card" id="detail-1">
+      <div class="detail-accent" style="background:#9b59b6"></div>
+      <div class="detail-body">
+        <div class="detail-header">
+          <span class="icon">📜</span>
+          <div><h2>Team Dante - L'Oracolo dell'Ufficio</h2>
+          <div class="sub">Chatbot RAG sui regolamenti interni per i dipendenti</div></div>
+        </div>
+        <div class="detail-section"><h3>Motivazione</h3>
+          <p>Ogni dipendente perde tempo a cercare informazioni su permessi, moduli e procedure interne. Un chatbot alimentato dai regolamenti dell'ente trasforma documenti statici in risposte immediate, mostrando il potere del RAG in modo concreto e replicabile.</p>
+        </div>
+        <div class="detail-section"><h3>Membri</h3>
+          <ul>
+            <li><strong>Partecipante_01</strong> (Team Leader) — CED</li>
+            <li>Partecipante_02 — Funzionario Sistemi Informativi, Comune di Firenze</li>
+            <li>Partecipante_03 — Assessore</li>
+            <li>Partecipante_04 — Area Amministrativa</li>
+            <li>Partecipante_05 — Istruttore Informatico</li>
+          </ul>
+        </div>
+        <div class="detail-section"><h3>Rompighiaccio — 5 Domande per lo Step 1</h3>
+          <ol>
+            <li><strong>Perimetro:</strong> Quali regolamenti volete includere nel chatbot? Solo quelli del personale (permessi, ferie, buoni pasto) o anche regolamenti tecnici e disciplinari?</li>
+            <li><strong>Utenti:</strong> Quanti dipendenti useranno il sistema? Ci sono categorie con esigenze diverse (amministrativi vs tecnici vs politici)?</li>
+            <li><strong>Dati:</strong> I regolamenti sono gi&agrave; in formato digitale (PDF, Word)? Sono aggiornati? Esiste un indice o sono sparsi in cartelle diverse?</li>
+            <li><strong>Risorse:</strong> Chi si occuper&agrave; di aggiornare la base documentale quando i regolamenti cambiano? C'&egrave; un referente per area?</li>
+            <li><strong>Successo:</strong> Come misurate il successo? Riduzione delle chiamate all'ufficio personale? Tempo medio di risposta? Soddisfazione dei dipendenti?</li>
+          </ol>
+        </div>
+        <div class="detail-section"><h3>Prompt di partenza — Track 📜 Normativa</h3>
+          <div class="prompt-box">"Agisci come un consulente giuridico-amministrativo. Per il problema della gestione delle richieste dei dipendenti sui regolamenti interni, elencami le fonti normative rilevanti (CCNL, regolamento comunale, circolari interne), i vincoli non derogabili e producimi una checklist di conformit&agrave;."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRUPPO 2 -->
+    <div class="detail-card" id="detail-2">
+      <div class="detail-accent" style="background:#e74c3c"></div>
+      <div class="detail-body">
+        <div class="detail-header">
+          <span class="icon">⚙️</span>
+          <div><h2>Team Leonardo - Il Postino Intelligente</h2>
+          <div class="sub">Smistamento automatico del protocollo con classificazione archivistica</div></div>
+        </div>
+        <div class="detail-section"><h3>Motivazione</h3>
+          <p>Lo smistamento del protocollo in entrata &egrave; un collo di bottiglia in ogni ente. Un agente IA che legge l'oggetto, propone l'ufficio destinatario e suggerisce la classificazione archivistica pu&ograve; ridurre drasticamente i tempi e gli errori di assegnazione.</p>
+        </div>
+        <div class="detail-section"><h3>Membri</h3>
+          <ul>
+            <li><strong>Partecipante_06</strong> (Team Leader) — Transizione Digitale, Comune di Parma</li>
+            <li>Partecipante_07 — Ufficio Tributi, Comune di Pontedera</li>
+            <li>Partecipante_08 — IT, Comune di Bagno a Ripoli</li>
+            <li>Partecipante_09 — CED, Comune di Monsummano Terme</li>
+            <li>Partecipante_10 — CED</li>
+          </ul>
+        </div>
+        <div class="detail-section"><h3>Rompighiaccio — 5 Domande per lo Step 1</h3>
+          <ol>
+            <li><strong>Perimetro:</strong> Quanti protocolli in entrata gestite al giorno/mese? Lo smistamento oggi &egrave; manuale al 100% o c'&egrave; gi&agrave; una pre-classificazione?</li>
+            <li><strong>Utenti:</strong> Chi smista oggi? Una persona dedicata o pi&ugrave; operatori? A quanti uffici destinatari va distribuito il flusso?</li>
+            <li><strong>Dati:</strong> Avete uno storico digitale dei protocolli gi&agrave; smistati (oggetto → ufficio)? Il titolario di classificazione &egrave; standard o personalizzato?</li>
+            <li><strong>Risorse:</strong> Quale sistema di protocollo usate? Ha API o possibilit&agrave; di export? C'&egrave; margine per integrazioni?</li>
+            <li><strong>Successo:</strong> Qual &egrave; il tasso di errore attuale nello smistamento? Quanto tempo si risparmierebbe per documento? Qual &egrave; il costo di uno smistamento errato?</li>
+          </ol>
+        </div>
+        <div class="detail-section"><h3>Prompt di partenza — Track ⚙️ Processo</h3>
+          <div class="prompt-box">"Agisci come un analista di processo. Elenca tutti gli attori coinvolti nel processo di smistamento del protocollo in entrata, identifica i 3 principali colli di bottiglia e le regole decisionali non scritte che governano il flusso attuale."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRUPPO 3 -->
+    <div class="detail-card" id="detail-3">
+      <div class="detail-accent" style="background:#e67e22"></div>
+      <div class="detail-body">
+        <div class="detail-header">
+          <span class="icon">⚙️</span>
+          <div><h2>Team Machiavelli - Gli Acchiappabug</h2>
+          <div class="sub">Ticketing CED con risposte automatiche e suggerimenti da esperienze passate</div></div>
+        </div>
+        <div class="detail-section"><h3>Motivazione</h3>
+          <p>Il CED riceve decine di richieste ripetitive. Un sistema che riconosce problemi gi&agrave; risolti e suggerisce soluzioni immediate (o guida il tecnico con lo storico) riduce i tempi di risposta e libera risorse per i problemi complessi.</p>
+        </div>
+        <div class="detail-section"><h3>Membri</h3>
+          <ul>
+            <li><strong>Partecipante_11</strong> (Team Leader) — CED</li>
+            <li>Partecipante_12 — CED</li>
+            <li>Partecipante_13 — CED, Comune di Lucca</li>
+            <li>Partecipante_14 — CED, Comune di Lucca</li>
+            <li>Partecipante_15 — CED</li>
+          </ul>
+        </div>
+        <div class="detail-section"><h3>Rompighiaccio — 5 Domande per lo Step 1</h3>
+          <ol>
+            <li><strong>Perimetro:</strong> Che tipo di ticket gestite? Solo hardware/software o anche richieste applicative, accessi, permessi? Quanti ticket al mese?</li>
+            <li><strong>Utenti:</strong> Quanti dipendenti aprono ticket? C'&egrave; un portale o arrivano via email/telefono/chat in modo destrutturato?</li>
+            <li><strong>Dati:</strong> Avete uno storico dei ticket risolti con le soluzioni adottate? In che formato (database, email, fogli Excel)?</li>
+            <li><strong>Risorse:</strong> Quanti tecnici CED gestiscono i ticket? C'&egrave; gi&agrave; un sistema di ticketing o &egrave; tutto manuale?</li>
+            <li><strong>Successo:</strong> Qual &egrave; il tempo medio di risoluzione attuale? Quale percentuale di ticket sono ripetitivi? Quanto tempo si risparmierebbe con risposte automatiche?</li>
+          </ol>
+        </div>
+        <div class="detail-section"><h3>Prompt di partenza — Track ⚙️ Processo</h3>
+          <div class="prompt-box">"Agisci come un analista di processo. Elenca tutti gli attori coinvolti nel sistema di ticketing del CED, identifica i 3 principali colli di bottiglia e le regole decisionali non scritte che governano il flusso attuale di gestione delle richieste."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRUPPO 4 -->
+    <div class="detail-card" id="detail-4">
+      <div class="detail-accent" style="background:#2c3e50"></div>
+      <div class="detail-body">
+        <div class="detail-header">
+          <span class="icon">📣</span>
+          <div><h2>Team Mary Oliver - I Cantieri Trasparenti</h2>
+          <div class="sub">Comunicazione proattiva sui cantieri in citt&agrave; per anticipare le lamentele</div></div>
+        </div>
+        <div class="detail-section"><h3>Motivazione</h3>
+          <p>I cantieri generano lamentele quando i cittadini non sono informati. Una comunicazione proattiva e multicanale — che anticipa i disagi, spiega i tempi e risponde alle domande — trasforma un problema politico in un'opportunit&agrave; di trasparenza.</p>
+        </div>
+        <div class="detail-section"><h3>Membri</h3>
+          <ul>
+            <li><strong>Partecipante_16</strong> (Team Leader) — CED / Area Tecnica, Comune di Scandicci</li>
+            <li>Partecipante_17 — Ufficio Cultura / Stampa</li>
+            <li>Partecipante_18 — Comunicazione / Segreteria, Comune di Montelupo Fiorentino</li>
+            <li>Partecipante_19 — Commissario Polizia locale</li>
+          </ul>
+        </div>
+        <div class="detail-section"><h3>Rompighiaccio — 5 Domande per lo Step 1</h3>
+          <ol>
+            <li><strong>Perimetro:</strong> Quanti cantieri attivi avete mediamente in citt&agrave;? La comunicazione riguarda solo lavori pubblici o anche cantieri privati che impattano la viabilit&agrave;?</li>
+            <li><strong>Utenti:</strong> Chi sono i destinatari principali? Residenti delle zone interessate, commercianti, pendolari? Ci sono categorie particolarmente vocali?</li>
+            <li><strong>Dati:</strong> Avete gi&agrave; un database dei cantieri con date, localizzazione e stato avanzamento? Le informazioni arrivano dall'ufficio tecnico in modo strutturato?</li>
+            <li><strong>Risorse:</strong> Quali canali usate oggi (sito, social, app, cartelli)? Chi produce i contenuti? Quanto tempo dedicate alla comunicazione cantieri?</li>
+            <li><strong>Successo:</strong> Come misurate l'efficacia? Riduzione segnalazioni/reclami? Engagement sui social? Percezione dei cittadini sulla trasparenza?</li>
+          </ol>
+        </div>
+        <div class="detail-section"><h3>Prompt di partenza — Track 📣 Comunicazione</h3>
+          <div class="prompt-box">"Agisci come un esperto di comunicazione pubblica. Per il problema della comunicazione proattiva sui cantieri in citt&agrave;, mappami gli stakeholder, i registri comunicativi appropriati per ogni canale e i 3 scenari critici da gestire."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRUPPO 5 -->
+    <div class="detail-card" id="detail-5">
+      <div class="detail-accent" style="background:#27ae60"></div>
+      <div class="detail-body">
+        <div class="detail-header">
+          <span class="icon">⚙️</span>
+          <div><h2>Team Michelangelo - Lo Smistatore Civico</h2>
+          <div class="sub">Gestione automatizzata delle segnalazioni dei cittadini con smistamento agli uffici</div></div>
+        </div>
+        <div class="detail-section"><h3>Motivazione</h3>
+          <p>Le segnalazioni dei cittadini arrivano da canali diversi (email, form, telefono, social) in modo destrutturato. Un sistema IA che classifica, smista all'ufficio competente e genera una risposta iniziale al cittadino riduce i tempi di presa in carico e migliora la percezione del servizio.</p>
+        </div>
+        <div class="detail-section"><h3>Membri</h3>
+          <ul>
+            <li><strong>Partecipante_20</strong> (Team Leader) — RTD</li>
+            <li>Partecipante_21 — Sociale e Comunicazione, Comune di Roccastrada</li>
+            <li>Partecipante_22 — Affari legali, Comune di Roccastrada</li>
+          </ul>
+        </div>
+        <div class="detail-section"><h3>Rompighiaccio — 5 Domande per lo Step 1</h3>
+          <ol>
+            <li><strong>Perimetro:</strong> Quante segnalazioni ricevete al mese? Da quali canali arrivano (email, form online, telefono, social)? Quali categorie di problemi coprono?</li>
+            <li><strong>Utenti:</strong> Chi gestisce oggi lo smistamento? C'&egrave; un URP dedicato o ogni ufficio riceve direttamente? Come viene data risposta al cittadino?</li>
+            <li><strong>Dati:</strong> Esiste un database delle segnalazioni passate con esito? Le categorie di smistamento sono formalizzate o ogni operatore decide a intuito?</li>
+            <li><strong>Risorse:</strong> Quante persone sono coinvolte nel processo? C'&egrave; gi&agrave; un software di gestione segnalazioni o si usa email/protocollo?</li>
+            <li><strong>Successo:</strong> Qual &egrave; il tempo medio di risposta al cittadino oggi? Quante segnalazioni finiscono all'ufficio sbagliato? Come misurate la soddisfazione?</li>
+          </ol>
+        </div>
+        <div class="detail-section"><h3>Prompt di partenza — Track ⚙️ Processo</h3>
+          <div class="prompt-box">"Agisci come un analista di processo. Elenca tutti gli attori coinvolti nel processo di gestione delle segnalazioni dei cittadini, identifica i 3 principali colli di bottiglia e le regole decisionali non scritte che governano il flusso attuale di smistamento agli uffici."</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<footer>
+  AI-PACT — Laboratorio di Innovazione con l'Intelligenza Artificiale · Firenze, 26 febbraio 2026
+</footer>
+
+<script>
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(name).classList.add('active');
+  document.querySelectorAll('.nav-bar button').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  window.scrollTo(0, 0);
+}
+function showDetail(n) {
+  showView('dettaglio');
+  document.querySelectorAll('.nav-bar button').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.nav-bar button')[2].classList.add('active');
+  setTimeout(() => {
+    document.getElementById('detail-' + n).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+</script>
+
+</body>
+</html>
