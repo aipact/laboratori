@@ -142,7 +142,7 @@ Ticketing CED con risposte automatiche. Form web-based per acquisizione richiest
 
 | Punteggio | Valutazione | Deliverable |
 |-----------|-------------|-------------|
-| 7.4/10 | [Scheda valutazione](FIRENZE/Gruppo_3_Acchiappabug/valutazione.html) | [deliverable.php](FIRENZE/Gruppo_3_Acchiappabug/deliverable.php) |
+| 7.4/10 | [Scheda valutazione](FIRENZE/Gruppo_3_Acchiappabug/valutazione.html) | [deliverable.html](FIRENZE/Gruppo_3_Acchiappabug/deliverable.html) |
 
 ### Gruppo 4 — I Cantieri Trasparenti 🏆
 Comunicazione proattiva cantieri con piano strutturato multicanale. Mappatura di 12 categorie di stakeholder, iterazione a 8 cicli con revisione critica autonoma, conformità GDPR approfondita (Art. 6.1.e, ANPR, DPIA). Il team che ha colto meglio lo spirito del laboratorio, mettendo al centro la sostanza operativa.
