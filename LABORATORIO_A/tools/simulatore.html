@@ -319,6 +319,8 @@
         #homeBtn,
         #newChatBtn,
         #cloneChatBtn,
+        #newAgentsSessionBtn,
+        #clearAgentsBtn,
         #apiKeyBtn {
             flex-shrink: 0;
             width: 44px;
@@ -341,6 +343,8 @@
         #homeBtn:active,
         #newChatBtn:active,
         #cloneChatBtn:active,
+        #newAgentsSessionBtn:active,
+        #clearAgentsBtn:active,
         #apiKeyBtn:active {
             background: var(--button-hover);
         }
@@ -619,6 +623,23 @@
 
         #reasoningToggle:active {
             background: #f0f0f0;
+        }
+
+        #datetimeToggle {
+            width: 44px;
+            height: 44px;
+            border: 2px solid var(--border-color);
+            background: var(--bg-color);
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #datetimeToggle.active {
+            background: var(--message-assistant-bg);
+            border-color: var(--message-assistant-border);
         }
 
         #historyBtn {
@@ -1091,6 +1112,8 @@
             #homeBtn,
             #newChatBtn,
             #cloneChatBtn,
+            #newAgentsSessionBtn,
+            #clearAgentsBtn,
             #apiKeyBtn {
                 width: 36px;
                 height: 36px;
@@ -1182,6 +1205,890 @@
                 padding: 12px;
             }
         }
+
+        /* ===== TAB BAR ===== */
+        .tab-bar {
+            display: flex;
+            border-bottom: 2px solid var(--border-color);
+            background: #fafafa;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            color: var(--meta-text);
+            border-bottom: 3px solid transparent;
+            font-family: inherit;
+        }
+
+        .tab-btn.active {
+            color: var(--border-color);
+            border-bottom-color: var(--border-color);
+            background: var(--bg-color);
+        }
+
+        .tab-btn:active {
+            background: #f0f0f0;
+        }
+
+        /* Hide/show based on active tab */
+        #app.tab-agents .prompt-hint,
+        #app.tab-agents #promptPanel,
+        #app.tab-agents #messagesContainer,
+        #app.tab-agents #bottomBar {
+            display: none !important;
+        }
+
+        #app.tab-agents ~ .floating-toggles {
+            display: none !important;
+        }
+
+        #app.tab-agents #newChatBtn,
+        #app.tab-agents #cloneChatBtn {
+            display: none !important;
+        }
+
+        /* Hide agents-only buttons when in chat tab (default) */
+        #newAgentsSessionBtn,
+        #clearAgentsBtn {
+            display: none;
+        }
+        #app.tab-agents #newAgentsSessionBtn,
+        #app.tab-agents #clearAgentsBtn {
+            display: flex;
+        }
+
+        /* ===== AGENTS VIEW ===== */
+        #agentsView {
+            flex: 1;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #app.tab-agents #agentsView {
+            display: flex;
+        }
+
+        .agents-config {
+            padding: 12px 15px;
+            border-bottom: 2px solid var(--border-color);
+            background: #fafafa;
+        }
+
+        .agents-config-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .agents-config-header h3 {
+            margin: 0;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .agents-config-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .agents-orchestrator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+        }
+
+        .agents-orchestrator label {
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .agents-orchestrator select {
+            padding: 6px 8px;
+            font-size: 13px;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--bg-color);
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .add-agent-btn {
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: bold;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--button-bg);
+            color: var(--button-text);
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .add-agent-btn:active {
+            background: var(--button-hover);
+        }
+
+        .orchestrator-prompt-section {
+            margin-bottom: 8px;
+        }
+
+        .orchestrator-prompt-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--meta-text);
+            padding: 4px 0;
+        }
+
+        .orchestrator-prompt-toggle:hover {
+            color: var(--border-color);
+        }
+
+        .orchestrator-prompt-textarea {
+            width: 100%;
+            min-height: 70px;
+            padding: 8px 10px;
+            font-size: 13px;
+            font-family: inherit;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            resize: vertical;
+            margin-top: 4px;
+        }
+
+        .orchestrator-prompt-textarea.hidden {
+            display: none;
+        }
+
+        .agents-list {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 4px 0;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .agent-card {
+            min-width: 200px;
+            max-width: 260px;
+            flex-shrink: 0;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px;
+            background: var(--bg-color);
+            position: relative;
+        }
+
+        .agent-card input,
+        .agent-card textarea,
+        .agent-card select {
+            width: 100%;
+            padding: 6px 8px;
+            font-size: 13px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 6px;
+            font-family: inherit;
+        }
+
+        .agent-card textarea {
+            min-height: 50px;
+            resize: vertical;
+        }
+
+        .agent-card label {
+            display: block;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 3px;
+            color: var(--meta-text);
+        }
+
+        .agent-remove-btn {
+            width: 24px;
+            height: 24px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: var(--meta-text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .agent-remove-btn:hover {
+            background: #fee;
+            color: #c00;
+        }
+
+        .agent-card.disabled {
+            opacity: 0.45;
+            border-style: dashed;
+        }
+
+        .agent-card.disabled textarea,
+        .agent-card.disabled input,
+        .agent-card.disabled select {
+            pointer-events: none;
+        }
+
+        .agent-toggle {
+            position: relative;
+            display: inline-block;
+            width: 36px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .agent-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            position: absolute;
+        }
+
+        .agent-toggle-slider {
+            position: absolute;
+            inset: 0;
+            background: #ccc;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .agent-toggle-slider::before {
+            content: '';
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            left: 3px;
+            top: 3px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform 0.2s;
+        }
+
+        .agent-toggle input:checked + .agent-toggle-slider {
+            background: var(--button-bg);
+        }
+
+        .agent-toggle input:checked + .agent-toggle-slider::before {
+            transform: translateX(16px);
+        }
+
+        .agent-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            gap: 6px;
+        }
+
+        .agent-card-header-left {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Agents messages area */
+        .agents-messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .agents-messages-container .message {
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid;
+        }
+
+        .agents-messages-container .message.user {
+            background: var(--message-user-bg);
+            border-left-color: var(--message-user-border);
+        }
+
+        .agents-messages-container .message.orchestrator {
+            background: var(--message-assistant-bg);
+            border-left-color: var(--message-assistant-border);
+        }
+        .agents-messages-container .message.orchestrator.lead {
+            border-left-color: #2196F3;
+            border-left-width: 4px;
+        }
+        .agents-messages-container .message.orchestrator.lead .message-role {
+            color: #1976D2;
+            font-weight: 600;
+        }
+        .agent-lead-btn {
+            background: none;
+            border: 1.5px solid #90CAF9;
+            color: #90CAF9;
+            border-radius: 4px;
+            padding: 1px 7px;
+            font-size: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            margin-left: 6px;
+            transition: all 0.15s;
+        }
+        .agent-lead-btn:hover {
+            background: #E3F2FD;
+            border-color: #1976D2;
+            color: #1976D2;
+        }
+        .agent-lead-btn.active {
+            background: #1976D2;
+            border-color: #1976D2;
+            color: #fff;
+        }
+        .agent-card.disabled .agent-lead-btn {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .agent-responses-group {
+            margin-bottom: 15px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .agent-responses-toggle {
+            width: 100%;
+            padding: 10px 15px;
+            background: #f5f5f5;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: bold;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--text-color);
+        }
+
+        .agent-responses-toggle:active {
+            background: #eee;
+        }
+
+        .agent-responses-body {
+            display: none;
+            padding: 0;
+        }
+
+        .agent-responses-body.expanded {
+            display: block;
+        }
+
+        .agent-response-item {
+            padding: 12px 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .agent-response-item:first-child {
+            border-top: none;
+        }
+
+        .agent-response-name {
+            font-weight: bold;
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: var(--border-color);
+        }
+
+        .agent-response-content {
+            font-size: 14px;
+            word-wrap: break-word;
+        }
+
+        .agent-response-meta {
+            margin-top: 6px;
+            font-size: 11px;
+            color: var(--meta-text);
+        }
+
+        .agents-status {
+            text-align: center;
+            padding: 8px;
+            font-size: 13px;
+            color: var(--meta-text);
+            font-style: italic;
+        }
+
+        /* Agents bottom bar */
+        .agents-bottom-bar {
+            display: flex;
+            gap: 8px;
+            padding: 12px;
+            border-top: 2px solid var(--border-color);
+            background: var(--bg-color);
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .agents-bottom-bar .font-btn,
+        .agents-bottom-bar .nav-btn {
+            width: 44px;
+            height: 44px;
+            border: 2px solid var(--border-color);
+            background: var(--bg-color);
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .agents-toggle-config {
+            padding: 8px 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-color);
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+            font-family: inherit;
+        }
+
+        .agents-toggle-config.active {
+            background: var(--message-assistant-bg);
+            border-color: var(--message-assistant-border);
+        }
+
+        .agents-shared-prompts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .agents-shared-field label {
+            display: block;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .agents-shared-field textarea {
+            width: 100%;
+            min-height: 60px;
+            padding: 8px 10px;
+            font-size: 13px;
+            font-family: inherit;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            resize: vertical;
+        }
+
+        @media (max-width: 500px) {
+            .agents-shared-prompts {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .agents-config.collapsed {
+            display: none;
+        }
+
+        .agents-history-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+
+        .agents-history-item:hover {
+            background: #f9f9f9;
+        }
+
+        .agents-history-item:active {
+            background: #f0f0f0;
+        }
+
+        .agents-history-title {
+            font-weight: bold;
+            margin-bottom: 4px;
+            word-break: break-word;
+        }
+
+        .agents-history-meta {
+            font-size: 12px;
+            color: var(--meta-text);
+            margin-bottom: 6px;
+        }
+
+        .agents-history-agents {
+            font-size: 11px;
+            color: var(--border-color);
+            margin-bottom: 6px;
+        }
+
+        .agents-history-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .agents-history-actions button {
+            padding: 4px 10px;
+            font-size: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: var(--bg-color);
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .agents-history-actions button:active {
+            background: #f0f0f0;
+        }
+
+        .agents-history-actions .delete-btn {
+            border-color: #c00;
+            color: #c00;
+        }
+
+        .agents-history-actions .delete-btn:active {
+            background: #fee;
+        }
+
+        /* Agents live progress tracker */
+        .agents-progress {
+            margin: 15px 0;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--bg-color);
+        }
+
+        .agents-progress-header {
+            padding: 10px 15px;
+            background: #f5f5f5;
+            font-size: 13px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .agents-progress-header .spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid #ccc;
+            border-top-color: var(--border-color);
+            border-radius: 50%;
+            animation: agentSpin 0.8s linear infinite;
+        }
+
+        @keyframes agentSpin {
+            to { transform: rotate(360deg); }
+        }
+
+        .agent-progress-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 15px;
+            border-top: 1px solid #eee;
+            font-size: 13px;
+            transition: background 0.3s;
+        }
+
+        .agent-progress-row.done {
+            background: var(--message-assistant-bg);
+        }
+
+        .agent-progress-row.error {
+            background: #fff0f0;
+        }
+
+        .agent-progress-row.working {
+            background: #fffbe6;
+        }
+
+        .agent-progress-icon {
+            width: 20px;
+            text-align: center;
+            flex-shrink: 0;
+            font-size: 14px;
+        }
+
+        .agent-progress-icon .spinner {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid #ddd;
+            border-top-color: var(--border-color);
+            border-radius: 50%;
+            animation: agentSpin 0.8s linear infinite;
+        }
+
+        .agent-progress-name {
+            font-weight: bold;
+            min-width: 80px;
+        }
+
+        .agent-progress-status {
+            flex: 1;
+            color: var(--meta-text);
+            font-size: 12px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .agent-progress-time {
+            font-size: 11px;
+            color: var(--meta-text);
+            flex-shrink: 0;
+        }
+
+        .orchestrator-progress-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            border-top: 2px solid var(--border-color);
+            font-size: 13px;
+            background: #f0f5e8;
+            transition: background 0.3s;
+        }
+
+        .orchestrator-progress-row.done {
+            background: var(--message-assistant-bg);
+        }
+
+        /* Agent picker modal */
+        .agent-picker-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .agent-picker {
+            background: var(--bg-color);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            max-width: 420px;
+            width: 92vw;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        .agent-picker h3 {
+            margin: 0 0 12px 0;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .agent-picker-item {
+            padding: 10px 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .agent-picker-item:hover {
+            border-color: var(--border-color);
+        }
+
+        .agent-picker-item:active {
+            background: #f5f5f5;
+        }
+
+        .agent-picker-item .picker-name {
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .agent-picker-item .picker-desc {
+            font-size: 12px;
+            color: var(--meta-text);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .agent-picker-item.custom-pick {
+            border-style: dashed;
+            text-align: center;
+        }
+
+        .agent-picker-item.custom-pick .picker-name {
+            font-size: 15px;
+        }
+
+        .agent-picker-close {
+            display: block;
+            margin: 8px auto 0;
+            padding: 6px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--bg-color);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 13px;
+        }
+
+        /* Preset badge on agent card */
+        .agent-preset-badge {
+            font-size: 10px;
+            background: var(--border-color);
+            color: var(--bg-color);
+            padding: 1px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-weight: bold;
+        }
+
+        /* preset agents are removable — user can re-add from picker */
+
+        .agent-auto-disable-badge {
+            font-size: 10px;
+            background: #e8a800;
+            color: #fff;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        /* Code Preview */
+        .preview-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 8px;
+            padding: 5px 10px;
+            font-size: 12px;
+            font-weight: bold;
+            font-family: inherit;
+            border: 2px solid var(--message-assistant-border);
+            border-radius: 6px;
+            background: var(--message-assistant-bg);
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        .preview-btn:active {
+            background: #e0ebd0;
+        }
+
+        #previewModal .modal-content {
+            max-width: 95vw;
+            width: 900px;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #previewModal .modal-header {
+            flex-shrink: 0;
+        }
+
+        .preview-iframe-wrap {
+            flex: 1;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .preview-iframe-wrap iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .preview-tabs {
+            display: flex;
+            gap: 4px;
+            padding: 8px 0;
+            flex-shrink: 0;
+        }
+
+        .preview-tab-btn {
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: bold;
+            font-family: inherit;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--bg-color);
+            cursor: pointer;
+        }
+
+        .preview-tab-btn.active {
+            background: var(--button-bg);
+            color: var(--button-text);
+            border-color: var(--button-bg);
+        }
+
+        .preview-source {
+            flex: 1;
+            overflow: auto;
+            display: none;
+        }
+
+        .preview-source.active {
+            display: block;
+        }
+
+        .preview-source pre {
+            margin: 0;
+            padding: 12px;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-break: break-word;
+            background: #f5f5f5;
+            min-height: 100%;
+        }
+
     </style>
 </head>
 <body>
@@ -1228,12 +2135,20 @@
             <button id="demoBannerBtn" data-i18n="demo.insertKey">Inserisci chiave</button>
             <button id="demoTourBtn" data-i18n="guide.launch">Guida</button>
         </div>
+        <!-- Tab Bar -->
+        <div class="tab-bar">
+            <button class="tab-btn active" id="tabAgents" data-tab="agents" data-i18n="tabs.agents">Agents</button>
+            <button class="tab-btn" id="tabChat" data-tab="chat" data-i18n="tabs.chat">Chat</button>
+        </div>
+
         <!-- Top Bar -->
         <div id="topBar">
             <div id="topActions">
                 <button id="homeBtn" title="Torna alla home" data-i18n-title="top.homeTitle">🏠</button>
                 <button id="newChatBtn" title="Nuova Chat (azzera i prompt)" data-i18n-title="top.newChatTitle">💬</button>
                 <button id="cloneChatBtn" title="Nuova Chat (clona prompt)" data-i18n-title="top.cloneChatTitle">CL</button>
+                <button id="newAgentsSessionBtn" title="Nuova sessione agenti" data-i18n-title="agents.newSessionTitle">💬</button>
+                <button id="clearAgentsBtn" title="Pulisci tutto" data-i18n-title="agents.clearTitle">🗑</button>
                 <button id="apiKeyBtn" title="Cambia API Key" data-i18n-title="top.apiKeyTitle">🔑</button>
             </div>
             <textarea id="messageInput" placeholder="Scrivi un messaggio..." data-i18n-placeholder="chat.inputPlaceholder"></textarea>
@@ -1275,6 +2190,7 @@
                 <button class="font-btn" id="fontIncrease">A+</button>
             </div>
             <button id="reasoningToggle" class="hidden" title="Reasoning: OFF">🧠</button>
+            <button id="datetimeToggle" title="Ancoraggio temporale: OFF" data-i18n-title="nav.datetimeTitle">🕐</button>
             <button id="autoScrollToggle" title="Toggle auto-scroll" data-i18n-title="nav.autoScrollTitle">👁️</button>
             <button id="exportBtn" title="Export chat (MD)" data-i18n-title="nav.exportTitle">⬇️</button>
             <button id="pageViewBtn" title="Modal pagine" data-i18n-title="nav.pageViewTitle">📖</button>
@@ -1282,6 +2198,46 @@
             <button id="historyBtn" title="Storico chat" data-i18n-title="history.title">🕘</button>
             <button id="langToggle" title="Cambia lingua" data-i18n-title="lang.toggleTitle">IT</button>
             <div id="creditDisplay" title="Credito residuo (clicca per aggiornare)" data-i18n-title="credit.title">$-.--</div>
+        </div>
+
+        <!-- Agents View -->
+        <div id="agentsView">
+            <div id="agentsConfig" class="agents-config">
+                <div class="agents-config-header">
+                    <h3 data-i18n="agents.title">Configura Agenti</h3>
+                    <div class="agents-config-actions">
+                        <div class="agents-orchestrator">
+                            <label data-i18n="agents.orchestratorLabel">Orchestratore:</label>
+                            <select id="orchestratorSelector"></select>
+                        </div>
+                        <button class="add-agent-btn" id="addAgentBtn" data-i18n="agents.addAgent">+ Agente</button>
+                    </div>
+                </div>
+                <div class="orchestrator-prompt-section">
+                    <button class="orchestrator-prompt-toggle" id="orchPromptToggle" data-i18n="agents.orchPromptToggle">Istruzioni orchestratore ▼</button>
+                    <textarea id="orchestratorPrompt" class="orchestrator-prompt-textarea hidden" data-i18n-placeholder="agents.orchPromptPlaceholder" placeholder="Istruzioni per l'orchestratore..."></textarea>
+                </div>
+                <div class="agents-list" id="agentsList"></div>
+                <div class="agents-shared-prompts">
+                    <div class="agents-shared-field">
+                        <label for="agentsContext" data-i18n="prompt.contextLabel">Context</label>
+                        <textarea id="agentsContext" placeholder="Informazioni utili, dati, scenario..." data-i18n-placeholder="prompt.contextPlaceholder"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="agents-messages-container" id="agentsMessagesContainer">
+                <div id="agentsMessages"></div>
+            </div>
+            <div class="agents-bottom-bar">
+                <button class="agents-toggle-config active" id="agentsToggleConfig" data-i18n="agents.toggleConfig">Config</button>
+                <button class="font-btn" id="agentsFontDecrease">A-</button>
+                <button class="font-btn" id="agentsFontIncrease">A+</button>
+                <button class="nav-btn" id="agentsExportBtn" title="Export" data-i18n-title="nav.exportTitle">&#x2B07;&#xFE0F;</button>
+                <button class="nav-btn" id="agentsNewSessionBtn" title="Nuova sessione" data-i18n-title="agents.newSessionTitle">&#x1F4AC;</button>
+                <button class="nav-btn" id="agentsHistoryBtn" title="Storico sessioni" data-i18n-title="agents.historyTitle">&#x1F558;</button>
+                <button class="nav-btn" id="agentsLangToggle" title="Cambia lingua" data-i18n-title="lang.toggleTitle">IT</button>
+                <div class="nav-btn" id="agentsCreditDisplay" title="Credito residuo (clicca per aggiornare)" data-i18n-title="credit.title" style="font-size:12px;cursor:pointer;">$-.--</div>
+            </div>
         </div>
     </div>
 
@@ -1310,6 +2266,37 @@
                 <button class="close-btn" onclick="app.closeHistory()">&times;</button>
             </div>
             <div id="historyList"></div>
+        </div>
+    </div>
+
+    <!-- Agents History Modal -->
+    <div id="agentsHistoryModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 data-i18n="agents.historyTitle">Storico Sessioni Agenti</h2>
+                <button class="close-btn" onclick="app.closeAgentsHistory()">&times;</button>
+            </div>
+            <div id="agentsHistoryList"></div>
+        </div>
+    </div>
+
+    <!-- Code Preview Modal -->
+    <div id="previewModal" class="modal-overlay" aria-hidden="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 data-i18n="preview.title">Anteprima Codice</h2>
+                <button class="close-btn" onclick="app.closePreview()">&times;</button>
+            </div>
+            <div class="preview-tabs">
+                <button class="preview-tab-btn active" id="previewTabRender" data-i18n="preview.tabRender">Render</button>
+                <button class="preview-tab-btn" id="previewTabSource" data-i18n="preview.tabSource">Sorgente</button>
+            </div>
+            <div class="preview-iframe-wrap" id="previewRenderPane">
+                <iframe id="previewFrame" sandbox="allow-scripts allow-modals"></iframe>
+            </div>
+            <div class="preview-source" id="previewSourcePane">
+                <pre id="previewSourceCode"></pre>
+            </div>
         </div>
     </div>
 
@@ -1374,6 +2361,56 @@
             return html;
         }
 
+        function extractCodeBlocks(text) {
+            const blocks = { html: [], css: [], js: [] };
+            const regex = /```(html|css|javascript|js|htm)\s*\n([\s\S]*?)```/gi;
+            let match;
+            while ((match = regex.exec(text)) !== null) {
+                const lang = match[1].toLowerCase();
+                const code = match[2].trim();
+                if (lang === 'html' || lang === 'htm') blocks.html.push(code);
+                else if (lang === 'css') blocks.css.push(code);
+                else if (lang === 'javascript' || lang === 'js') blocks.js.push(code);
+            }
+            return blocks;
+        }
+
+        function hasPreviewableCode(text) {
+            if (!text) return false;
+            return /```(html|htm|css|javascript|js)\s*\n/i.test(text);
+        }
+
+        function buildPreviewDocument(blocks) {
+            const cssContent = blocks.css.length ? '<sty' + 'le>\n' + blocks.css.join('\n\n') + '\n</sty' + 'le>' : '';
+            const jsContent = blocks.js.length ? '<scr' + 'ipt>\n' + blocks.js.join('\n\n') + '\n</scr' + 'ipt>' : '';
+
+            const fullDoc = blocks.html.find(h => /<html[\s>]/i.test(h) || /<!doctype/i.test(h));
+            if (fullDoc) {
+                let doc = fullDoc;
+                if (cssContent && !blocks.css.every(c => doc.includes(c))) {
+                    doc = doc.replace(/<\/head>/i, cssContent + '\n<' + '/head>');
+                }
+                if (jsContent && !blocks.js.every(c => doc.includes(c))) {
+                    doc = doc.replace(/<\/body>/i, jsContent + '\n<' + '/body>');
+                }
+                return doc;
+            }
+
+            const htmlContent = blocks.html.join('\n\n');
+            return '<' + '!DOCTYPE html>\n' +
+                '<ht' + 'ml>\n' +
+                '<he' + 'ad>\n' +
+                '<meta charset="UTF-8">\n' +
+                '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+                cssContent + '\n' +
+                '</he' + 'ad>\n' +
+                '<bo' + 'dy>\n' +
+                htmlContent + '\n' +
+                jsContent + '\n' +
+                '</bo' + 'dy>\n' +
+                '</ht' + 'ml>';
+        }
+
         const I18N = {
             it: {
                 docTitle: 'Simulatore AI-PACT',
@@ -1430,6 +2467,9 @@
                     prevTitle: 'Messaggio precedente',
                     nextTitle: 'Messaggio successivo',
                     autoScrollTitle: 'Toggle auto-scroll',
+                    datetimeTitle: 'Ancoraggio temporale',
+                    datetimeOn: 'Ancoraggio temporale: ON',
+                    datetimeOff: 'Ancoraggio temporale: OFF',
                     exportTitle: 'Export chat (MD)',
                     pageViewTitle: 'Modal pagine'
                 },
@@ -1520,6 +2560,67 @@
                     exportEmpty: 'Nessuna chat da esportare.',
                     changeKeyConfirm: 'Vuoi cambiare la chiave API?',
                     generic: 'Errore: {message}'
+                },
+                tabs: {
+                    chat: 'Chat',
+                    agents: 'Agents'
+                },
+                agents: {
+                    title: 'Configura Agenti',
+                    orchestratorLabel: 'Orchestratore:',
+                    addAgent: '+ Agente',
+                    agentName: 'Nome',
+                    agentNamePlaceholder: 'es. Sviluppatore',
+                    agentRole: 'Ruolo',
+                    agentRolePlaceholder: 'Descrivi il punto di vista...',
+                    agentModel: 'Modello',
+                    toggleConfig: 'Config',
+                    newSessionTitle: 'Nuova sessione agenti',
+                    clearTitle: 'Pulisci tutto',
+                    emptyAgents: 'Aggiungi almeno un agente per iniziare.',
+                    emptyChat: 'Nessun messaggio. Invia una domanda per attivare gli agenti. Con un solo agente attivo si attiva la modalità LEAD (risposta diretta).',
+                    statusCalling: 'Chiamata agenti in parallelo...',
+                    statusOrchestrating: 'Orchestratore in elaborazione...',
+                    agentResponses: '{count} risposte agenti',
+                    orchestratorRole: 'Sei un orchestratore esperto. Riceverai le risposte di diversi agenti specializzati che hanno analizzato la stessa domanda da punti di vista diversi. Sintetizza le loro risposte in una risposta completa, evidenziando i punti di convergenza e le prospettive complementari. Se ci sono contraddizioni, segnalale. Alla fine della sintesi, suggerisci quali agenti specializzati attivare nel turno successivo per approfondire aspetti emersi o colmare lacune. Agenti disponibili: Facilitatore, Ricerca Web, Esperto di Diritto, Esperto Privacy e Dati (DPO), Sociologo, Economista, Urbanista, Esperto Progetti Europei, Sviluppatore Web, Anonimizzatore. Rispondi nella lingua dell\'utente.',
+                    removeConfirm: 'Rimuovere questo agente?',
+                    noAgentsWarning: 'Configura almeno un agente prima di inviare.',
+                    exportTitle: 'Sessione Agenti',
+                    progressHeader: 'Agenti al lavoro...',
+                    progressWaiting: 'In attesa...',
+                    progressWorking: 'Elaborazione...',
+                    progressDone: 'Completato',
+                    progressError: 'Errore',
+                    progressTime: '{seconds}s',
+                    progressOrchestrator: 'Sintesi in corso...',
+                    progressOrchestratorDone: 'Sintesi completata',
+                    historyTitle: 'Storico Sessioni Agenti',
+                    historyEmpty: 'Nessuna sessione salvata',
+                    historyAgents: '{count} agenti',
+                    historyMessages: '{count} scambi',
+                    historyRestore: 'Ripristina config',
+                    historyDelete: 'Elimina',
+                    pickerTitle: 'Aggiungi Agente',
+                    pickerCustom: 'Agente Custom',
+                    pickerCustomDesc: 'Crea un agente personalizzato con ruolo e modello a scelta.',
+                    pickerClose: 'Annulla',
+                    presetBadge: 'Preset',
+                    autoDisableBadge: '1 turno',
+                    orchPromptToggle: 'Istruzioni orchestratore \u25BC',
+                    orchPromptPlaceholder: 'Istruzioni per l\'orchestratore (come sintetizzare, formato, lunghezza...)',
+                    leadHint: '1 agente attivo → modalità LEAD: la risposta dell\'agente è quella finale, senza passare dall\'orchestratore.',
+                    leadHeader: 'Agente LEAD al lavoro...',
+                    leadLabel: 'LEAD — Risposta diretta',
+                    leadDone: 'Risposta diretta completata',
+                    phaseLabel: 'Fase:',
+                    phaseHint: '0 = parallelo, 1→2→3 = sequenziale',
+                    phaseProgress: 'Fase {phase} di {total}'
+                },
+                preview: {
+                    title: 'Anteprima Codice',
+                    tabRender: 'Render',
+                    tabSource: 'Sorgente',
+                    btn: 'Anteprima'
                 }
             },
             en: {
@@ -1577,6 +2678,9 @@
                     prevTitle: 'Previous message',
                     nextTitle: 'Next message',
                     autoScrollTitle: 'Toggle auto-scroll',
+                    datetimeTitle: 'Time anchor',
+                    datetimeOn: 'Time anchor: ON',
+                    datetimeOff: 'Time anchor: OFF',
                     exportTitle: 'Export chat (MD)',
                     pageViewTitle: 'Page mode'
                 },
@@ -1667,6 +2771,67 @@
                     exportEmpty: 'No chat to export.',
                     changeKeyConfirm: 'Do you want to change the API key?',
                     generic: 'Error: {message}'
+                },
+                tabs: {
+                    chat: 'Chat',
+                    agents: 'Agents'
+                },
+                agents: {
+                    title: 'Configure Agents',
+                    orchestratorLabel: 'Orchestrator:',
+                    addAgent: '+ Agent',
+                    agentName: 'Name',
+                    agentNamePlaceholder: 'e.g. Developer',
+                    agentRole: 'Role',
+                    agentRolePlaceholder: 'Describe the perspective...',
+                    agentModel: 'Model',
+                    toggleConfig: 'Config',
+                    newSessionTitle: 'New agents session',
+                    clearTitle: 'Clear all',
+                    emptyAgents: 'Add at least one agent to start.',
+                    emptyChat: 'No messages. Send a question to activate the agents. With a single active agent, LEAD mode is enabled (direct response).',
+                    statusCalling: 'Calling agents in parallel...',
+                    statusOrchestrating: 'Orchestrator processing...',
+                    agentResponses: '{count} agent responses',
+                    orchestratorRole: 'You are an expert orchestrator. You will receive responses from various specialized agents who analyzed the same question from different perspectives. Synthesize their responses into a comprehensive answer, highlighting points of convergence and complementary perspectives. If there are contradictions, flag them. At the end of your synthesis, suggest which specialized agents to activate in the next turn to deepen emerging aspects or fill gaps. Available agents: Facilitator, Web Search, Legal Expert, Privacy & Data Expert (DPO), Sociologist, Economist, Urban Planner, EU Projects Expert, Web Developer, Anonymizer. Reply in the user\'s language.',
+                    removeConfirm: 'Remove this agent?',
+                    noAgentsWarning: 'Configure at least one agent before sending.',
+                    exportTitle: 'Agents Session',
+                    progressHeader: 'Agents working...',
+                    progressWaiting: 'Waiting...',
+                    progressWorking: 'Processing...',
+                    progressDone: 'Done',
+                    progressError: 'Error',
+                    progressTime: '{seconds}s',
+                    progressOrchestrator: 'Synthesizing...',
+                    progressOrchestratorDone: 'Synthesis complete',
+                    historyTitle: 'Agents Session History',
+                    historyEmpty: 'No saved sessions',
+                    historyAgents: '{count} agents',
+                    historyMessages: '{count} exchanges',
+                    historyRestore: 'Restore config',
+                    historyDelete: 'Delete',
+                    pickerTitle: 'Add Agent',
+                    pickerCustom: 'Custom Agent',
+                    pickerCustomDesc: 'Create a custom agent with your own role and model.',
+                    pickerClose: 'Cancel',
+                    presetBadge: 'Preset',
+                    autoDisableBadge: '1 turn',
+                    orchPromptToggle: 'Orchestrator instructions \u25BC',
+                    orchPromptPlaceholder: 'Instructions for the orchestrator (how to synthesize, format, length...)',
+                    leadHint: '1 active agent → LEAD mode: the agent\'s response is the final output, bypassing the orchestrator.',
+                    leadHeader: 'LEAD Agent working...',
+                    leadLabel: 'LEAD — Direct response',
+                    leadDone: 'Direct response complete',
+                    phaseLabel: 'Phase:',
+                    phaseHint: '0 = parallel, 1→2→3 = sequential',
+                    phaseProgress: 'Phase {phase} of {total}'
+                },
+                preview: {
+                    title: 'Code Preview',
+                    tabRender: 'Render',
+                    tabSource: 'Source',
+                    btn: 'Preview'
                 }
             }
         };
@@ -1674,16 +2839,163 @@
         // ===== MODELS CONFIGURATION =====
         const MODELS = [
             { id: 'google/gemini-2.5-flash', name: 'Gemini 2.5 Flash', cost: { input: 0.0000003, output: 0.0000025 } },
-            { id: 'openai/gpt-5.2-chat', name: 'OpenAI GPT-5.2 Chat', cost: { input: 0.00000175, output: 0.000014 } },
-            { id: 'google/gemini-3-flash-preview', name: 'Gemini 3 Flash Preview', cost: { input: 0.0000005, output: 0.000003 } },
+            { id: 'google/gemini-2.5-flash-lite', name: 'Gemini 2.5 Flash Lite', cost: { input: 0.0000001, output: 0.0000004 } },
             { id: 'perplexity/sonar', name: 'Perplexity Sonar', cost: { input: 0.000001, output: 0.000001 } },
             { id: 'mistralai/mistral-small-3.2-24b-instruct', name: 'Mistral Small 3.2 (24B)', cost: { input: 0.00000006, output: 0.00000018 } },
             { id: 'mistralai/ministral-8b-2512', name: 'Mistral - OpenSource - Self-hostable (8B)', cost: { input: 0.00000015, output: 0.00000015 } },
             { id: 'google/gemma-3-12b-it', name: 'Gemma - OpenSource - Self-hostable (12B)', cost: { input: 0.00000003, output: 0.0000001 } },
             { id: 'google/gemma-3-27b-it', name: 'Gemma - OpenSource - Self-hostable (27B)', cost: { input: 0.00000004, output: 0.00000015 } },
-            { id: 'openai/gpt-4.1', name: 'ChatGPT 4.1', cost: { input: 0.000002, output: 0.000008 } },
-            { id: 'deepseek/deepseek-r1', name: 'DeepSeek R1', cost: { input: 0.0000007, output: 0.0000025 } },
             { id: 'qwen/qwen-2.5-72b-instruct', name: 'Qwen 2.5 (72B)', cost: { input: 0.00000012, output: 0.00000039 } },
+            { id: 'qwen/qwen3.5-plus-02-15', name: 'Qwen 3.5 Plus', cost: { input: 0.00000026, output: 0.00000156 } },
+            { id: 'qwen/qwen3.5-35b-a3b', name: 'Qwen 3.5 MoE (35B/3B)', cost: { input: 0.00000025, output: 0.000002 } },
+            { id: 'qwen/qwen3.5-27b', name: 'Qwen 3.5 Dense (27B)', cost: { input: 0.000000195, output: 0.000000195 } },
+        ];
+
+        // Models available for agent card selection (restricted set)
+        const AGENT_MODELS = MODELS.filter(m => [
+            'qwen/qwen3.5-plus-02-15',
+            'google/gemini-2.5-flash',
+            'google/gemini-2.5-flash-lite',
+            'mistralai/mistral-small-3.2-24b-instruct'
+        ].includes(m.id));
+
+        // ===== PRESET AGENTS =====
+        const PRESET_AGENTS = [
+            {
+                key: 'facilitator',
+                nameIt: 'Facilitatore', nameEn: 'Facilitator',
+                modelId: 'google/gemini-2.5-flash',
+                roleIt: `Sei il FACILITATORE del Laboratorio AI-PACT, un percorso di Design Thinking per la Pubblica Amministrazione. Il tuo ruolo è guidare i partecipanti passo dopo passo.
+
+CONTESTO PIATTAFORMA:
+Stai operando dentro un simulatore multi-agente. I partecipanti possono attivare agenti specializzati che lavorano in parallelo o in sequenza (fasi). Gli agenti disponibili sono:
+- Ricerca Web (Perplexity, fase 1 — cerca dati aggiornati, si auto-disattiva dopo ogni turno)
+- Esperto di Diritto (normative, vincoli legali, TUEL, appalti)
+- Esperto Privacy e Dati / DPO (GDPR, protezione dati, consenso)
+- Sociologo (dinamiche sociali, partecipazione, inclusione)
+- Economista (costi-benefici, finanza pubblica, finanziamenti)
+- Urbanista (pianificazione territoriale, rigenerazione, mobilità)
+- Esperto Progetti Europei (PNRR, Horizon, FESR, FSE+, Interreg)
+- Sviluppatore Web (produce pagine HTML/CSS/JS singole)
+- Anonimizzatore (de-identificazione GDPR di documenti)
+
+FUNZIONALITÀ CHIAVE:
+- Modalità LEAD: con 1 solo agente attivo, la risposta è diretta senza orchestratore
+- Fasi: gli agenti con fase diversa lavorano in sequenza (es. Ricerca Web fase 1, poi esperti fase 2)
+- Contesto condiviso: il campo "Contesto" in alto viene letto da tutti gli agenti
+- Anteprima codice: i report HTML prodotti dallo Sviluppatore Web si visualizzano con il pulsante Anteprima
+
+IL TUO COMPITO:
+1. FASE ESPLORATIVA: Aiuta il partecipante a formulare il suo problema in modo chiaro e specifico. Fai domande mirate per capire: qual è la sfida concreta? Chi ne è coinvolto? Quali dati servirebbero?
+2. SUGGERIMENTI: Dopo aver capito il problema, suggerisci quali 2-3 agenti attivare e in che ordine (fasi). Non suggerire mai più di 3 agenti alla volta — meglio iterare con pochi agenti mirati.
+3. CONTESTO: Suggerisci cosa scrivere nel campo "Contesto" per dare agli agenti le informazioni giuste.
+4. ITERAZIONE: Dopo ogni turno multi-agente, aiuta a interpretare i risultati e suggerisci il passo successivo.
+
+REGOLE:
+- Sii pratico e concreto, non accademico
+- Parla come un collega esperto, non come un manuale
+- Adatta i suggerimenti al livello di esperienza del partecipante
+- Ricorda sempre che l'obiettivo finale è un report/soluzione applicabile
+- Quando il partecipante è pronto per il report finale, suggerisci lo Sviluppatore Web in modalità LEAD`,
+                roleEn: `You are the FACILITATOR of the AI-PACT Lab, a Design Thinking pathway for Public Administration. Your role is to guide participants step by step.
+
+PLATFORM CONTEXT:
+You are operating inside a multi-agent simulator. Participants can activate specialized agents that work in parallel or in sequence (phases). Available agents are:
+- Web Search (Perplexity, phase 1 — searches for up-to-date data, auto-disables after each turn)
+- Legal Expert (regulations, legal constraints, public law)
+- Privacy & Data Expert / DPO (GDPR, data protection, consent)
+- Sociologist (social dynamics, participation, inclusion)
+- Economist (cost-benefit, public finance, funding)
+- Urban Planner (territorial planning, regeneration, mobility)
+- EU Projects Expert (PNRR, Horizon, ERDF, ESF+, Interreg)
+- Web Developer (produces single-file HTML/CSS/JS pages)
+- Anonymizer (GDPR de-identification of documents)
+
+KEY FEATURES:
+- LEAD mode: with only 1 active agent, the response is direct without orchestrator
+- Phases: agents with different phase numbers work sequentially (e.g. Web Search phase 1, then experts phase 2)
+- Shared context: the "Context" field at the top is read by all agents
+- Code preview: HTML reports produced by Web Developer can be viewed with the Preview button
+
+YOUR TASK:
+1. EXPLORATORY PHASE: Help the participant formulate their problem clearly and specifically. Ask targeted questions: what is the concrete challenge? Who is involved? What data would be needed?
+2. SUGGESTIONS: After understanding the problem, suggest which 2-3 agents to activate and in what order (phases). Never suggest more than 3 agents at once — better to iterate with few targeted agents.
+3. CONTEXT: Suggest what to write in the "Context" field to give agents the right information.
+4. ITERATION: After each multi-agent turn, help interpret results and suggest the next step.
+
+RULES:
+- Be practical and concrete, not academic
+- Speak like a knowledgeable colleague, not a manual
+- Adapt suggestions to the participant's experience level
+- Always remember the final goal is an actionable report/solution
+- When the participant is ready for the final report, suggest Web Developer in LEAD mode`
+            },
+            {
+                key: 'webSearch',
+                nameIt: 'Ricerca Web', nameEn: 'Web Search',
+                modelId: 'perplexity/sonar',
+                lockedModel: true,
+                autoDisable: true,
+                phase: 1,
+                roleIt: 'Sei un esperto di ricerca informazioni online. Cerca dati aggiornati, statistiche, best practice, normative e riferimenti pertinenti alla domanda dell\'utente. Fornisci sempre le fonti. Concentrati su risultati rilevanti per la pubblica amministrazione italiana e lo sviluppo locale.',
+                roleEn: 'You are an expert web researcher. Search for up-to-date data, statistics, best practices, regulations and references relevant to the user\'s question. Always provide sources. Focus on results relevant to Italian public administration and local development.'
+            },
+            {
+                key: 'jurist',
+                nameIt: 'Esperto di Diritto', nameEn: 'Legal Expert',
+                modelId: 'google/gemini-2.5-flash',
+                roleIt: 'Sei un esperto di diritto amministrativo e pubblico italiano. Analizza le questioni dal punto di vista giuridico, citando normative rilevanti (TUEL, Codice degli Appalti, normative regionali). Evidenzia vincoli, opportunità e rischi legali per la pubblica amministrazione.',
+                roleEn: 'You are an expert in Italian administrative and public law. Analyze questions from a legal perspective, citing relevant regulations. Highlight constraints, opportunities and legal risks for public administration.'
+            },
+            {
+                key: 'dpo',
+                nameIt: 'Esperto Privacy e Dati', nameEn: 'Privacy & Data Expert',
+                modelId: 'google/gemini-2.5-flash',
+                roleIt: 'Sei un DPO (Data Protection Officer) esperto di GDPR, privacy by design e gestione dei dati nella pubblica amministrazione. Valuta gli aspetti di protezione dati, consenso, trasparenza e sicurezza. Suggerisci misure tecniche e organizzative appropriate.',
+                roleEn: 'You are a DPO (Data Protection Officer) expert in GDPR, privacy by design and data management in public administration. Assess data protection, consent, transparency and security aspects. Suggest appropriate technical and organizational measures.'
+            },
+            {
+                key: 'sociologist',
+                nameIt: 'Sociologo', nameEn: 'Sociologist',
+                modelId: 'google/gemini-2.5-flash-lite',
+                roleIt: 'Sei un sociologo esperto di dinamiche sociali, partecipazione cittadina e impatto sociale delle politiche pubbliche. Analizza le questioni dal punto di vista dell\'inclusione, dell\'equità, delle disuguaglianze e della coesione sociale. Considera le esigenze delle comunità locali e dei gruppi vulnerabili.',
+                roleEn: 'You are a sociologist expert in social dynamics, citizen participation and social impact of public policies. Analyze questions from the perspective of inclusion, equity, inequalities and social cohesion. Consider the needs of local communities and vulnerable groups.'
+            },
+            {
+                key: 'economist',
+                nameIt: 'Economista', nameEn: 'Economist',
+                modelId: 'google/gemini-2.5-flash-lite',
+                roleIt: 'Sei un economista esperto di economia locale, finanza pubblica e sviluppo territoriale. Analizza costi-benefici, sostenibilità finanziaria, impatto economico e opportunità di finanziamento. Considera il contesto dei comuni italiani e delle risorse disponibili.',
+                roleEn: 'You are an economist expert in local economy, public finance and territorial development. Analyze cost-benefit, financial sustainability, economic impact and funding opportunities. Consider the context of Italian municipalities and available resources.'
+            },
+            {
+                key: 'urbanist',
+                nameIt: 'Urbanista', nameEn: 'Urban Planner',
+                modelId: 'google/gemini-2.5-flash-lite',
+                roleIt: 'Sei un urbanista esperto di pianificazione territoriale, rigenerazione urbana e sviluppo sostenibile delle città. Analizza le questioni dal punto di vista spaziale, infrastrutturale e ambientale. Considera mobilità, verde pubblico, servizi e qualità della vita urbana.',
+                roleEn: 'You are an urban planner expert in territorial planning, urban regeneration and sustainable city development. Analyze questions from spatial, infrastructural and environmental perspectives. Consider mobility, green spaces, services and urban quality of life.'
+            },
+            {
+                key: 'euProjects',
+                nameIt: 'Esperto Progetti Europei', nameEn: 'EU Projects Expert',
+                modelId: 'google/gemini-2.5-flash',
+                roleIt: 'Sei un esperto di progettazione europea e fondi strutturali (PNRR, Horizon Europe, FESR, FSE+, Interreg). Identifica opportunità di finanziamento, requisiti di ammissibilità, partenariati e strategie per massimizzare le chance di successo dei progetti della pubblica amministrazione.',
+                roleEn: 'You are an expert in European project design and structural funds (PNRR, Horizon Europe, ERDF, ESF+, Interreg). Identify funding opportunities, eligibility requirements, partnerships and strategies to maximize success chances for public administration projects.'
+            },
+            {
+                key: 'webDev',
+                nameIt: 'Sviluppatore Web', nameEn: 'Web Developer',
+                modelId: 'google/gemini-2.5-flash',
+                roleIt: 'Sei uno sviluppatore web specializzato nella creazione di pagine HTML/CSS/JavaScript singole (single-file). Produci codice pulito, accessibile e responsive. Quando richiesto, genera direttamente il codice completo della pagina. Segui le linee guida di accessibilità WCAG e il design system della PA italiana.',
+                roleEn: 'You are a web developer specialized in creating single-file HTML/CSS/JavaScript pages. Produce clean, accessible and responsive code. When requested, directly generate the complete page code. Follow WCAG accessibility guidelines and Italian PA design system.'
+            },
+            {
+                key: 'anonymizer',
+                nameIt: 'Anonimizzatore', nameEn: 'Anonymizer',
+                modelId: 'google/gemini-2.5-flash',
+                roleIt: 'SEI UN SENIOR PRIVACY ENGINEER SPECIALIZZATO IN CONFORMITÀ GDPR. Il tuo compito è la de-identificazione irreversibile di documenti amministrativi.\n\nREGOLE MANDATORIE:\n1. INTEGRITÀ: È vietato cancellare intere frasi. Ogni informazione deve essere preservata trasformando i dati sensibili in placeholder descrittivi (es. [DESCRIZIONE POSIZIONE]).\n2. WHITE LIST: NON anonimizzare nomi di personaggi storici, alte cariche dello Stato e riferimenti a leggi, decreti o articoli di codici (es. "Art. 615-bis c.p.").\n3. IDENTIFICATORI INDIRETTI: Presta massima attenzione a ruoli univoci, soprannomi o descrizioni fisiche che rendono una persona identificabile in piccoli contesti.\n4. NUMERI SEMANTICI: I numeri scritti a parole (es. "tre-quattro-zero") devono essere trattati come dati sensibili e anonimizzati in [TELEFONO] o [CODICE].\n5. OUTPUT: Restituisci esclusivamente il testo anonimizzato.\n\n<ESEMPI>\nInput: Ho incontrato il Presidente Mattarella e il Sig. Luca Rossi per la Legge 104.\nOutput: Ho incontrato il Presidente Mattarella e il Sig. [NOME E COGNOME] per la Legge 104.\n\nInput: Vive nella casa rossa dopo il ruscello a Vagli Sotto.\nOutput: Vive in [DESCRIZIONE ABITAZIONE] a [COMUNE].\n\nInput: Mi chiami allo zero-sei, quaranta, venti.\nOutput: Mi chiami al [TELEFONO].\n\nInput: Si allega bolletta n. A-X-4500 intestata a Bianca Rosa.\nOutput: Si allega bolletta n. [CODICE DOCUMENTO] intestata a [NOME E COGNOME].\n</ESEMPI>',
+                roleEn: 'YOU ARE A SENIOR PRIVACY ENGINEER SPECIALIZED IN GDPR COMPLIANCE. Your task is the irreversible de-identification of administrative documents.\n\nMANDATORY RULES:\n1. INTEGRITY: It is forbidden to delete entire sentences. Every piece of information must be preserved by transforming sensitive data into descriptive placeholders (e.g. [POSITION DESCRIPTION]).\n2. WHITE LIST: DO NOT anonymize names of historical figures, high-ranking State officials and references to laws, decrees or legal articles (e.g. "Art. 615-bis c.p.").\n3. INDIRECT IDENTIFIERS: Pay close attention to unique roles, nicknames or physical descriptions that make a person identifiable in small contexts.\n4. SEMANTIC NUMBERS: Numbers written as words (e.g. "three-four-zero") must be treated as sensitive data and anonymized as [PHONE] or [CODE].\n5. OUTPUT: Return exclusively the anonymized text.\n\n<EXAMPLES>\nInput: I met President Mattarella and Mr. John Smith regarding Law 104.\nOutput: I met President Mattarella and Mr. [FULL NAME] regarding Law 104.\n\nInput: He lives in the red house past the stream in Vagli Sotto.\nOutput: He lives in [DWELLING DESCRIPTION] in [MUNICIPALITY].\n\nInput: Call me at zero-six, forty, twenty.\nOutput: Call me at [PHONE].\n\nInput: Attached is bill no. A-X-4500 registered to Jane Doe.\nOutput: Attached is bill no. [DOCUMENT CODE] registered to [FULL NAME].\n</EXAMPLES>'
+            }
         ];
 
         // ===== API KEY MANAGER =====
@@ -1951,6 +3263,17 @@
                 div.appendChild(roleDiv);
                 div.appendChild(contentDiv);
 
+                // Preview button for code blocks
+                if (message.role === 'assistant' && hasPreviewableCode(message.content)) {
+                    const previewBtn = document.createElement('button');
+                    previewBtn.className = 'preview-btn';
+                    previewBtn.textContent = '\u25B6 ' + this.t('preview.btn');
+                    previewBtn.addEventListener('click', () => {
+                        if (window.app) window.app.openPreview(message.content);
+                    });
+                    div.appendChild(previewBtn);
+                }
+
                 if (message.model && message.role === 'assistant' && message.cost > 0) {
                     const metaDiv = document.createElement('div');
                     metaDiv.className = 'message-meta';
@@ -2133,6 +3456,9 @@
                 this.reasoningStorageKey = 'reasoningEnabled_online';
                 this.reasoningEffortKey = 'reasoningEffort_online';
                 this.reasoningToastTimer = null;
+                this.activeTab = 'chat';
+                this.agentsConfigVisible = true;
+                this.agentsManager = null;
 
                 this.init();
             }
@@ -2207,6 +3533,9 @@
                 localStorage.setItem(this.langStorageKey, lang);
                 this.updateLanguageControls();
                 this.chatUI.setTranslator((key, vars) => this.t(key, vars));
+                if (this.agentsManager) {
+                    this.agentsManager.setTranslator((key, vars) => this.t(key, vars));
+                }
                 this.applyTranslations();
                 this.chatUI.renderMessages(this.conversationManager.getCurrentMessages());
                 if (document.getElementById('pageModal').classList.contains('active')) {
@@ -2323,18 +3652,31 @@
                 this.setDemoMode(false);
                 this.hideSetupOverlay();
 
-                this.setupEventListeners();
-                this.populateModelSelector();
-                this.setupPromptToggle();
-                this.setupBottomToggle();
-                this.setupNotice();
-                this.updateReasoningAvailability();
+                if (!this._appInitialized) {
+                    this._appInitialized = true;
 
-                this.chatCore = new ChatCore(
-                    this.modelSelector,
-                    this.apiKeyManager,
-                    (content) => this.chatUI.updateLastMessage(content)
-                );
+                    this.setupEventListeners();
+                    this.populateModelSelector();
+                    this.setupPromptToggle();
+                    this.setupBottomToggle();
+                    this.setupNotice();
+                    this.updateReasoningAvailability();
+
+                    this.chatCore = new ChatCore(
+                        this.modelSelector,
+                        this.apiKeyManager,
+                        (content) => this.chatUI.updateLastMessage(content)
+                    );
+
+                    this.agentsManager = new AgentsManager(
+                        this.apiKeyManager,
+                        MODELS,
+                        (key, vars) => this.t(key, vars)
+                    );
+                    this.setupTabs();
+                    this.setupAgentsView();
+                }
+
                 this.startNewChat();
             }
 
@@ -2383,19 +3725,31 @@
 
             setupEventListeners() {
                 // Send button
-                document.getElementById('sendBtn').addEventListener('click', () => this.sendMessage());
+                document.getElementById('sendBtn').addEventListener('click', () => {
+                    if (this.activeTab === 'agents') {
+                        this.sendAgentsMessage();
+                    } else {
+                        this.sendMessage();
+                    }
+                });
 
                 // Enter key
                 document.getElementById('messageInput').addEventListener('keydown', (e) => {
                     if (e.key === 'Enter' && !e.shiftKey) {
                         e.preventDefault();
-                        this.sendMessage();
+                        if (this.activeTab === 'agents') {
+                            this.sendAgentsMessage();
+                        } else {
+                            this.sendMessage();
+                        }
                     }
                 });
 
                 // New chat button
                 document.getElementById('newChatBtn').addEventListener('click', () => this.startNewChat());
                 document.getElementById('cloneChatBtn').addEventListener('click', () => this.cloneChat());
+                document.getElementById('newAgentsSessionBtn').addEventListener('click', () => this.startNewAgentsSession());
+                document.getElementById('clearAgentsBtn').addEventListener('click', () => this.clearAgentsAll());
                 document.getElementById('homeBtn').addEventListener('click', () => {
                     window.location.href = '/';
                 });
@@ -2452,6 +3806,15 @@
                 // History button
                 document.getElementById('historyBtn').addEventListener('click', () => {
                     this.showHistory();
+                });
+
+                // Datetime toggle
+                const dtBtn = document.getElementById('datetimeToggle');
+                if (localStorage.getItem('chat_datetime_anchor') === 'true') dtBtn.classList.add('active');
+                dtBtn.addEventListener('click', () => {
+                    const on = dtBtn.classList.toggle('active');
+                    localStorage.setItem('chat_datetime_anchor', on);
+                    dtBtn.title = on ? this.t('nav.datetimeOn') : this.t('nav.datetimeOff');
                 });
 
                 // Tour button
@@ -2584,6 +3947,28 @@
                     contextPrompt: '',
                     examplesPrompt: ''
                 });
+            }
+
+            startNewAgentsSession() {
+                if (this.agentsManager) {
+                    this.agentsManager.saveCurrentSession();
+                    this.agentsManager.currentSession = null;
+                }
+                document.getElementById('agentsMessages').innerHTML = '';
+                document.getElementById('messageInput').value = '';
+            }
+
+            clearAgentsAll() {
+                if (this.agentsManager) {
+                    this.agentsManager.saveCurrentSession();
+                    this.agentsManager.currentSession = null;
+                    this.agentsManager.agents = [];
+                    this.agentsManager.saveAgents();
+                }
+                document.getElementById('agentsMessages').innerHTML = '';
+                document.getElementById('messageInput').value = '';
+                document.getElementById('agentsContext').value = '';
+                this.renderAgentsCards();
             }
 
             cloneChat() {
@@ -2795,6 +4180,9 @@
                 const examplesPrompt = document.getElementById('examplesPrompt').value.trim();
 
                 const sections = [];
+                if (localStorage.getItem('chat_datetime_anchor') === 'true') {
+                    sections.push(`Current date and time: ${new Date().toLocaleString()}`);
+                }
                 if (systemPrompt) {
                     sections.push(`<SYSTEM_PROMPT>\n${systemPrompt}\n</SYSTEM_PROMPT>`);
                 }
@@ -3357,11 +4745,13 @@
                 const creditData = await this.fetchCredit();
 
                 const bottomDisplay = document.getElementById('creditDisplay');
+                const agentsDisplay = document.getElementById('agentsCreditDisplay');
                 const setupDisplay = document.getElementById('setupCreditValue');
                 const setupContainer = document.getElementById('setupCredit');
 
                 if (!creditData) {
                     if (bottomDisplay) bottomDisplay.textContent = '$-.--';
+                    if (agentsDisplay) agentsDisplay.textContent = '$-.--';
                     if (setupDisplay) setupDisplay.textContent = '$-.--';
                     if (setupContainer) setupContainer.classList.add('hidden');
                     return;
@@ -3379,8 +4769,1253 @@
                 }
 
                 if (bottomDisplay) bottomDisplay.textContent = displayText;
+                if (agentsDisplay) agentsDisplay.textContent = displayText;
                 if (setupDisplay) setupDisplay.textContent = displayText;
                 if (setupContainer) setupContainer.classList.remove('hidden');
+            }
+
+            // ===== TAB MANAGEMENT =====
+            setupTabs() {
+                const appEl = document.getElementById('app');
+                appEl.classList.add('tab-agents');
+
+                document.getElementById('tabChat').addEventListener('click', () => this.switchTab('chat'));
+                document.getElementById('tabAgents').addEventListener('click', () => this.switchTab('agents'));
+                this.renderAgentsCards();
+                this.renderAgentsMessages();
+            }
+
+            switchTab(tab) {
+                this.activeTab = tab;
+                const appEl = document.getElementById('app');
+                appEl.classList.remove('tab-chat', 'tab-agents');
+                appEl.classList.add(`tab-${tab}`);
+
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.tab === tab);
+                });
+
+                if (tab === 'agents') {
+                    this.renderAgentsCards();
+                    this.renderAgentsMessages();
+                }
+            }
+
+            // ===== AGENTS VIEW =====
+            setupAgentsView() {
+                document.getElementById('addAgentBtn').addEventListener('click', () => {
+                    this.showAgentPicker();
+                });
+
+                // Populate orchestrator selector (restricted models)
+                const orchSelect = document.getElementById('orchestratorSelector');
+                AGENT_MODELS.forEach(m => {
+                    const opt = document.createElement('option');
+                    opt.value = m.id;
+                    opt.textContent = m.name;
+                    orchSelect.appendChild(opt);
+                });
+                orchSelect.value = this.agentsManager.getOrchestratorModelId();
+                orchSelect.addEventListener('change', (e) => {
+                    this.agentsManager.setOrchestratorModelId(e.target.value);
+                });
+
+                // Orchestrator prompt toggle and persistence
+                const orchPromptEl = document.getElementById('orchestratorPrompt');
+                const orchToggleBtn = document.getElementById('orchPromptToggle');
+                const savedOrchPrompt = localStorage.getItem('agents_orchestrator_prompt_online');
+                orchPromptEl.value = savedOrchPrompt !== null ? savedOrchPrompt : this.t('agents.orchestratorRole');
+                orchPromptEl.addEventListener('input', () => {
+                    localStorage.setItem('agents_orchestrator_prompt_online', orchPromptEl.value);
+                });
+                orchToggleBtn.addEventListener('click', () => {
+                    orchPromptEl.classList.toggle('hidden');
+                });
+
+                // Shared prompts persistence
+                const ctxEl = document.getElementById('agentsContext');
+                const savedCtx = localStorage.getItem('agents_context_online');
+                if (savedCtx) ctxEl.value = savedCtx;
+                ctxEl.addEventListener('input', () => {
+                    localStorage.setItem('agents_context_online', ctxEl.value);
+                });
+
+                // Toggle config
+                document.getElementById('agentsToggleConfig').addEventListener('click', () => {
+                    this.agentsConfigVisible = !this.agentsConfigVisible;
+                    document.getElementById('agentsConfig').classList.toggle('collapsed', !this.agentsConfigVisible);
+                    document.getElementById('agentsToggleConfig').classList.toggle('active', this.agentsConfigVisible);
+                });
+
+                // Font size
+                document.getElementById('agentsFontIncrease').addEventListener('click', () => {
+                    this.chatUI.increaseFontSize();
+                });
+                document.getElementById('agentsFontDecrease').addEventListener('click', () => {
+                    this.chatUI.decreaseFontSize();
+                });
+
+                // New session
+                document.getElementById('agentsNewSessionBtn').addEventListener('click', () => {
+                    this.agentsManager.newSession();
+                    this.renderAgentsMessages();
+                });
+
+                // History
+                document.getElementById('agentsHistoryBtn').addEventListener('click', () => {
+                    this.showAgentsHistory();
+                });
+
+                // Export
+                document.getElementById('agentsExportBtn').addEventListener('click', () => {
+                    this.exportAgentsSession();
+                });
+
+                // Language toggle (mirror)
+                document.getElementById('agentsLangToggle').addEventListener('click', () => {
+                    this.toggleLanguage();
+                });
+
+                // Credit display (mirror)
+                document.getElementById('agentsCreditDisplay').addEventListener('click', () => {
+                    this.updateCreditDisplay();
+                });
+
+                this.renderAgentsCards();
+                this.renderAgentsMessages();
+            }
+
+            showAgentPicker() {
+                const overlay = document.createElement('div');
+                overlay.className = 'agent-picker-overlay';
+
+                const picker = document.createElement('div');
+                picker.className = 'agent-picker';
+
+                const title = document.createElement('h3');
+                title.textContent = this.t('agents.pickerTitle');
+                picker.appendChild(title);
+
+                // Custom agent option
+                const customItem = document.createElement('div');
+                customItem.className = 'agent-picker-item custom-pick';
+                customItem.innerHTML = `<div class="picker-name">${this.t('agents.pickerCustom')}</div><div class="picker-desc">${this.t('agents.pickerCustomDesc')}</div>`;
+                customItem.addEventListener('click', () => {
+                    this.agentsManager.addAgent({
+                        name: '',
+                        role: '',
+                        modelId: AGENT_MODELS[0].id,
+                        preset: null
+                    });
+                    this.renderAgentsCards();
+                    overlay.remove();
+                });
+                picker.appendChild(customItem);
+
+                // Preset agents — hide already-added presets
+                const existingPresets = this.agentsManager.getAgents()
+                    .filter(a => a.preset)
+                    .map(a => a.preset);
+
+                PRESET_AGENTS.forEach(preset => {
+                    if (existingPresets.includes(preset.key)) return;
+
+                    const item = document.createElement('div');
+                    item.className = 'agent-picker-item';
+                    const name = this.lang === 'it' ? preset.nameIt : preset.nameEn;
+                    const desc = this.lang === 'it' ? preset.roleIt : preset.roleEn;
+                    let badges = '';
+                    if (preset.autoDisable) {
+                        badges = ` <span class="agent-auto-disable-badge">${this.t('agents.autoDisableBadge')}</span>`;
+                    }
+                    item.innerHTML = `<div class="picker-name">${name}${badges}</div><div class="picker-desc">${desc}</div>`;
+                    item.addEventListener('click', () => {
+                        this.agentsManager.addAgent({
+                            name: name,
+                            role: this.lang === 'it' ? preset.roleIt : preset.roleEn,
+                            modelId: preset.modelId,
+                            preset: preset.key,
+                            lockedModel: preset.lockedModel || false,
+                            autoDisable: preset.autoDisable || false,
+                            phase: preset.phase || 0,
+                            enabled: true
+                        });
+                        this.renderAgentsCards();
+                        overlay.remove();
+                    });
+                    picker.appendChild(item);
+                });
+
+                const closeBtn = document.createElement('button');
+                closeBtn.className = 'agent-picker-close';
+                closeBtn.textContent = this.t('agents.pickerClose');
+                closeBtn.addEventListener('click', () => overlay.remove());
+                picker.appendChild(closeBtn);
+
+                overlay.appendChild(picker);
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay) overlay.remove();
+                });
+                document.body.appendChild(overlay);
+            }
+
+            renderAgentsCards() {
+                const list = document.getElementById('agentsList');
+                list.innerHTML = '';
+                const agents = this.agentsManager.getAgents();
+
+                if (agents.length === 0) {
+                    list.innerHTML = `<p style="padding: 10px; color: var(--meta-text); font-size: 13px;">${this.t('agents.emptyAgents')}</p>`;
+                    return;
+                }
+
+                const enabledCount = agents.filter(a => a.enabled !== false).length;
+                const existingHint = document.getElementById('leadHint');
+                if (existingHint) existingHint.remove();
+                if (enabledCount === 1) {
+                    const hint = document.createElement('div');
+                    hint.id = 'leadHint';
+                    hint.style.cssText = 'padding: 8px 12px; margin: 0 0 6px 0; background: var(--accent-bg, #e8f4fd); border-left: 3px solid var(--accent, #0077cc); border-radius: 4px; font-size: 12px; color: var(--text-secondary, #555); line-height: 1.4;';
+                    hint.textContent = this.t('agents.leadHint');
+                    list.parentNode.insertBefore(hint, list);
+                }
+
+                agents.forEach(agent => {
+                    const isEnabled = agent.enabled !== false;
+                    const isPreset = !!agent.preset;
+                    const card = document.createElement('div');
+                    card.className = 'agent-card' + (isEnabled ? '' : ' disabled') + (isPreset ? ' preset' : '');
+
+                    const headerDiv = document.createElement('div');
+                    headerDiv.className = 'agent-card-header';
+
+                    const headerLeft = document.createElement('div');
+                    headerLeft.className = 'agent-card-header-left';
+
+                    const toggle = document.createElement('label');
+                    toggle.className = 'agent-toggle';
+                    const toggleInput = document.createElement('input');
+                    toggleInput.type = 'checkbox';
+                    toggleInput.checked = isEnabled;
+                    toggleInput.addEventListener('change', (e) => {
+                        this.agentsManager.updateAgent(agent.id, { enabled: e.target.checked });
+                        this.renderAgentsCards();
+                    });
+                    const slider = document.createElement('span');
+                    slider.className = 'agent-toggle-slider';
+                    toggle.appendChild(toggleInput);
+                    toggle.appendChild(slider);
+                    headerLeft.appendChild(toggle);
+
+                    const leadBtn = document.createElement('button');
+                    leadBtn.className = 'agent-lead-btn' + (enabledCount === 1 && isEnabled ? ' active' : '');
+                    leadBtn.textContent = 'LEAD';
+                    leadBtn.title = this.t('agents.leadHint');
+                    leadBtn.addEventListener('click', () => {
+                        const allAgents = this.agentsManager.getAgents();
+                        allAgents.forEach(a => {
+                            this.agentsManager.updateAgent(a.id, { enabled: a.id === agent.id });
+                        });
+                        this.renderAgentsCards();
+                    });
+                    headerLeft.appendChild(leadBtn);
+
+                    if (isPreset) {
+                        const badge = document.createElement('span');
+                        badge.className = 'agent-preset-badge';
+                        badge.textContent = this.t('agents.presetBadge');
+                        headerLeft.appendChild(badge);
+                    }
+                    if (agent.autoDisable) {
+                        const adBadge = document.createElement('span');
+                        adBadge.className = 'agent-auto-disable-badge';
+                        adBadge.textContent = this.t('agents.autoDisableBadge');
+                        headerLeft.appendChild(adBadge);
+                    }
+
+                    const removeBtn = document.createElement('button');
+                    removeBtn.className = 'agent-remove-btn';
+                    removeBtn.textContent = '\u00D7';
+                    removeBtn.addEventListener('click', () => {
+                        this.agentsManager.removeAgent(agent.id);
+                        this.renderAgentsCards();
+                    });
+
+                    headerDiv.appendChild(headerLeft);
+                    headerDiv.appendChild(removeBtn);
+
+                    const nameLabel = document.createElement('label');
+                    nameLabel.textContent = this.t('agents.agentName');
+                    const nameInput = document.createElement('input');
+                    nameInput.type = 'text';
+                    nameInput.value = agent.name;
+                    nameInput.placeholder = this.t('agents.agentNamePlaceholder');
+                    if (isPreset) {
+                        nameInput.readOnly = true;
+                        nameInput.style.opacity = '0.7';
+                    } else {
+                        nameInput.addEventListener('input', (e) => {
+                            this.agentsManager.updateAgent(agent.id, { name: e.target.value });
+                        });
+                    }
+
+                    const roleLabel = document.createElement('label');
+                    roleLabel.textContent = this.t('agents.agentRole');
+                    const roleInput = document.createElement('textarea');
+                    roleInput.value = agent.role;
+                    roleInput.placeholder = this.t('agents.agentRolePlaceholder');
+                    if (isPreset) {
+                        roleInput.readOnly = true;
+                        roleInput.style.opacity = '0.7';
+                    } else {
+                        roleInput.addEventListener('input', (e) => {
+                            this.agentsManager.updateAgent(agent.id, { role: e.target.value });
+                        });
+                    }
+
+                    const modelLabel = document.createElement('label');
+                    modelLabel.textContent = this.t('agents.agentModel');
+                    let modelSelect;
+                    if (agent.lockedModel) {
+                        // Locked model: show as plain text
+                        const m = MODELS.find(m => m.id === agent.modelId) || MODELS[0];
+                        modelSelect = document.createElement('div');
+                        modelSelect.style.cssText = 'padding: 6px 8px; background: var(--input-bg, #f5f5f5); border: 1px solid var(--border, #ddd); border-radius: 6px; font-size: 13px; color: var(--text-secondary, #888); opacity: 0.7; cursor: default;';
+                        modelSelect.textContent = m.name;
+                    } else {
+                        modelSelect = document.createElement('select');
+                        // Use restricted AGENT_MODELS for selection
+                        AGENT_MODELS.forEach(m => {
+                            const opt = document.createElement('option');
+                            opt.value = m.id;
+                            opt.textContent = m.name;
+                            modelSelect.appendChild(opt);
+                        });
+                        modelSelect.value = agent.modelId;
+                        modelSelect.addEventListener('change', (e) => {
+                            this.agentsManager.updateAgent(agent.id, { modelId: e.target.value });
+                        });
+                    }
+
+                    const phaseRow = document.createElement('div');
+                    phaseRow.style.cssText = 'display: flex; align-items: center; gap: 8px; margin-top: 4px;';
+                    const phaseLabel = document.createElement('label');
+                    phaseLabel.textContent = this.t('agents.phaseLabel');
+                    phaseLabel.style.cssText = 'font-size: 12px; margin: 0; white-space: nowrap;';
+                    const phaseInput = document.createElement('input');
+                    phaseInput.type = 'number';
+                    phaseInput.min = '0';
+                    phaseInput.max = '9';
+                    phaseInput.value = agent.phase || 0;
+                    phaseInput.style.cssText = 'width: 50px; padding: 4px 6px; font-size: 12px; border: 1px solid var(--border, #ddd); border-radius: 4px; text-align: center;';
+                    phaseInput.addEventListener('change', (e) => {
+                        this.agentsManager.updateAgent(agent.id, { phase: parseInt(e.target.value) || 0 });
+                    });
+                    const phaseHint = document.createElement('span');
+                    phaseHint.style.cssText = 'font-size: 11px; color: var(--text-secondary, #888);';
+                    phaseHint.textContent = this.t('agents.phaseHint');
+                    phaseRow.appendChild(phaseLabel);
+                    phaseRow.appendChild(phaseInput);
+                    phaseRow.appendChild(phaseHint);
+
+                    card.appendChild(headerDiv);
+                    card.appendChild(nameLabel);
+                    card.appendChild(nameInput);
+                    card.appendChild(roleLabel);
+                    card.appendChild(roleInput);
+                    card.appendChild(modelLabel);
+                    card.appendChild(modelSelect);
+                    card.appendChild(phaseRow);
+                    list.appendChild(card);
+                });
+            }
+
+            renderAgentsMessages() {
+                const container = document.getElementById('agentsMessages');
+                const messages = this.agentsManager.getSessionMessages();
+
+                if (messages.length === 0) {
+                    container.innerHTML = `<p style="text-align: center; padding: 40px; color: #666;">${this.t('agents.emptyChat')}</p>`;
+                    return;
+                }
+
+                container.innerHTML = '';
+
+                messages.forEach(entry => {
+                    if (entry.type === 'user') {
+                        const div = document.createElement('div');
+                        div.className = 'message user';
+                        const roleDiv = document.createElement('div');
+                        roleDiv.className = 'message-role';
+                        roleDiv.textContent = this.t('role.user');
+                        const contentDiv = document.createElement('div');
+                        contentDiv.className = 'message-content';
+                        contentDiv.textContent = entry.content;
+                        div.appendChild(roleDiv);
+                        div.appendChild(contentDiv);
+                        container.appendChild(div);
+                    } else if (entry.type === 'agent-responses') {
+                        const group = document.createElement('div');
+                        group.className = 'agent-responses-group';
+
+                        const toggleBtn = document.createElement('button');
+                        toggleBtn.className = 'agent-responses-toggle';
+                        const totalCost = entry.responses.reduce((s, r) => s + (r.cost || 0), 0);
+                        toggleBtn.innerHTML = `<span>${this.t('agents.agentResponses', { count: entry.responses.length })}</span><span>$${totalCost.toFixed(6)}</span>`;
+
+                        const body = document.createElement('div');
+                        body.className = 'agent-responses-body';
+
+                        toggleBtn.addEventListener('click', () => {
+                            body.classList.toggle('expanded');
+                        });
+
+                        entry.responses.forEach(r => {
+                            const item = document.createElement('div');
+                            item.className = 'agent-response-item';
+
+                            const name = document.createElement('div');
+                            name.className = 'agent-response-name';
+                            name.textContent = `${r.agentName} (${r.modelName})`;
+
+                            const content = document.createElement('div');
+                            content.className = 'agent-response-content';
+                            content.innerHTML = renderMarkdown(r.content);
+
+                            const meta = document.createElement('div');
+                            meta.className = 'agent-response-meta';
+                            meta.textContent = `$${(r.cost || 0).toFixed(6)} | ${r.inputTokens}\u2192${r.outputTokens} tok`;
+
+                            item.appendChild(name);
+                            item.appendChild(content);
+                            if (hasPreviewableCode(r.content)) {
+                                const previewBtn = document.createElement('button');
+                                previewBtn.className = 'preview-btn';
+                                previewBtn.textContent = '\u25B6 ' + this.t('preview.btn');
+                                previewBtn.addEventListener('click', (e) => {
+                                    e.stopPropagation();
+                                    this.openPreview(r.content);
+                                });
+                                item.appendChild(previewBtn);
+                            }
+                            item.appendChild(meta);
+                            body.appendChild(item);
+                        });
+
+                        group.appendChild(toggleBtn);
+                        group.appendChild(body);
+                        container.appendChild(group);
+                    } else if (entry.type === 'orchestrator') {
+                        const div = document.createElement('div');
+                        div.className = 'message orchestrator' + (entry.isLead ? ' lead' : '');
+                        const roleDiv = document.createElement('div');
+                        roleDiv.className = 'message-role';
+                        if (entry.isLead) {
+                            roleDiv.textContent = `${entry.agentName || ''} — ${this.t('agents.leadLabel')} (${entry.modelName})`;
+                        } else {
+                            roleDiv.textContent = `${this.t('agents.orchestratorLabel').replace(':', '')} (${entry.modelName})`;
+                        }
+                        const contentDiv = document.createElement('div');
+                        contentDiv.className = 'message-content';
+                        contentDiv.innerHTML = renderMarkdown(entry.content);
+                        const metaDiv = document.createElement('div');
+                        metaDiv.className = 'message-meta';
+                        metaDiv.textContent = `$${(entry.cost || 0).toFixed(6)} | ${entry.inputTokens}\u2192${entry.outputTokens} tok`;
+                        div.appendChild(roleDiv);
+                        div.appendChild(contentDiv);
+                        if (hasPreviewableCode(entry.content)) {
+                            const previewBtn = document.createElement('button');
+                            previewBtn.className = 'preview-btn';
+                            previewBtn.textContent = '\u25B6 ' + this.t('preview.btn');
+                            previewBtn.addEventListener('click', () => this.openPreview(entry.content));
+                            div.appendChild(previewBtn);
+                        }
+                        div.appendChild(metaDiv);
+                        container.appendChild(div);
+                    }
+                });
+
+                const scrollContainer = document.getElementById('agentsMessagesContainer');
+                scrollContainer.scrollTop = scrollContainer.scrollHeight;
+            }
+
+            buildProgressTracker(agents) {
+                const tracker = document.createElement('div');
+                tracker.className = 'agents-progress';
+
+                const isLeadMode = agents.length === 1;
+                const header = document.createElement('div');
+                header.className = 'agents-progress-header';
+                header.innerHTML = `<span class="spinner"></span><span>${isLeadMode ? this.t('agents.leadHeader') : this.t('agents.progressHeader')}</span>`;
+                tracker.appendChild(header);
+
+                const rows = {};
+                // Group by phase for visual display
+                const phaseMap = {};
+                agents.forEach(agent => {
+                    const p = agent.phase || 0;
+                    if (!phaseMap[p]) phaseMap[p] = [];
+                    phaseMap[p].push(agent);
+                });
+                const phaseKeys = Object.keys(phaseMap).map(Number).sort((a, b) => a - b);
+                const hasPhases = phaseKeys.length > 1;
+
+                phaseKeys.forEach((phaseNum, idx) => {
+                    if (hasPhases) {
+                        const phaseDiv = document.createElement('div');
+                        phaseDiv.style.cssText = 'font-size: 10px; color: #999; padding: 4px 8px 2px; text-transform: uppercase; letter-spacing: 0.5px; border-top: ' + (idx > 0 ? '1px dashed #ddd' : 'none') + '; margin-top: ' + (idx > 0 ? '4px' : '0') + ';';
+                        phaseDiv.textContent = `${this.t('agents.phaseLabel').replace(':', '')} ${idx + 1}`;
+                        tracker.appendChild(phaseDiv);
+                    }
+                    phaseMap[phaseNum].forEach(agent => {
+                        const row = document.createElement('div');
+                        row.className = 'agent-progress-row' + (idx === 0 ? ' working' : '');
+                        row.innerHTML = `
+                            <span class="agent-progress-icon">${idx === 0 ? '<span class="spinner"></span>' : '\u23F3'}</span>
+                            <span class="agent-progress-name">${this.escapeHtml(agent.name)}</span>
+                            <span class="agent-progress-status">${idx === 0 ? this.t('agents.progressWorking') : this.t('agents.progressWaiting')}</span>
+                            <span class="agent-progress-time"></span>
+                        `;
+                        tracker.appendChild(row);
+                        rows[agent.id] = { el: row, start: Date.now() };
+                    });
+                });
+
+                let orchRow = null;
+                if (!isLeadMode) {
+                    orchRow = document.createElement('div');
+                    orchRow.className = 'orchestrator-progress-row';
+                    orchRow.style.display = 'none';
+                    orchRow.innerHTML = `
+                        <span class="agent-progress-icon"><span class="spinner"></span></span>
+                        <span class="agent-progress-name">${this.t('agents.orchestratorLabel').replace(':', '')}</span>
+                        <span class="agent-progress-status">${this.t('agents.progressOrchestrator')}</span>
+                        <span class="agent-progress-time"></span>
+                    `;
+                    tracker.appendChild(orchRow);
+                }
+
+                return { tracker, rows, header, orchRow };
+            }
+
+            updateProgressRow(rowData, status, detail) {
+                const row = rowData.el;
+                const elapsed = ((Date.now() - rowData.start) / 1000).toFixed(1);
+                const timeEl = row.querySelector('.agent-progress-time');
+                const statusEl = row.querySelector('.agent-progress-status');
+                const iconEl = row.querySelector('.agent-progress-icon');
+
+                if (status === 'done') {
+                    row.className = 'agent-progress-row done';
+                    iconEl.textContent = '\u2713';
+                    statusEl.textContent = detail || this.t('agents.progressDone');
+                } else if (status === 'error') {
+                    row.className = 'agent-progress-row error';
+                    iconEl.textContent = '\u2717';
+                    statusEl.textContent = detail || this.t('agents.progressError');
+                }
+                timeEl.textContent = this.t('agents.progressTime', { seconds: elapsed });
+            }
+
+            escapeHtml(str) {
+                const div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML;
+            }
+
+            async sendAgentsMessage() {
+                const agents = this.agentsManager.getAgents().filter(a => a.name && a.role && a.enabled !== false);
+
+                if (agents.length === 0) {
+                    alert(this.t('agents.noAgentsWarning'));
+                    return;
+                }
+
+                const input = document.getElementById('messageInput');
+                const content = input.value.trim();
+                if (!content) return;
+
+                if (!this.apiKeyManager.hasApiKey()) {
+                    alert(this.t('errors.missingKey'));
+                    return;
+                }
+
+                const sharedPrompts = {
+                    context: document.getElementById('agentsContext').value.trim(),
+                    orchestratorPrompt: document.getElementById('orchestratorPrompt').value.trim()
+                };
+
+                input.value = '';
+                document.getElementById('sendBtn').disabled = true;
+
+                const conversationContext = this.agentsManager.getSessionMessages().filter(
+                    m => m.type === 'user' || m.type === 'orchestrator'
+                );
+
+                this.agentsManager.addSessionEntry({ type: 'user', content });
+                this.renderAgentsMessages();
+
+                const { tracker, rows, header, orchRow } = this.buildProgressTracker(agents);
+                document.getElementById('agentsMessages').appendChild(tracker);
+                const scrollContainer = document.getElementById('agentsMessagesContainer');
+                scrollContainer.scrollTop = scrollContainer.scrollHeight;
+
+                const timerInterval = setInterval(() => {
+                    Object.values(rows).forEach(rowData => {
+                        if (rowData.el.classList.contains('working')) {
+                            const elapsed = ((Date.now() - rowData.start) / 1000).toFixed(1);
+                            const timeEl = rowData.el.querySelector('.agent-progress-time');
+                            if (timeEl) timeEl.textContent = this.t('agents.progressTime', { seconds: elapsed });
+                        }
+                    });
+                    if (orchRow && orchRow.style.display !== 'none' && !orchRow.classList.contains('done')) {
+                        const orchTime = orchRow.querySelector('.agent-progress-time');
+                        if (orchTime && orchRow._start) {
+                            const elapsed = ((Date.now() - orchRow._start) / 1000).toFixed(1);
+                            orchTime.textContent = this.t('agents.progressTime', { seconds: elapsed });
+                        }
+                    }
+                }, 200);
+
+                try {
+                    // Group agents by phase for sequential execution
+                    const phaseMap = {};
+                    agents.forEach(agent => {
+                        const phase = agent.phase || 0;
+                        if (!phaseMap[phase]) phaseMap[phase] = [];
+                        phaseMap[phase].push(agent);
+                    });
+                    const phaseKeys = Object.keys(phaseMap).map(Number).sort((a, b) => a - b);
+                    const hasMultiplePhases = phaseKeys.length > 1 || (phaseKeys.length === 1 && phaseKeys[0] !== 0);
+
+                    let allResponses = [];
+                    let allErrors = [];
+                    let previousPhasesContext = '';
+
+                    for (const phaseNum of phaseKeys) {
+                        const phaseAgents = phaseMap[phaseNum];
+
+                        // Update progress header with phase info
+                        if (hasMultiplePhases && phaseKeys.length > 1) {
+                            const phaseIdx = phaseKeys.indexOf(phaseNum) + 1;
+                            header.querySelector('span:last-child').textContent =
+                                this.t('agents.phaseProgress', { phase: phaseIdx, total: phaseKeys.length });
+                        }
+
+                        // Start phase agents — enrich sharedPrompts with previous phases output
+                        const phaseSharedPrompts = { ...sharedPrompts };
+                        if (previousPhasesContext) {
+                            const existingCtx = phaseSharedPrompts.context || '';
+                            phaseSharedPrompts.context = existingCtx
+                                ? `${existingCtx}\n\n<PREVIOUS_AGENTS_OUTPUT>\n${previousPhasesContext}\n</PREVIOUS_AGENTS_OUTPUT>`
+                                : `<PREVIOUS_AGENTS_OUTPUT>\n${previousPhasesContext}\n</PREVIOUS_AGENTS_OUTPUT>`;
+                        }
+
+                        // Activate spinners for this phase's agents
+                        phaseAgents.forEach(agent => {
+                            const rowData = rows[agent.id];
+                            rowData.start = Date.now();
+                            rowData.el.className = 'agent-progress-row working';
+                            rowData.el.querySelector('.agent-progress-icon').innerHTML = '<span class="spinner"></span>';
+                            rowData.el.querySelector('.agent-progress-status').textContent = this.t('agents.progressWorking');
+                        });
+
+                        const phasePromises = phaseAgents.map(agent => {
+                            return this.agentsManager.callAgent(agent, content, conversationContext, phaseSharedPrompts)
+                                .then(result => {
+                                    this.updateProgressRow(rows[agent.id], 'done',
+                                        `${this.t('agents.progressDone')} ($${(result.cost || 0).toFixed(6)})`);
+                                    scrollContainer.scrollTop = scrollContainer.scrollHeight;
+                                    return { status: 'fulfilled', value: result };
+                                })
+                                .catch(err => {
+                                    this.updateProgressRow(rows[agent.id], 'error', err.message.substring(0, 60));
+                                    scrollContainer.scrollTop = scrollContainer.scrollHeight;
+                                    return { status: 'rejected', reason: err };
+                                });
+                        });
+
+                        const phaseResults = await Promise.all(phasePromises);
+
+                        const phaseResponses = phaseResults
+                            .filter(r => r.status === 'fulfilled')
+                            .map(r => r.value);
+                        const phaseErrors = phaseResults
+                            .filter(r => r.status === 'rejected')
+                            .map(r => ({ agentName: 'Error', modelName: '-', content: r.reason.message, cost: 0, inputTokens: 0, outputTokens: 0 }));
+
+                        allResponses.push(...phaseResponses);
+                        allErrors.push(...phaseErrors);
+
+                        // Build context from this phase for the next phase
+                        if (phaseResponses.length > 0) {
+                            const phaseOutputs = phaseResponses.map(r =>
+                                `[${r.agentName}]:\n${r.content}`
+                            ).join('\n\n---\n\n');
+                            previousPhasesContext += (previousPhasesContext ? '\n\n---\n\n' : '') + phaseOutputs;
+                        }
+                    }
+
+                    const responses = allResponses;
+                    const errors = allErrors;
+
+                    const isLeadMode = agents.length === 1;
+
+                    if (isLeadMode && responses.length === 1) {
+                        // LEAD MODE: single agent, skip orchestrator, use agent output directly
+                        const lead = responses[0];
+                        this.agentsManager.addSessionEntry({
+                            type: 'orchestrator',
+                            isLead: true,
+                            content: lead.content,
+                            cost: lead.cost,
+                            inputTokens: lead.inputTokens,
+                            outputTokens: lead.outputTokens,
+                            modelName: lead.modelName,
+                            agentName: lead.agentName
+                        });
+
+                        header.querySelector('.spinner').remove();
+                        header.querySelector('span:last-child').textContent =
+                            this.t('agents.leadDone');
+
+                    } else {
+                        // MULTI-AGENT MODE: orchestrate
+                        const allResponses = [...responses, ...errors];
+                        this.agentsManager.addSessionEntry({ type: 'agent-responses', responses: allResponses });
+
+                        header.querySelector('.spinner').remove();
+                        header.querySelector('span:last-child').textContent =
+                            this.t('agents.agentResponses', { count: responses.length });
+
+                        if (responses.length > 0) {
+                            orchRow.style.display = 'flex';
+                            orchRow._start = Date.now();
+                            scrollContainer.scrollTop = scrollContainer.scrollHeight;
+
+                            const orchResult = await this.agentsManager.callOrchestrator(content, allResponses, conversationContext, sharedPrompts);
+
+                            orchRow.classList.add('done');
+                            orchRow.querySelector('.agent-progress-icon').textContent = '\u2713';
+                            orchRow.querySelector('.agent-progress-status').textContent = this.t('agents.progressOrchestratorDone');
+                            const orchElapsed = ((Date.now() - orchRow._start) / 1000).toFixed(1);
+                            orchRow.querySelector('.agent-progress-time').textContent =
+                                this.t('agents.progressTime', { seconds: orchElapsed });
+
+                            this.agentsManager.addSessionEntry({
+                                type: 'orchestrator',
+                                content: orchResult.content,
+                                cost: orchResult.cost,
+                                inputTokens: orchResult.inputTokens,
+                                outputTokens: orchResult.outputTokens,
+                                modelName: orchResult.modelName
+                            });
+                        }
+                    }
+
+                } catch (error) {
+                    console.error('Agents error:', error);
+                    this.agentsManager.addSessionEntry({
+                        type: 'orchestrator',
+                        content: `Error: ${error.message}`,
+                        cost: 0,
+                        inputTokens: 0,
+                        outputTokens: 0,
+                        modelName: 'Error'
+                    });
+                }
+
+                clearInterval(timerInterval);
+
+                // Auto-disable agents marked with autoDisable (e.g. Perplexity)
+                this.agentsManager.getAgents().forEach(a => {
+                    if (a.autoDisable && a.enabled !== false) {
+                        this.agentsManager.updateAgent(a.id, { enabled: false });
+                    }
+                });
+
+                document.getElementById('sendBtn').disabled = false;
+                this.renderAgentsMessages();
+                this.renderAgentsCards();
+            }
+
+            exportAgentsSession() {
+                const messages = this.agentsManager.getSessionMessages();
+                if (messages.length === 0) {
+                    alert(this.t('errors.exportEmpty'));
+                    return;
+                }
+
+                const lines = [`# ${this.t('agents.exportTitle')}`, ''];
+                const agents = this.agentsManager.getAgents();
+                if (agents.length > 0) {
+                    lines.push('## Agents');
+                    agents.forEach(a => {
+                        lines.push(`- **${a.name}**: ${a.role} (${(MODELS.find(m => m.id === a.modelId) || {}).name || a.modelId})`);
+                    });
+                    lines.push('');
+                }
+
+                messages.forEach(entry => {
+                    if (entry.type === 'user') {
+                        lines.push(`## ${this.t('role.user')}`);
+                        lines.push(entry.content);
+                        lines.push('');
+                    } else if (entry.type === 'agent-responses') {
+                        lines.push('## Agent Responses');
+                        entry.responses.forEach(r => {
+                            lines.push(`### ${r.agentName} (${r.modelName})`);
+                            lines.push(r.content);
+                            lines.push(`_$${(r.cost || 0).toFixed(6)}_`);
+                            lines.push('');
+                        });
+                    } else if (entry.type === 'orchestrator') {
+                        lines.push('## Orchestrator');
+                        lines.push(entry.content);
+                        lines.push(`_${entry.modelName} | $${(entry.cost || 0).toFixed(6)}_`);
+                        lines.push('');
+                    }
+                });
+
+                const markdown = lines.join('\n');
+                this.downloadFile(`agents_session_${Date.now()}.md`, markdown, 'text/markdown');
+            }
+
+            // ===== AGENTS HISTORY =====
+            showAgentsHistory() {
+                const list = document.getElementById('agentsHistoryList');
+                list.innerHTML = '';
+                document.getElementById('agentsHistoryModal').classList.add('active');
+
+                this.agentsManager.saveCurrentSession();
+
+                const sessions = this.agentsManager.getAllSessions();
+
+                if (sessions.length === 0) {
+                    const emptyDiv = document.createElement('div');
+                    emptyDiv.style.cssText = 'text-align:center;padding:20px;color:#666;';
+                    emptyDiv.textContent = this.t('agents.historyEmpty');
+                    list.appendChild(emptyDiv);
+                    return;
+                }
+
+                const locale = this.lang === 'it' ? 'it-IT' : 'en-US';
+
+                sessions.forEach(session => {
+                    const item = document.createElement('div');
+                    item.className = 'agents-history-item';
+
+                    const title = document.createElement('div');
+                    title.className = 'agents-history-title';
+                    title.textContent = session.title || this.t('agents.exportTitle');
+
+                    const date = new Date(session.createdAt);
+                    const userMsgCount = session.messages.filter(m => m.type === 'user').length;
+
+                    const meta = document.createElement('div');
+                    meta.className = 'agents-history-meta';
+                    meta.textContent = `${this.t('agents.historyMessages', { count: userMsgCount })} \u2022 ${date.toLocaleDateString(locale)} ${date.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })}`;
+
+                    const agentsInfo = document.createElement('div');
+                    agentsInfo.className = 'agents-history-agents';
+                    if (session.snapshot?.agents?.length) {
+                        const names = session.snapshot.agents
+                            .filter(a => a.enabled !== false && a.name)
+                            .map(a => a.name).join(', ');
+                        agentsInfo.textContent = names || this.t('agents.historyAgents', { count: session.snapshot.agents.length });
+                    }
+
+                    const actions = document.createElement('div');
+                    actions.className = 'agents-history-actions';
+
+                    const restoreBtn = document.createElement('button');
+                    restoreBtn.textContent = this.t('agents.historyRestore');
+                    restoreBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.restoreAgentsConfig(session);
+                    });
+
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'delete-btn';
+                    deleteBtn.textContent = this.t('agents.historyDelete');
+                    deleteBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.agentsManager.deleteSession(session.id);
+                        this.showAgentsHistory();
+                    });
+
+                    actions.appendChild(restoreBtn);
+                    actions.appendChild(deleteBtn);
+
+                    item.appendChild(title);
+                    item.appendChild(meta);
+                    if (agentsInfo.textContent) item.appendChild(agentsInfo);
+                    item.appendChild(actions);
+
+                    item.addEventListener('click', () => {
+                        this.loadAgentsSession(session.id);
+                    });
+
+                    list.appendChild(item);
+                });
+            }
+
+            closeAgentsHistory() {
+                document.getElementById('agentsHistoryModal').classList.remove('active');
+            }
+
+            loadAgentsSession(id) {
+                const session = this.agentsManager.loadSessionById(id);
+                if (!session) return;
+
+                if (session.snapshot) {
+                    this.applyAgentsSnapshot(session.snapshot);
+                }
+
+                this.renderAgentsCards();
+                this.renderAgentsMessages();
+                this.closeAgentsHistory();
+            }
+
+            restoreAgentsConfig(session) {
+                if (!session.snapshot) return;
+                this.applyAgentsSnapshot(session.snapshot);
+                this.renderAgentsCards();
+                this.closeAgentsHistory();
+            }
+
+            applyAgentsSnapshot(snapshot) {
+                if (snapshot.agents) {
+                    this.agentsManager.agents = JSON.parse(JSON.stringify(snapshot.agents));
+                    this.agentsManager.saveAgents();
+                }
+
+                if (snapshot.orchestratorModelId) {
+                    this.agentsManager.setOrchestratorModelId(snapshot.orchestratorModelId);
+                    const orchSelect = document.getElementById('orchestratorSelector');
+                    if (orchSelect) orchSelect.value = snapshot.orchestratorModelId;
+                }
+
+                const orchPromptEl = document.getElementById('orchestratorPrompt');
+                if (orchPromptEl && snapshot.orchestratorPrompt !== undefined) {
+                    orchPromptEl.value = snapshot.orchestratorPrompt;
+                    localStorage.setItem('agents_orchestrator_prompt_online', orchPromptEl.value);
+                }
+
+                const ctxEl = document.getElementById('agentsContext');
+                if (ctxEl) {
+                    ctxEl.value = snapshot.context || '';
+                    localStorage.setItem('agents_context_online', ctxEl.value);
+                }
+            }
+
+            // ===== CODE PREVIEW =====
+            openPreview(messageContent) {
+                const blocks = extractCodeBlocks(messageContent);
+                const doc = buildPreviewDocument(blocks);
+
+                const modal = document.getElementById('previewModal');
+                modal.classList.add('active');
+                modal.setAttribute('aria-hidden', 'false');
+
+                document.getElementById('previewFrame').srcdoc = doc;
+                document.getElementById('previewSourceCode').textContent = doc;
+                this.setPreviewTab('render');
+
+                document.getElementById('previewTabRender').onclick = () => this.setPreviewTab('render');
+                document.getElementById('previewTabSource').onclick = () => this.setPreviewTab('source');
+            }
+
+            setPreviewTab(tab) {
+                const renderPane = document.getElementById('previewRenderPane');
+                const sourcePane = document.getElementById('previewSourcePane');
+                const renderBtn = document.getElementById('previewTabRender');
+                const sourceBtn = document.getElementById('previewTabSource');
+
+                if (tab === 'render') {
+                    renderPane.style.display = '';
+                    sourcePane.classList.remove('active');
+                    renderBtn.classList.add('active');
+                    sourceBtn.classList.remove('active');
+                } else {
+                    renderPane.style.display = 'none';
+                    sourcePane.classList.add('active');
+                    renderBtn.classList.remove('active');
+                    sourceBtn.classList.add('active');
+                }
+            }
+
+            closePreview() {
+                const modal = document.getElementById('previewModal');
+                modal.classList.remove('active');
+                modal.setAttribute('aria-hidden', 'true');
+                document.getElementById('previewFrame').srcdoc = '';
+            }
+        }
+
+        // ===== AGENTS MANAGER CLASS =====
+        class AgentsManager {
+            constructor(apiKeyManager, models, translator) {
+                this.apiKeyManager = apiKeyManager;
+                this.models = models;
+                this.t = translator;
+                this.storageKey = 'agents_config_online';
+                this.historyKey = 'agents_history_online';
+                this.orchestratorKey = 'agents_orchestrator_online';
+                this.agents = this.loadAgents();
+                this.history = this.loadHistory();
+                this.currentSession = null;
+            }
+
+            setTranslator(t) {
+                this.t = t;
+            }
+
+            // ---- Agent config persistence ----
+            loadAgents() {
+                const saved = localStorage.getItem(this.storageKey);
+                if (saved) {
+                    try { return JSON.parse(saved); } catch(e) {}
+                }
+                return [];
+            }
+
+            saveAgents() {
+                localStorage.setItem(this.storageKey, JSON.stringify(this.agents));
+            }
+
+            addAgent(agent) {
+                const entry = {
+                    id: Date.now(),
+                    name: agent.name || '',
+                    role: agent.role || '',
+                    modelId: agent.modelId || this.models[0].id,
+                    enabled: agent.enabled !== false
+                };
+                if (agent.preset) entry.preset = agent.preset;
+                if (agent.lockedModel) entry.lockedModel = true;
+                if (agent.autoDisable) entry.autoDisable = true;
+                if (agent.phase) entry.phase = agent.phase;
+                this.agents.push(entry);
+                this.saveAgents();
+            }
+
+            removeAgent(id) {
+                this.agents = this.agents.filter(a => a.id !== id);
+                this.saveAgents();
+            }
+
+            updateAgent(id, data) {
+                const agent = this.agents.find(a => a.id === id);
+                if (agent) {
+                    Object.assign(agent, data);
+                    this.saveAgents();
+                }
+            }
+
+            getAgents() {
+                return this.agents;
+            }
+
+            getOrchestratorModelId() {
+                return localStorage.getItem(this.orchestratorKey) || this.models[0].id;
+            }
+
+            setOrchestratorModelId(id) {
+                localStorage.setItem(this.orchestratorKey, id);
+            }
+
+            // ---- Session & history management ----
+            loadHistory() {
+                const saved = localStorage.getItem(this.historyKey);
+                if (saved) {
+                    try { return JSON.parse(saved); } catch(e) {}
+                }
+                return [];
+            }
+
+            saveHistory() {
+                localStorage.setItem(this.historyKey, JSON.stringify(this.history));
+            }
+
+            newSession(snapshot) {
+                this.saveCurrentSession();
+                this.currentSession = {
+                    id: Date.now(),
+                    title: '',
+                    createdAt: new Date().toISOString(),
+                    messages: [],
+                    snapshot: snapshot || this.takeSnapshot()
+                };
+            }
+
+            takeSnapshot() {
+                return {
+                    agents: JSON.parse(JSON.stringify(this.agents)),
+                    orchestratorModelId: this.getOrchestratorModelId(),
+                    orchestratorPrompt: document.getElementById('orchestratorPrompt')?.value || '',
+                    context: document.getElementById('agentsContext')?.value || ''
+                };
+            }
+
+            saveCurrentSession() {
+                if (!this.currentSession || this.currentSession.messages.length === 0) return;
+                const idx = this.history.findIndex(s => s.id === this.currentSession.id);
+                if (idx >= 0) {
+                    this.history[idx] = this.currentSession;
+                } else {
+                    this.history.push(this.currentSession);
+                }
+                this.saveHistory();
+            }
+
+            loadSessionById(id) {
+                const session = this.history.find(s => s.id === id);
+                if (!session) return null;
+                this.currentSession = session;
+                return session;
+            }
+
+            deleteSession(id) {
+                this.history = this.history.filter(s => s.id !== id);
+                if (this.currentSession && this.currentSession.id === id) {
+                    this.currentSession = null;
+                }
+                this.saveHistory();
+            }
+
+            getAllSessions() {
+                return [...this.history].sort((a, b) =>
+                    new Date(b.createdAt) - new Date(a.createdAt)
+                );
+            }
+
+            addSessionEntry(entry) {
+                if (!this.currentSession) {
+                    this.newSession();
+                }
+                this.currentSession.messages.push(entry);
+
+                if (!this.currentSession.title && entry.type === 'user') {
+                    this.currentSession.title = entry.content.substring(0, 60) + (entry.content.length > 60 ? '...' : '');
+                }
+
+                this.saveCurrentSession();
+            }
+
+            getSessionMessages() {
+                return this.currentSession ? this.currentSession.messages : [];
+            }
+
+            async callAgent(agent, userMessage, conversationContext, sharedPrompts) {
+                const apiKey = this.apiKeyManager.getApiKey();
+                const model = this.models.find(m => m.id === agent.modelId) || this.models[0];
+
+                const messages = [];
+
+                const systemParts = [`Current date and time: ${new Date().toLocaleString()}`];
+                if (agent.role) systemParts.push(agent.role);
+                if (sharedPrompts?.context) systemParts.push(`<CONTEXT>\n${sharedPrompts.context}\n</CONTEXT>`);
+                if (systemParts.length > 0) {
+                    messages.push({ role: 'system', content: systemParts.join('\n\n') });
+                }
+
+                for (const ctx of conversationContext) {
+                    if (ctx.type === 'user') {
+                        messages.push({ role: 'user', content: ctx.content });
+                    } else if (ctx.type === 'orchestrator') {
+                        messages.push({ role: 'assistant', content: ctx.content });
+                    }
+                }
+
+                messages.push({ role: 'user', content: userMessage });
+
+                const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`,
+                        'HTTP-Referer': window.location.origin,
+                        'X-Title': 'Simulatore AI-PACT - Agents'
+                    },
+                    body: JSON.stringify({ model: model.id, messages })
+                });
+
+                if (!response.ok) {
+                    const errText = await response.text();
+                    throw new Error(`${agent.name}: API ${response.status} - ${errText}`);
+                }
+
+                const data = await response.json();
+                const content = data.choices?.[0]?.message?.content || '';
+                const cost = data.usage?.cost ?? 0;
+                const inputTokens = data.usage?.prompt_tokens ?? 0;
+                const outputTokens = data.usage?.completion_tokens ?? 0;
+
+                return {
+                    agentId: agent.id,
+                    agentName: agent.name,
+                    modelName: model.name,
+                    content,
+                    cost,
+                    inputTokens,
+                    outputTokens
+                };
+            }
+
+            async callOrchestrator(userMessage, agentResponses, conversationContext, sharedPrompts) {
+                const apiKey = this.apiKeyManager.getApiKey();
+                const orchestratorModelId = this.getOrchestratorModelId();
+                const model = this.models.find(m => m.id === orchestratorModelId) || this.models[0];
+
+                const orchPrompt = sharedPrompts?.orchestratorPrompt || this.t('agents.orchestratorRole');
+                const systemParts = [`Current date and time: ${new Date().toLocaleString()}`, orchPrompt];
+                if (sharedPrompts?.context) systemParts.push(`<CONTEXT>\n${sharedPrompts.context}\n</CONTEXT>`);
+
+                const responseSummary = agentResponses.map(r =>
+                    `### ${r.agentName} (${r.modelName}):\n${r.content}`
+                ).join('\n\n---\n\n');
+
+                const messages = [
+                    { role: 'system', content: systemParts.join('\n\n') }
+                ];
+
+                for (const ctx of conversationContext) {
+                    if (ctx.type === 'user') {
+                        messages.push({ role: 'user', content: ctx.content });
+                    } else if (ctx.type === 'orchestrator') {
+                        messages.push({ role: 'assistant', content: ctx.content });
+                    }
+                }
+
+                messages.push({
+                    role: 'user',
+                    content: `Domanda dell'utente:\n${userMessage}\n\n---\n\nRisposte degli agenti:\n\n${responseSummary}`
+                });
+
+                const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`,
+                        'HTTP-Referer': window.location.origin,
+                        'X-Title': 'Simulatore AI-PACT - Orchestrator'
+                    },
+                    body: JSON.stringify({ model: model.id, messages })
+                });
+
+                if (!response.ok) {
+                    const errText = await response.text();
+                    throw new Error(`Orchestrator: API ${response.status} - ${errText}`);
+                }
+
+                const data = await response.json();
+                const content = data.choices?.[0]?.message?.content || '';
+                const cost = data.usage?.cost ?? 0;
+                const inputTokens = data.usage?.prompt_tokens ?? 0;
+                const outputTokens = data.usage?.completion_tokens ?? 0;
+
+                return { content, cost, inputTokens, outputTokens, modelName: model.name };
             }
         }
 
