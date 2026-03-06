@@ -3456,7 +3456,7 @@ RULES:
                 this.reasoningStorageKey = 'reasoningEnabled_online';
                 this.reasoningEffortKey = 'reasoningEffort_online';
                 this.reasoningToastTimer = null;
-                this.activeTab = 'chat';
+                this.activeTab = 'agents';
                 this.agentsConfigVisible = true;
                 this.agentsManager = null;
 
@@ -4781,8 +4781,6 @@ RULES:
 
                 document.getElementById('tabChat').addEventListener('click', () => this.switchTab('chat'));
                 document.getElementById('tabAgents').addEventListener('click', () => this.switchTab('agents'));
-                this.renderAgentsCards();
-                this.renderAgentsMessages();
             }
 
             switchTab(tab) {
