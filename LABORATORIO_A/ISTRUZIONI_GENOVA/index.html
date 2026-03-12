@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laboratorio A - Design Thinking per l'IA nei Comuni</title>
+    <title>Laboratorio - Design Thinking per l'IA nei Comuni</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -541,77 +541,87 @@
             color: white;
         }
 
-        /* Track Selector */
-        .track-selector {
-            margin: 1rem 0;
+        /* Track Selector (percorso) */
+        .percorso-selector {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            text-align: center;
         }
 
-        .track-selector p {
-            font-size: 0.95rem;
-            margin-bottom: 0.75rem;
-            font-weight: 600;
-        }
-
-        .track-tabs {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .track-tab {
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            border: 2px solid var(--border);
-            background: var(--bg);
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .track-tab:hover {
-            border-color: var(--accent);
-        }
-
-        .track-tab.active {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-        }
-
-        .track-content {
-            display: none;
-            background: var(--bg);
-            border-radius: 12px;
-            padding: 1.25rem;
-        }
-
-        .track-content.active {
-            display: block;
-        }
-
-        .track-content h5 {
-            font-size: 0.95rem;
-            color: var(--accent);
+        .percorso-selector h3 {
+            font-size: 1.1rem;
             margin-bottom: 0.5rem;
         }
 
-        .track-content .track-artefatto {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.5rem;
-            background: #fef3c7;
-            border-radius: 8px;
-            padding: 0.75rem;
-            margin-top: 0.75rem;
+        .percorso-selector p {
             font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
         }
 
-        .track-content .track-artefatto::before {
-            content: '📋';
+        .percorso-tabs {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
         }
+
+        .percorso-tab {
+            flex: 1;
+            max-width: 350px;
+            min-width: 250px;
+            padding: 1.25rem;
+            border-radius: 12px;
+            border: 3px solid var(--border);
+            background: var(--bg);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            text-align: left;
+        }
+
+        .percorso-tab:hover {
+            border-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .percorso-tab.active {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            box-shadow: 0 4px 15px rgba(30,64,175,0.15);
+        }
+
+        .percorso-tab .percorso-tab-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.35rem;
+        }
+
+        .percorso-tab .percorso-tab-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .percorso-tab.active .percorso-tab-title::before {
+            content: '● ';
+            color: var(--primary);
+        }
+
+        /* Track show/hide */
+        .track-a, .track-ab { display: none; }
+        body.track-a-active .track-a { display: block; }
+        body.track-ab-active .track-ab { display: block; }
+        body.track-a-active .track-ab { display: none; }
+        body.track-ab-active .track-a { display: none; }
+
+        /* Legacy track styles (kept for compatibility) */
+        .track-selector { margin: 1rem 0; }
+        .track-content { display: none; background: var(--bg); border-radius: 12px; padding: 1.25rem; }
+        .track-content.active { display: block; }
 
         /* Consegna Conversazione */
         .consegna-conversazione {
@@ -663,7 +673,7 @@
 </head>
 <body>
     <header class="header">
-        <h1>Laboratorio A - Design Thinking per l'IA</h1>
+        <h1>Laboratorio — Design Thinking per l'IA</h1>
         <p>Progetto AI-PACT | IFEL - Fondazione ANCI | Città Metropolitana di Genova</p>
     </header>
 
@@ -672,11 +682,6 @@
             <div class="icon">📊</div>
             <h3>Presentazione</h3>
             <p>Slide della giornata</p>
-        </a>
-        <a href="https://forms.gle/p4M8oa9UwUgHmvnD9" target="_blank" class="quick-link">
-            <div class="icon">📝</div>
-            <h3>Modulo Idee</h3>
-            <p>FASE 1 - Inserisci il tuo problema</p>
         </a>
         <a href="../tools/simulatore.html" target="_blank" class="quick-link primary">
             <div class="icon">🤖</div>
@@ -691,8 +696,24 @@
     </div>
 
     <div class="container">
-        <!-- FASE 1 -->
-        <section class="fase fase-1">
+        <!-- SELETTORE PERCORSO -->
+        <div class="percorso-selector">
+            <h3>Quale percorso segue il tuo gruppo?</h3>
+            <p>Chiedi al coordinatore se non sei sicuro. Il contenuto della guida si adatta automaticamente.</p>
+            <div class="percorso-tabs">
+                <button class="percorso-tab active" onclick="setTrack('a')">
+                    <div class="percorso-tab-title">Percorso A — Problem Solving</div>
+                    <div class="percorso-tab-desc">Parti da un problema reale, esplori con gli agenti generici, produci un report con lo Sviluppatore Web</div>
+                </button>
+                <button class="percorso-tab" onclick="setTrack('ab')">
+                    <div class="percorso-tab-title">Percorso A+B — Problem Solving + Pianificazione</div>
+                    <div class="percorso-tab-desc">Parti da un problema, poi costruisci un piano d'adozione IA con agenti specializzati: stakeholder, rischi, competenze, monitoraggio, costi</div>
+                </button>
+            </div>
+        </div>
+
+        <!-- FASE 1 — PERCORSO A -->
+        <section class="fase fase-1 track-a">
             <div class="fase-header">
                 <div class="fase-number">1</div>
                 <div class="fase-title">
@@ -745,8 +766,33 @@
             </div>
         </section>
 
-        <!-- FASE 2 -->
-        <section class="fase fase-2">
+        <!-- FASE 1 — PERCORSO A+B -->
+        <section class="fase fase-1 track-ab">
+            <div class="fase-header">
+                <div class="fase-number">1</div>
+                <div class="fase-title">
+                    <h2>Il Tema del Laboratorio</h2>
+                    <span>Presentazione in plenaria</span>
+                </div>
+            </div>
+
+            <p>In questo percorso tutti i gruppi lavorano sullo <strong>stesso tema</strong>, presentato in plenaria dal coordinatore.</p>
+
+            <div style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-radius: 16px; padding: 2rem; margin: 1.5rem 0; border: 3px solid var(--primary-light); text-align: center;">
+                <p style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;">Tema della giornata</p>
+                <h3 style="font-size: 1.5rem; color: var(--primary);" id="temaGiornata">Verrà comunicato in plenaria</h3>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">Ogni gruppo costruirà un piano di adozione dell'IA per il proprio servizio/reparto partendo da questo tema</p>
+            </div>
+
+            <p style="font-size: 0.9rem;">Dopo la presentazione, vi dividerete in gruppi e passerete direttamente al simulatore. Il Facilitatore-Laboratorio vi guiderà passo dopo passo.</p>
+
+            <a href="#sessioni-precedenti" class="cta-button" style="background: var(--text-muted); margin-top: 1rem;">
+                👀 Guarda i progetti delle sessioni precedenti
+            </a>
+        </section>
+
+        <!-- FASE 2 — PERCORSO A -->
+        <section class="fase fase-2 track-a">
             <div class="fase-header">
                 <div class="fase-number">2</div>
                 <div class="fase-title">
@@ -887,6 +933,129 @@
             </div>
         </section>
 
+        <!-- FASE 2 — PERCORSO A+B -->
+        <section class="fase fase-2 track-ab">
+            <div class="fase-header">
+                <div class="fase-number">2</div>
+                <div class="fase-title">
+                    <h2>Piano di Adozione IA</h2>
+                    <span>60-90 minuti</span>
+                </div>
+            </div>
+
+            <p>Costruite un <strong>piano di adozione dell'IA</strong> per il vostro servizio/reparto usando il simulatore multi-agente. Agenti specializzati vi guidano passo dopo passo attraverso 5 schemi: stakeholder, rischi, competenze, monitoraggio, costi.</p>
+
+            <div style="margin-top: 1.5rem; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-radius: 16px; padding: 1.5rem; border: 3px solid var(--primary-light);">
+                <h3 style="color: var(--primary); margin-bottom: 0.75rem; font-size: 1.2rem;">🧭 Prima cosa: partite dal Facilitatore-Lab!</h3>
+                <p style="font-size: 0.95rem; margin-bottom: 0.75rem;">Aprite il simulatore, cliccate <strong>"+ Agente"</strong>, nella sezione <strong>Agenti Laboratorio</strong> scegliete <strong>Facilitatore-Lab</strong> e attivatelo in modalità <strong>LEAD</strong>.</p>
+                <p style="font-size: 0.95rem;">Lui vi guiderà in tutto il percorso: quali schemi affrontare, quanto tempo dedicare, quando passare all'agente successivo.</p>
+            </div>
+
+            <div class="steps">
+                <div class="step">
+                    <h4>Il Percorso Guidato</h4>
+                    <p>Gli <strong>agenti del laboratorio</strong> li trovate nella sezione dedicata quando cliccate "+ Agente". Attivatene <strong>uno alla volta</strong> in modalità LEAD — ogni agente vi guida su uno schema specifico.</p>
+
+                    <div style="margin: 1rem 0; background: var(--bg); border-radius: 12px; padding: 1.25rem; border: 2px solid var(--border);">
+                        <h4 style="font-size: 1rem; margin-bottom: 0.75rem;">🧪 Gli Agenti del Laboratorio</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">Attivatene <strong>uno alla volta</strong> in modalità LEAD. Ogni agente vi guida su uno schema specifico.</p>
+                        <div class="aree-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                            <div class="area-item" style="border-left: 3px solid var(--primary);">
+                                <strong>🧭 Facilitatore-Lab</strong><br>
+                                Avvio, orientamento, chiusura. Partite da qui!
+                            </div>
+                            <div class="area-item" style="border-left: 3px solid var(--accent);">
+                                <strong>👥 Stakeholder-Lab</strong><br>
+                                Chi è coinvolto e chi influenza il progetto
+                            </div>
+                            <div class="area-item" style="border-left: 3px solid var(--danger);">
+                                <strong>⚠️ Rischi-Lab</strong><br>
+                                Cosa può andare storto e come prevenirlo
+                            </div>
+                            <div class="area-item" style="border-left: 3px solid var(--success);">
+                                <strong>🎓 Competenze-Lab</strong><br>
+                                Cosa serve sapere e a chi
+                            </div>
+                            <div class="area-item" style="border-left: 3px solid #8b5cf6;">
+                                <strong>📊 Monitoraggio-Lab</strong><br>
+                                Come misuriamo se funziona
+                            </div>
+                            <div class="area-item" style="border-left: 3px solid #ec4899;">
+                                <strong>💰 Costi-Lab</strong><br>
+                                Quanto costa e chi paga
+                            </div>
+                            <div class="area-item" style="border-left: 3px solid #14b8a6;">
+                                <strong>📄 Report-Lab</strong><br>
+                                Genera il report HTML finale stampabile
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 style="font-size: 0.95rem; color: var(--primary); margin: 1rem 0 0.5rem;">Come procedere:</h4>
+                    <ol style="font-size: 0.9rem; padding-left: 1.25rem;">
+                        <li style="margin-bottom: 0.5rem;"><strong>Facilitatore-Lab</strong> in LEAD → vi aiuta a definire il contesto e negoziare quali schemi affrontare nel tempo disponibile</li>
+                        <li style="margin-bottom: 0.5rem;">Disattivate il Facilitatore, attivate <strong>Stakeholder-Lab</strong> in LEAD → lavorate sullo schema, producete un checkpoint</li>
+                        <li style="margin-bottom: 0.5rem;">Copiate il checkpoint nel <strong>Contesto condiviso</strong> → passate all'agente successivo</li>
+                        <li style="margin-bottom: 0.5rem;">Ripetete per ogni schema scelto (Rischi, Competenze, Monitoraggio, Costi)</li>
+                        <li style="margin-bottom: 0.5rem;">Tornate al <strong>Facilitatore-Lab</strong> per la chiusura e il riepilogo</li>
+                        <li>Attivate <strong>Report-Lab</strong> in LEAD → genera il report HTML finale stampabile</li>
+                    </ol>
+
+                    <p style="margin-top: 1rem; padding: 0.75rem; background: #fef3c7; border-radius: 8px; font-size: 0.85rem;">
+                        💡 <strong>Ogni agente vi dice quando passare al successivo.</strong> Non dovete ricordare la sequenza — basta seguire le indicazioni. Ogni messaggio include una barra di stato con il progresso.
+                    </p>
+
+                    <p style="margin-top: 0.75rem; padding: 0.75rem; background: #eff6ff; border-radius: 8px; font-size: 0.85rem; border: 1px solid #bfdbfe;">
+                        🔧 <strong>Avete anche gli agenti generici</strong> (Ricerca Web, Giurista, Economista, DPO...) disponibili nel simulatore. Se durante il percorso avete bisogno di approfondire un aspetto specifico, potete attivarli in qualsiasi momento.
+                    </p>
+                </div>
+
+                <div class="step">
+                    <h4>REPORT FINALE</h4>
+                    <p>Attivate <strong>Report-Lab</strong> in LEAD e scrivetegli "Genera il report". Lui prende i checkpoint dal Contesto e produce un HTML stampabile con executive summary, tutte le sezioni, e prossimi passi.</p>
+                    <p style="margin-top: 0.5rem;">Usate il pulsante <strong>"Anteprima"</strong> per visualizzarlo e il pulsante <strong>"Scarica HTML"</strong> per salvarlo.</p>
+                    <div class="result">
+                        <strong>Risultato:</strong> Un piano di adozione IA completo, stampabile e presentabile.
+                    </div>
+                </div>
+            </div>
+
+            <a href="../tools/simulatore.html" target="_blank" class="cta-button accent">
+                🤖 Apri il Simulatore IA
+            </a>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-muted);">
+                La chiave con i crediti viene fornita in classe
+            </p>
+
+            <div class="sos-box" style="margin-top: 1.5rem; margin-bottom: 0;">
+                <h3>🆘 Sei Bloccato?</h3>
+                <p><strong>CHIAMATE SCARSELLI!</strong></p>
+                <p>Lavoriamo insieme sulla strategia e troviamo gli agenti giusti per sbloccare il vostro percorso.</p>
+            </div>
+
+            <div style="margin-top: 1.5rem; background: var(--bg); border-radius: 12px; padding: 1.25rem; border: 2px solid var(--border);">
+                <h4 style="font-size: 1rem; margin-bottom: 0.75rem;">🖥️ Come funziona il Simulatore</h4>
+                <p style="font-size: 0.9rem; margin-bottom: 0.75rem;">Il simulatore ha due modalità, selezionabili dalla tab bar in alto:</p>
+                <ul style="font-size: 0.85rem; padding-left: 1.25rem; margin-bottom: 0.75rem;">
+                    <li><strong>Chat</strong> → Conversazione diretta con un modello IA (per esplorazioni rapide)</li>
+                    <li><strong>Agenti</strong> → Il sistema multi-agente con esperti specializzati (per il laboratorio)</li>
+                </ul>
+                <p style="font-size: 0.9rem; margin-bottom: 0.5rem;"><strong>Nella modalità Agenti trovate:</strong></p>
+                <ul style="font-size: 0.85rem; padding-left: 1.25rem; margin-bottom: 0.75rem;">
+                    <li><strong>"+ Agente"</strong> → Aggiunge un agente (preset o custom). Gli agenti laboratorio sono nella sezione dedicata</li>
+                    <li><strong>Toggle ON/OFF</strong> → Attiva/disattiva ogni agente</li>
+                    <li><strong>Pulsante LEAD</strong> → Un solo agente attivo, risposta diretta senza orchestratore</li>
+                    <li><strong>Contesto</strong> → Informazioni condivise — qui copiate i checkpoint di ogni schema</li>
+                </ul>
+
+                <h4 style="font-size: 1rem; margin-top: 1.25rem; margin-bottom: 0.75rem;">🎬 Video Guida</h4>
+                <video controls playsinline preload="metadata" style="width: 100%; border-radius: 8px; border: 1px solid var(--border);">
+                    <source src="VIDEO_GUIDA.mp4" type="video/mp4">
+                    Il tuo browser non supporta il video HTML5. <a href="VIDEO_GUIDA.mp4">Scarica il video</a>.
+                </video>
+            </div>
+        </section>
+
         <!-- FASE 3 -->
         <section class="fase fase-3">
             <div class="fase-header">
@@ -970,5 +1139,18 @@
         <p>Progetto AI-PACT | IFEL - Fondazione ANCI | Città Metropolitana di Genova</p>
         <p>Marzo 2026</p>
     </footer>
+
+    <script>
+        function setTrack(track) {
+            document.body.classList.remove('track-a-active', 'track-ab-active');
+            document.body.classList.add('track-' + track + '-active');
+            document.querySelectorAll('.percorso-tab').forEach(function(tab, i) {
+                tab.classList.toggle('active', (track === 'a' && i === 0) || (track === 'ab' && i === 1));
+            });
+            localStorage.setItem('lab_track', track);
+        }
+        // Init
+        setTrack(localStorage.getItem('lab_track') || 'a');
+    </script>
 </body>
 </html>

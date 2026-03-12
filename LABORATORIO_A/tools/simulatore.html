@@ -2371,7 +2371,7 @@
             <div class="setup-header">
                 <h1>Simulatore <span class="online-badge">AI-PACT</span></h1>
                 <div class="setup-header-actions">
-                    <div class="setup-lang" aria-label="Language">
+                    <div class="setup-lang" aria-label="Language" style="display:none;">
                         <button id="setupLangEn" class="setup-lang-btn" type="button" title="English">🇬🇧</button>
                         <button id="setupLangIt" class="setup-lang-btn" type="button" title="Italiano">🇮🇹</button>
                     </div>
@@ -4187,6 +4187,7 @@ NON fare domande, NON facilitare discussioni, NON aggiungere contenuti inventati
             constructor() {
                 this.langStorageKey = 'lang_online';
                 this.lang = 'it';
+                localStorage.setItem(this.langStorageKey, 'it');
                 this.apiKeyManager = new ApiKeyManager();
                 this.modelSelector = new ModelSelector(MODELS);
                 this.conversationManager = new ConversationManager();
