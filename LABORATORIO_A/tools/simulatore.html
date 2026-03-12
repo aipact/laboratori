@@ -4343,7 +4343,13 @@ NON fare domande, NON facilitare discussioni, NON aggiungere contenuti inventati
                 const urlParams = new URLSearchParams(window.location.search);
                 const apiKey = urlParams.get('key');
                 if (apiKey) {
-                    document.getElementById('apiKeyInput').value = apiKey;
+                    this.apiKeyManager.setApiKey(apiKey);
+                    // Rimuovi key dall'URL senza side effects
+                    urlParams.delete('key');
+                    const newUrl = urlParams.toString()
+                        ? `${window.location.pathname}?${urlParams.toString()}`
+                        : window.location.pathname;
+                    window.history.replaceState({}, '', newUrl);
                 }
             }
 
