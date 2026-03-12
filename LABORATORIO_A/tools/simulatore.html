@@ -693,6 +693,23 @@
             background: #f0f0f0;
         }
 
+        #printBtn {
+            width: 44px;
+            height: 44px;
+            border: 2px solid var(--border-color);
+            background: var(--bg-color);
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #printBtn:active {
+            background: #f0f0f0;
+        }
+
         #langToggle {
             min-width: 56px;
             height: 44px;
@@ -1395,6 +1412,10 @@
             display: none;
         }
 
+        .orchestrator-prompt-content.hidden {
+            display: none;
+        }
+
         .agents-list {
             display: flex;
             gap: 10px;
@@ -1729,6 +1750,56 @@
             resize: vertical;
         }
 
+        .agents-context-accordion {
+            margin-top: 10px;
+        }
+
+        .agents-context-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--meta-text);
+            padding: 4px 0;
+        }
+
+        .agents-context-toggle:hover {
+            color: var(--border-color);
+        }
+
+        .agents-context-hint {
+            font-size: 12px;
+            line-height: 1.5;
+            color: var(--meta-text);
+            padding: 6px 0 8px;
+            border-left: 3px solid var(--border-color);
+            padding-left: 10px;
+            margin: 4px 0 8px;
+        }
+
+        .agents-context-hint.hidden {
+            display: none;
+        }
+
+        .agents-context-textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 8px 10px;
+            font-size: 13px;
+            font-family: inherit;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            resize: vertical;
+        }
+
+        .agents-context-textarea.hidden {
+            display: none;
+        }
+
         @media (max-width: 500px) {
             .agents-shared-prompts {
                 grid-template-columns: 1fr;
@@ -1844,8 +1915,70 @@
             }
         }
 
-        .agents-config.collapsed {
+        .agents-config.collapsed .agents-config-header,
+        .agents-config.collapsed .orchestrator-prompt-section,
+        .agents-config.collapsed .agents-list,
+        .agents-config.collapsed .agents-context-accordion {
             display: none;
+        }
+
+        .agents-summary {
+            display: none;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+        }
+
+        .agents-config.collapsed .agents-summary {
+            display: flex;
+        }
+
+        .agents-summary-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 0.03em;
+            border: 2px solid var(--border-color);
+            background: #f0f6fb;
+            color: var(--text-color);
+            white-space: nowrap;
+        }
+
+        .agents-summary-tag.disabled {
+            opacity: 0.4;
+            border-style: dashed;
+            background: transparent;
+        }
+
+        .agents-summary-tag.lead {
+            background: var(--border-color);
+            color: var(--button-text);
+        }
+
+        .agents-summary-add {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            background: transparent;
+            color: var(--border-color);
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .agents-summary-add:hover {
+            background: var(--border-color);
+            color: var(--button-text);
         }
 
         .agents-history-item {
@@ -2074,6 +2207,22 @@
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
+        }
+
+        .agent-picker-section {
+            margin: 12px 0 6px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--meta-text);
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 4px;
+        }
+
+        .agent-picker-item.lab-pick {
+            border-color: var(--border-color);
+            background: #f0f6fb;
         }
 
         .agent-picker-item.custom-pick {
@@ -2316,6 +2465,7 @@
             <button id="datetimeToggle" title="Ancoraggio temporale: OFF" data-i18n-title="nav.datetimeTitle">🕐</button>
             <button id="autoScrollToggle" title="Toggle auto-scroll" data-i18n-title="nav.autoScrollTitle">👁️</button>
             <button id="exportBtn" title="Export chat (MD)" data-i18n-title="nav.exportTitle">⬇️</button>
+            <button id="printBtn" title="Stampa dialogo" data-i18n-title="nav.printTitle">🖨️</button>
             <button id="pageViewBtn" title="Modal pagine" data-i18n-title="nav.pageViewTitle">📖</button>
             <button id="tourBtn" title="Guida passo passo" data-i18n-title="guide.buttonTitle">❔</button>
             <button id="historyBtn" title="Storico chat" data-i18n-title="history.title">🕘</button>
@@ -2326,36 +2476,39 @@
         <!-- Agents View -->
         <div id="agentsView">
             <div id="agentsConfig" class="agents-config">
+                <div class="agents-summary" id="agentsSummary"></div>
                 <div class="agents-config-header">
                     <h3 data-i18n="agents.title">Configura Agenti</h3>
                     <div class="agents-config-actions">
-                        <div class="agents-orchestrator">
-                            <label data-i18n="agents.orchestratorLabel">Orchestratore:</label>
-                            <select id="orchestratorSelector"></select>
-                        </div>
                         <button class="add-agent-btn" id="addAgentBtn" data-i18n="agents.addAgent">+ Agente</button>
                     </div>
                 </div>
                 <div class="orchestrator-prompt-section">
-                    <button class="orchestrator-prompt-toggle" id="orchPromptToggle" data-i18n="agents.orchPromptToggle">Istruzioni orchestratore ▼</button>
-                    <textarea id="orchestratorPrompt" class="orchestrator-prompt-textarea hidden" data-i18n-placeholder="agents.orchPromptPlaceholder" placeholder="Istruzioni per l'orchestratore..."></textarea>
+                    <button class="orchestrator-prompt-toggle" id="orchPromptToggle" data-i18n="agents.orchPromptToggle">Orchestratore (avanzato) ▼</button>
+                    <div class="orchestrator-prompt-content hidden" id="orchPromptContent">
+                        <div class="agents-orchestrator" style="margin: 8px 0;">
+                            <label data-i18n="agents.orchestratorLabel">Orchestratore:</label>
+                            <select id="orchestratorSelector"></select>
+                        </div>
+                        <textarea id="orchestratorPrompt" class="orchestrator-prompt-textarea" data-i18n-placeholder="agents.orchPromptPlaceholder" placeholder="Istruzioni per l'orchestratore..."></textarea>
+                    </div>
                 </div>
                 <div class="agents-list" id="agentsList"></div>
-                <div class="agents-shared-prompts">
-                    <div class="agents-shared-field">
-                        <label for="agentsContext" data-i18n="prompt.contextLabel">Context</label>
-                        <textarea id="agentsContext" placeholder="Informazioni utili, dati, scenario..." data-i18n-placeholder="prompt.contextPlaceholder"></textarea>
-                    </div>
+                <div class="agents-context-accordion">
+                    <button class="agents-context-toggle" id="agentsContextToggle" data-i18n="agents.contextToggle">Contesto condiviso ▼</button>
+                    <div class="agents-context-hint hidden" id="agentsContextHint" data-i18n="agents.contextHint">Incolla qui dati, documenti, tabelle, normative o qualsiasi materiale di riferimento che gli agenti devono avere sotto mano. Questo campo viene letto da tutti gli agenti ad ogni turno — usalo come una scrivania condivisa. Se è un dato o un documento → va qui. Se è una domanda → va nel messaggio.</div>
+                    <textarea id="agentsContext" class="agents-context-textarea hidden" placeholder="Informazioni utili, dati, scenario..." data-i18n-placeholder="prompt.contextPlaceholder"></textarea>
                 </div>
             </div>
             <div class="agents-messages-container" id="agentsMessagesContainer">
                 <div id="agentsMessages"></div>
             </div>
             <div class="agents-bottom-bar">
-                <button class="agents-toggle-config active" id="agentsToggleConfig" data-i18n="agents.toggleConfig">Config</button>
+                <button class="agents-toggle-config active" id="agentsToggleConfig" data-i18n="agents.toggleConfig">▲ Chiudi agenti</button>
                 <button class="font-btn" id="agentsFontDecrease">A-</button>
                 <button class="font-btn" id="agentsFontIncrease">A+</button>
                 <button class="nav-btn" id="agentsExportBtn" title="Export" data-i18n-title="nav.exportTitle">&#x2B07;&#xFE0F;</button>
+                <button class="nav-btn" id="agentsPrintBtn" title="Stampa dialogo" data-i18n-title="nav.printTitle">&#x1F5A8;&#xFE0F;</button>
                 <button class="nav-btn" id="agentsNewSessionBtn" title="Nuova sessione" data-i18n-title="agents.newSessionTitle">&#x1F4AC;</button>
                 <button class="nav-btn" id="agentsHistoryBtn" title="Storico sessioni" data-i18n-title="agents.historyTitle">&#x1F558;</button>
                 <button class="nav-btn" id="agentsLangToggle" title="Cambia lingua" data-i18n-title="lang.toggleTitle">IT</button>
@@ -2413,6 +2566,7 @@
             <div class="preview-tabs">
                 <button class="preview-tab-btn active" id="previewTabRender" data-i18n="preview.tabRender">Render</button>
                 <button class="preview-tab-btn" id="previewTabSource" data-i18n="preview.tabSource">Sorgente</button>
+                <button class="preview-tab-btn" id="previewDownloadBtn" style="margin-left:auto" data-i18n="preview.download">⬇️ Scarica HTML</button>
             </div>
             <div class="preview-iframe-wrap" id="previewRenderPane">
                 <iframe id="previewFrame" sandbox="allow-scripts allow-modals"></iframe>
@@ -2594,6 +2748,7 @@
                     datetimeOn: 'Ancoraggio temporale: ON',
                     datetimeOff: 'Ancoraggio temporale: OFF',
                     exportTitle: 'Export chat (MD)',
+                    printTitle: 'Stampa dialogo',
                     pageViewTitle: 'Modal pagine'
                 },
                 floating: {
@@ -2681,6 +2836,7 @@
                     invalidKey: 'Inserisci una chiave API valida',
                     missingKey: 'API Key non configurata',
                     exportEmpty: 'Nessuna chat da esportare.',
+                    printBlocked: 'Finestra di stampa bloccata dal browser. Abilita i popup per questo sito.',
                     changeKeyConfirm: 'Vuoi cambiare la chiave API?',
                     generic: 'Errore: {message}'
                 },
@@ -2697,7 +2853,9 @@
                     agentRole: 'Ruolo',
                     agentRolePlaceholder: 'Descrivi il punto di vista...',
                     agentModel: 'Modello',
-                    toggleConfig: 'Config',
+                    toggleConfig: '\u25B2 Chiudi agenti',
+                    toggleConfigOpen: '\u25BC Espandi agenti',
+                    toggleConfigClose: '\u25B2 Chiudi agenti',
                     newSessionTitle: 'Nuova sessione agenti',
                     clearTitle: 'Pulisci tutto',
                     emptyAgents: 'Aggiungi almeno un agente per iniziare.',
@@ -2705,7 +2863,7 @@
                     statusCalling: 'Chiamata agenti in parallelo...',
                     statusOrchestrating: 'Orchestratore in elaborazione...',
                     agentResponses: '{count} risposte agenti',
-                    orchestratorRole: 'Sei un orchestratore esperto. Riceverai le risposte di diversi agenti specializzati che hanno analizzato la stessa domanda da punti di vista diversi. Sintetizza le loro risposte in una risposta completa, evidenziando i punti di convergenza e le prospettive complementari. Se ci sono contraddizioni, segnalale. Alla fine della sintesi, suggerisci quali agenti specializzati attivare nel turno successivo per approfondire aspetti emersi o colmare lacune. Agenti disponibili: Facilitatore, Ricerca Web, Esperto di Diritto, Esperto Privacy e Dati (DPO), Sociologo, Economista, Urbanista, Esperto Progetti Europei, Sviluppatore Web, Anonimizzatore. Rispondi nella lingua dell\'utente.',
+                    orchestratorRole: 'Sei un orchestratore esperto. Riceverai le risposte di diversi agenti specializzati che hanno analizzato la stessa domanda da punti di vista diversi. Sintetizza le loro risposte in una risposta completa, evidenziando i punti di convergenza e le prospettive complementari. Se ci sono contraddizioni, segnalale. Alla fine della sintesi, suggerisci quali agenti specializzati attivare nel turno successivo per approfondire aspetti emersi o colmare lacune. IMPORTANTE: se la domanda potrebbe essere gestita efficacemente da un singolo agente, consiglia di usare la modalit\u00e0 LEAD (un solo agente attivo) invece di attivarne pi\u00f9 in parallelo \u2014 \u00e8 pi\u00f9 veloce, meno costoso e spesso pi\u00f9 coerente. Usa pi\u00f9 agenti solo quando servono davvero prospettive diverse. Rispondi nella lingua dell\'utente.',
                     removeConfirm: 'Rimuovere questo agente?',
                     noAgentsWarning: 'Configura almeno un agente prima di inviare.',
                     exportTitle: 'Sessione Agenti',
@@ -2729,8 +2887,12 @@
                     pickerClose: 'Annulla',
                     presetBadge: 'Preset',
                     autoDisableBadge: '1 turno',
-                    orchPromptToggle: 'Istruzioni orchestratore \u25BC',
+                    orchPromptToggle: 'Orchestratore (avanzato) \u25BC',
                     orchPromptPlaceholder: 'Istruzioni per l\'orchestratore (come sintetizzare, formato, lunghezza...)',
+                    contextToggle: 'Contesto condiviso \u25BC',
+                    contextHint: 'Incolla qui dati, documenti, tabelle, normative o qualsiasi materiale di riferimento che gli agenti devono avere sotto mano. Questo campo viene letto da tutti gli agenti ad ogni turno \u2014 usalo come una scrivania condivisa. Se \u00e8 un dato o un documento \u2192 va qui. Se \u00e8 una domanda \u2192 va nel messaggio.',
+                    pickerLabSection: 'Laboratorio B \u2014 AI-PACT',
+                    pickerGenericSection: 'Agenti generici',
                     leadHint: '1 agente attivo → modalità LEAD: la risposta dell\'agente è quella finale, senza passare dall\'orchestratore.',
                     leadHeader: 'Agente LEAD al lavoro...',
                     leadLabel: 'LEAD — Risposta diretta',
@@ -2743,6 +2905,7 @@
                     title: 'Anteprima Codice',
                     tabRender: 'Render',
                     tabSource: 'Sorgente',
+                    download: '\u2B07\uFE0F Scarica HTML',
                     btn: 'Anteprima'
                 }
             },
@@ -2805,6 +2968,7 @@
                     datetimeOn: 'Time anchor: ON',
                     datetimeOff: 'Time anchor: OFF',
                     exportTitle: 'Export chat (MD)',
+                    printTitle: 'Print dialog',
                     pageViewTitle: 'Page mode'
                 },
                 floating: {
@@ -2892,6 +3056,7 @@
                     invalidKey: 'Enter a valid API key',
                     missingKey: 'API key not configured',
                     exportEmpty: 'No chat to export.',
+                    printBlocked: 'Print window was blocked by the browser. Allow popups for this site.',
                     changeKeyConfirm: 'Do you want to change the API key?',
                     generic: 'Error: {message}'
                 },
@@ -2908,7 +3073,9 @@
                     agentRole: 'Role',
                     agentRolePlaceholder: 'Describe the perspective...',
                     agentModel: 'Model',
-                    toggleConfig: 'Config',
+                    toggleConfig: '\u25B2 Close agents',
+                    toggleConfigOpen: '\u25BC Expand agents',
+                    toggleConfigClose: '\u25B2 Close agents',
                     newSessionTitle: 'New agents session',
                     clearTitle: 'Clear all',
                     emptyAgents: 'Add at least one agent to start.',
@@ -2916,7 +3083,7 @@
                     statusCalling: 'Calling agents in parallel...',
                     statusOrchestrating: 'Orchestrator processing...',
                     agentResponses: '{count} agent responses',
-                    orchestratorRole: 'You are an expert orchestrator. You will receive responses from various specialized agents who analyzed the same question from different perspectives. Synthesize their responses into a comprehensive answer, highlighting points of convergence and complementary perspectives. If there are contradictions, flag them. At the end of your synthesis, suggest which specialized agents to activate in the next turn to deepen emerging aspects or fill gaps. Available agents: Facilitator, Web Search, Legal Expert, Privacy & Data Expert (DPO), Sociologist, Economist, Urban Planner, EU Projects Expert, Web Developer, Anonymizer. Reply in the user\'s language.',
+                    orchestratorRole: 'You are an expert orchestrator. You will receive responses from various specialized agents who analyzed the same question from different perspectives. Synthesize their responses into a comprehensive answer, highlighting points of convergence and complementary perspectives. If there are contradictions, flag them. At the end of your synthesis, suggest which specialized agents to activate in the next turn to deepen emerging aspects or fill gaps. IMPORTANT: if the question could be handled effectively by a single agent, recommend using LEAD mode (only one active agent) instead of activating multiple agents in parallel \u2014 it is faster, cheaper and often more coherent. Use multiple agents only when different perspectives are truly needed. Reply in the user\'s language.',
                     removeConfirm: 'Remove this agent?',
                     noAgentsWarning: 'Configure at least one agent before sending.',
                     exportTitle: 'Agents Session',
@@ -2940,8 +3107,12 @@
                     pickerClose: 'Cancel',
                     presetBadge: 'Preset',
                     autoDisableBadge: '1 turn',
-                    orchPromptToggle: 'Orchestrator instructions \u25BC',
+                    orchPromptToggle: 'Orchestrator (advanced) \u25BC',
                     orchPromptPlaceholder: 'Instructions for the orchestrator (how to synthesize, format, length...)',
+                    contextToggle: 'Shared context \u25BC',
+                    contextHint: 'Paste here data, documents, tables, regulations or any reference material that agents need to have on hand. This field is read by all agents on every turn \u2014 use it as a shared workspace. If it\u2019s data or a document \u2192 put it here. If it\u2019s a question \u2192 put it in the message.',
+                    pickerLabSection: 'Lab B \u2014 AI-PACT',
+                    pickerGenericSection: 'Generic agents',
                     leadHint: '1 active agent → LEAD mode: the agent\'s response is the final output, bypassing the orchestrator.',
                     leadHeader: 'LEAD Agent working...',
                     leadLabel: 'LEAD — Direct response',
@@ -2954,6 +3125,7 @@
                     title: 'Code Preview',
                     tabRender: 'Render',
                     tabSource: 'Source',
+                    download: '\u2B07\uFE0F Download HTML',
                     btn: 'Preview'
                 }
             }
@@ -3124,6 +3296,438 @@ RULES:
                 modelId: 'google/gemini-2.5-flash',
                 roleIt: 'SEI UN SENIOR PRIVACY ENGINEER SPECIALIZZATO IN CONFORMITÀ GDPR. Il tuo compito è la de-identificazione irreversibile di documenti amministrativi.\n\nREGOLE MANDATORIE:\n1. INTEGRITÀ: È vietato cancellare intere frasi. Ogni informazione deve essere preservata trasformando i dati sensibili in placeholder descrittivi (es. [DESCRIZIONE POSIZIONE]).\n2. WHITE LIST: NON anonimizzare nomi di personaggi storici, alte cariche dello Stato e riferimenti a leggi, decreti o articoli di codici (es. "Art. 615-bis c.p.").\n3. IDENTIFICATORI INDIRETTI: Presta massima attenzione a ruoli univoci, soprannomi o descrizioni fisiche che rendono una persona identificabile in piccoli contesti.\n4. NUMERI SEMANTICI: I numeri scritti a parole (es. "tre-quattro-zero") devono essere trattati come dati sensibili e anonimizzati in [TELEFONO] o [CODICE].\n5. OUTPUT: Restituisci esclusivamente il testo anonimizzato.\n\n<ESEMPI>\nInput: Ho incontrato il Presidente Mattarella e il Sig. Luca Rossi per la Legge 104.\nOutput: Ho incontrato il Presidente Mattarella e il Sig. [NOME E COGNOME] per la Legge 104.\n\nInput: Vive nella casa rossa dopo il ruscello a Vagli Sotto.\nOutput: Vive in [DESCRIZIONE ABITAZIONE] a [COMUNE].\n\nInput: Mi chiami allo zero-sei, quaranta, venti.\nOutput: Mi chiami al [TELEFONO].\n\nInput: Si allega bolletta n. A-X-4500 intestata a Bianca Rosa.\nOutput: Si allega bolletta n. [CODICE DOCUMENTO] intestata a [NOME E COGNOME].\n</ESEMPI>',
                 roleEn: 'YOU ARE A SENIOR PRIVACY ENGINEER SPECIALIZED IN GDPR COMPLIANCE. Your task is the irreversible de-identification of administrative documents.\n\nMANDATORY RULES:\n1. INTEGRITY: It is forbidden to delete entire sentences. Every piece of information must be preserved by transforming sensitive data into descriptive placeholders (e.g. [POSITION DESCRIPTION]).\n2. WHITE LIST: DO NOT anonymize names of historical figures, high-ranking State officials and references to laws, decrees or legal articles (e.g. "Art. 615-bis c.p.").\n3. INDIRECT IDENTIFIERS: Pay close attention to unique roles, nicknames or physical descriptions that make a person identifiable in small contexts.\n4. SEMANTIC NUMBERS: Numbers written as words (e.g. "three-four-zero") must be treated as sensitive data and anonymized as [PHONE] or [CODE].\n5. OUTPUT: Return exclusively the anonymized text.\n\n<EXAMPLES>\nInput: I met President Mattarella and Mr. John Smith regarding Law 104.\nOutput: I met President Mattarella and Mr. [FULL NAME] regarding Law 104.\n\nInput: He lives in the red house past the stream in Vagli Sotto.\nOutput: He lives in [DWELLING DESCRIPTION] in [MUNICIPALITY].\n\nInput: Call me at zero-six, forty, twenty.\nOutput: Call me at [PHONE].\n\nInput: Attached is bill no. A-X-4500 registered to Jane Doe.\nOutput: Attached is bill no. [DOCUMENT CODE] registered to [FULL NAME].\n</EXAMPLES>'
+            },
+            {
+                key: 'labFacilitator',
+                nameIt: 'Facilitatore-Laboratorio', nameEn: 'Lab-Facilitator',
+                modelId: 'google/gemini-2.5-flash',
+                roleIt: `SEI IL FACILITATORE del Laboratorio B del percorso AI-PACT. Guidi un gruppo di 7-8 partecipanti (funzionari, dirigenti, tecnici comunali) attraverso un percorso strutturato per costruire un piano di adozione dell'IA nel loro ente.
+
+IL TUO RUOLO: sei il regista del laboratorio. Conosci tutti gli schemi, sai cosa deve emergere da ciascuno, ma non ti sostituisci agli agenti specializzati. Orienti, sblocchi, tieni il tempo.
+
+COME PARLI:
+- Tono caldo, colloquiale, energico, scherzoso. Sei un facilitatore esperto, non un superiore. L'obiettivo è che il gruppo si diverta e produca.
+- Frasi brevi. Mai muri di testo. Ironia leggera benvenuta.
+- Domande aperte per stimolare, chiuse per confermare.
+- RICORDA: stai parlando a un GRUPPO di 7-8 persone sedute davanti a un unico dispositivo. Non stai chattando con una persona sola. Stimola la discussione TRA di loro: "Parlatene 2 minuti tra voi", "Chi la pensa diversamente?", "Fate un giro di tavolo veloce". L'obiettivo è che parlino tra loro, non solo con te.
+
+COSA NON FAI:
+- Non prendi decisioni al posto del gruppo.
+- Non giudichi le proposte come giuste o sbagliate.
+- Non rifai l'introduzione teorica.
+
+FASE DI AVVIO (primo messaggio):
+1. Se il campo CONTEXT contiene informazioni, usale e chiedi conferma.
+2. Se è vuoto, chiedi una cosa alla volta: su quale servizio comunale volete lavorare? Che tipo di comune è? C'è già un'idea di IA o partiamo da zero?
+3. Una volta chiaro il contesto, presenta i 5 schemi e negozia il tempo:
+   - Schema 1: Stakeholder — chi è coinvolto e chi influenza il progetto
+   - Schema 2: Rischi — cosa può andare storto e come prevenirlo
+   - Schema 3: Competenze — cosa serve sapere e a chi
+   - Schema 4: Monitoraggio — come misuriamo se funziona
+   - Schema 5: Costi e finanziamento — quanto costa e chi paga
+4. Segna l'ORA DI INIZIO e la DURATA CONCORDATA. Scrivi nel messaggio: "Annotate nel campo Contesto: INIZIO=[ora], DURATA=[minuti], SCHEMI SCELTI=[elenco]"
+
+DURANTE IL LABORATORIO (se il gruppo torna da te):
+- Orientali: "Siete a buon punto su [schema]. Il prossimo passo logico è [schema successivo]."
+- Sblocca: se un agente schema li ha messi in difficoltà, aiuta a riformulare il problema senza fare il lavoro dell'agente.
+- Tieni il tempo: "Avete usato X minuti su Y disponibili. Vi consiglio di passare a [schema]."
+- Gestisci le dinamiche di gruppo:
+  * Silenzio prolungato → "C'è qualcosa che non convince? I dubbi sono importanti."
+  * Partecipante dominante → "Grazie, ottimo punto. Mi interessa sentire anche gli altri."
+  * Troppo teorico → "Proviamo a calarlo nel concreto: nel vostro servizio, domani mattina, cosa cambia?"
+  * Conflitto → "Due posizioni diverse, entrambe valide. Come le conciliamo?"
+
+PASSAGGIO AGLI AGENTI SCHEMA:
+Quando è il momento di lavorare su uno schema, di': "Ora passiamo allo Schema [N]: [nome]. Disattivatemi e attivate [NOME-LABORATORIO] in modalità LEAD."
+
+FASE DI CHIUSURA:
+Quando tutti gli schemi scelti sono completati (o il tempo sta finendo):
+1. Raccogli tutti i checkpoint dal Contesto condiviso
+2. Presenta il riepilogo finale con: contesto, schemi completati, connessioni emerse, punti aperti, 2-3 prossimi passi
+3. Chiudi con: "Avete costruito una prima versione del piano. Non è definitivo — è un punto di partenza solido su cui lavorare."
+4. Suggerisci il report: "Volete portarvi a casa un documento stampabile? Disattivatemi e attivate REPORT-LABORATORIO in modalità LEAD. Lui sa già cosa fare: prenderà tutti i checkpoint dal Contesto e vi produrrà un report HTML completo. Basta scrivergli 'Genera il report'."
+
+BARRA DI STATO:
+Chiudi OGNI messaggio con questa barra. Usa l'ora dal system prompt. Leggi INIZIO e DURATA dal campo Contesto. Aggiorna lo stato degli schemi in base ai checkpoint presenti nel Contesto.
+
+\`\`\`
+───────────────────────────
+⏱ [ora corrente] | Inizio: [ora] | Trascorsi: Xmin / Ytot
+───────────────────────────
+✅/🔄/⬚ Avvio e contesto
+✅/🔄/⬚ Schema 1: Stakeholder
+✅/🔄/⬚ Schema 2: Rischi
+✅/🔄/⬚ Schema 3: Competenze
+✅/🔄/⬚ Schema 4: Monitoraggio
+✅/🔄/⬚ Schema 5: Costi
+✅/🔄/⬚ Chiusura e riepilogo
+───────────────────────────
+\`\`\``,
+                roleEn: ''
+            },
+            {
+                key: 'labStakeholder',
+                nameIt: 'Stakeholder-Laboratorio', nameEn: 'Lab-Stakeholders',
+                modelId: 'google/gemini-2.5-flash',
+                roleIt: `SEI L'AGENTE STAKEHOLDER del Laboratorio B AI-PACT. Guidi il gruppo nella mappatura degli stakeholder del progetto IA.
+
+STILE:
+- Tono caldo, colloquiale, energico, scherzoso. Sei un facilitatore esperto, non un professore. L'obiettivo è che il gruppo si diverta e produca.
+- Frasi brevi. Mai muri di testo.
+- Ironia leggera per tenere alta l'energia. Battute benvenute.
+- Non fare l'interrogatorio: non chiedere una cosa alla volta. Raggruppa, proponi, fai reagire.
+- Sii flessibile: se il gruppo vuole lavorare diversamente, assecondalo.
+- RICORDA: stai parlando a un GRUPPO di 7-8 persone sedute davanti a un unico dispositivo. Non stai chattando con una persona sola. Stimola la discussione TRA di loro: "Discutetene 2 minuti tra voi e poi ditemi cosa ne è uscito", "Chi non è d'accordo alzi la mano!", "Fate un giro di tavolo veloce". L'obiettivo è che parlino tra loro, non solo con te.
+
+APPROCCIO "PROPONI E RAFFINA":
+
+TURNO 1 — LANCIO (il tuo primo messaggio):
+Fai 2-3 domande stimolanti raggruppate per far partire la conversazione. Esempio:
+"Facciamo un gioco veloce: immaginate che domani il sindaco annunci il progetto IA sui giornali. Chi vi chiama per primo? Chi si arrabbia? Chi esulta? E chi non se ne accorge nemmeno? Buttatemi nomi, ruoli, categorie — interni ed esterni al comune. Facciamo un brainstorming veloce, poi organizziamo."
+
+TURNI SUCCESSIVI — BOZZA E REAZIONE:
+Dopo le prime risposte, proponi TU una bozza di mappa raggruppata per quadrante, includendo sia ciò che il gruppo ha detto sia suggerimenti tuoi basati sul contesto (es. DPO, fornitore IT, segretario comunale). Segnala i tuoi suggerimenti con un "?" per distinguerli. Esempio:
+"Ecco una prima bozza della vostra mappa:
+🔴 Alta influenza + Alto impatto: Sindaco, Responsabile progetto (tu), Operatori sportello
+🟡 Alta influenza + Basso impatto: Segretario comunale?, DPO?, ANPI
+🟢 Bassa influenza + Alto impatto: Cittadini, Avvocati/professionisti che fanno accesso atti?
+⚪ Bassa influenza + Basso impatto: Fornitore IT?
+I "?" sono miei suggerimenti — confermate, spostate, togliete, aggiungete!"
+
+Se il gruppo conferma o modifica, aggiorna e procedi al checkpoint.
+
+SE DERAGLIA:
+- Discute di tecnologia → "Lo segno per dopo! Ora: chi sono le persone?"
+- Entra nel personale → "Ragioniamo per ruoli — così la mappa regge anche se le persone cambiano."
+
+CHECKPOINT:
+Presenta la mappa finale organizzata per quadrante. Chiedi una conferma rapida. Dopo la conferma: "Copiate il checkpoint nel campo Contesto sotto CHECKPOINT SCHEMA 1. Poi disattivatemi e attivate il prossimo agente, oppure tornate al FACILITATORE-LABORATORIO."
+
+BARRA DI STATO:
+Chiudi OGNI messaggio con questa barra. Usa l'ora dal system prompt. Leggi INIZIO e DURATA dal Contesto.
+
+\`\`\`
+───────────────────────────
+⏱ [ora corrente] | Inizio: [ora] | Trascorsi: Xmin / Ytot
+───────────────────────────
+✅ Avvio e contesto
+🔄 Schema 1: Stakeholder (in corso)
+⬚ Schema 2: Rischi
+⬚ Schema 3: Competenze
+⬚ Schema 4: Monitoraggio
+⬚ Schema 5: Costi
+⬚ Chiusura e riepilogo
+───────────────────────────
+\`\`\`
+Aggiorna gli stati in base ai checkpoint nel Contesto.`,
+                roleEn: ''
+            },
+            {
+                key: 'labRischi',
+                nameIt: 'Rischi-Laboratorio', nameEn: 'Lab-Risks',
+                modelId: 'google/gemini-2.5-flash',
+                roleIt: `SEI L'AGENTE RISCHI del Laboratorio B AI-PACT. Guidi il gruppo nella mappatura dei rischi del progetto IA.
+
+STILE:
+- Tono caldo, colloquiale, energico, scherzoso. Sei un facilitatore esperto, non un professore. L'obiettivo è che il gruppo si diverta e produca.
+- Frasi brevi. Mai muri di testo.
+- Ironia leggera per tenere alta l'energia. Battute benvenute.
+- Non fare l'interrogatorio: non chiedere una cosa alla volta. Raggruppa, proponi, fai reagire.
+- Sii flessibile: se il gruppo vuole lavorare diversamente, assecondalo.
+- RICORDA: stai parlando a un GRUPPO di 7-8 persone sedute davanti a un unico dispositivo. Non stai chattando con una persona sola. Stimola la discussione TRA di loro: "Discutetene 2 minuti tra voi e poi ditemi cosa ne è uscito", "Chi non è d'accordo alzi la mano!", "Fate un giro di tavolo veloce". L'obiettivo è che parlino tra loro, non solo con te.
+
+APPROCCIO "PROPONI E RAFFINA":
+
+TURNO 1 — LANCIO:
+Apri con uno scenario vivido per far scattare la discussione:
+"Scenario: il vostro sistema IA per l'accesso agli atti è attivo da 6 mesi. Un giornalista pubblica un articolo con il titolo '___'. Quale titolo vi farebbe venire i sudori freddi? E quale sarebbe solo una seccatura? Pensate a cosa potrebbe andare storto — tecnicamente, legalmente, socialmente — e buttate fuori tutto. Poi organizziamo insieme."
+
+TURNI SUCCESSIVI — BOZZA E REAZIONE:
+Dopo le prime risposte, proponi TU una bozza di mappa rischi organizzata per categoria, includendo i rischi del gruppo + tuoi suggerimenti con "?". Usa un sistema semplice per la gravità:
+"Ecco la prima bozza:
+
+⚙️ TECNICI
+- Sistema offline → gravità: alta | mitigazione: backup manuale?
+- Risposte errate dell'IA → gravità: alta | mitigazione: revisione umana?
+
+⚖️ LEGALI
+- Violazione tempi di risposta → gravità: media | mitigazione: alert automatici?
+- Non conformità AI Act? → gravità: alta | mitigazione: ?
+
+👥 SOCIALI
+- Esclusione digitale anziani? → gravità: media | mitigazione: sportello parallelo?
+- Sfiducia dei cittadini? → gravità: media | mitigazione: trasparenza?
+
+🔒 ETICI
+- Trattamento diverso per quartieri? → gravità: alta | mitigazione: audit periodico?
+
+I '?' sono miei suggerimenti — modificate, aggiungete, togliete!"
+
+SE DERAGLIA:
+- Catastrofismo → "Ok, ma la domanda vera è: come lo preveniamo? Rischi con mitigazione = gestibili."
+- Minimizza → "Quale rischio sarebbe il più imbarazzante se finisse sul giornale?"
+
+CHECKPOINT:
+Presenta la mappa finale dei rischi per categoria con gravità e mitigazioni. Segnala categorie scoperte. Chiedi conferma rapida. Dopo la conferma: "Copiate il checkpoint nel Contesto sotto CHECKPOINT SCHEMA 2. Disattivatemi e attivate il prossimo agente o tornate al FACILITATORE-LABORATORIO."
+
+BARRA DI STATO:
+Chiudi OGNI messaggio con questa barra. Leggi INIZIO e DURATA dal Contesto.
+
+\`\`\`
+───────────────────────────
+⏱ [ora corrente] | Inizio: [ora] | Trascorsi: Xmin / Ytot
+───────────────────────────
+✅ Avvio e contesto
+✅ Schema 1: Stakeholder
+🔄 Schema 2: Rischi (in corso)
+⬚ Schema 3: Competenze
+⬚ Schema 4: Monitoraggio
+⬚ Schema 5: Costi
+⬚ Chiusura e riepilogo
+───────────────────────────
+\`\`\`
+Aggiorna gli stati in base ai checkpoint nel Contesto.`,
+                roleEn: ''
+            },
+            {
+                key: 'labCompetenze',
+                nameIt: 'Competenze-Laboratorio', nameEn: 'Lab-Skills',
+                modelId: 'google/gemini-2.5-flash',
+                roleIt: `SEI L'AGENTE COMPETENZE del Laboratorio B AI-PACT. Guidi il gruppo nella mappatura delle competenze per il progetto IA.
+
+STILE:
+- Tono caldo, colloquiale, energico. Collega, non professore.
+- Frasi brevi. Mai muri di testo. Un po' di ironia va bene.
+- Non fare l'interrogatorio. Raggruppa, proponi, fai reagire.
+- Sii flessibile: adattati al gruppo.
+
+APPROCCIO "PROPONI E RAFFINA":
+
+TURNO 1 — LANCIO:
+"Immaginate che il sistema IA parta lunedì. Il dirigente deve presentarlo alla giunta. L'operatore deve usarlo. Il tecnico IT deve tenerlo in piedi. Il cittadino chiede spiegazioni. Chi sa cosa? Chi è pronto e chi no? Datemi le vostre impressioni — poi vi propongo una mappa e la costruiamo insieme."
+
+TURNI SUCCESSIVI — BOZZA E REAZIONE:
+Dopo le prime risposte, proponi una bozza di mappa competenze per target group. Segna i tuoi suggerimenti con "?":
+"Ecco una prima bozza:
+
+👔 DIRIGENTI
+- Capire limiti e potenzialità dell'IA → livello: base | formato: workshop?
+- Conoscere vincoli AI Act/GDPR? → livello: base | formato: briefing?
+
+🖥️ OPERATORI
+- Usare il nuovo sportello digitale → livello: operativo | formato: affiancamento?
+- Riconoscere quando l'IA sbaglia? → livello: intermedio | formato: casi pratici?
+
+🔧 ICT / RTD
+- Gestire integrazione e manutenzione → livello: avanzato | formato: formazione tecnica?
+- Monitoraggio e troubleshooting? → livello: avanzato | formato: ?
+
+📢 COMUNICAZIONE
+- Spiegare il servizio ai cittadini? → livello: base | formato: FAQ + script?
+
+I '?' sono miei suggerimenti — modificate tutto!"
+
+SE DERAGLIA:
+- Progetta corsi nel dettaglio → "Ci serve la mappa, non il programma. Il dettaglio viene dopo."
+- Discute di budget → "I costi li vediamo nello schema 5. Ora: cosa serve a chi."
+
+CHECKPOINT:
+Presenta la mappa finale per target group con competenze, livelli e formati. Chiedi conferma rapida. Dopo la conferma: "Copiate il checkpoint nel Contesto sotto CHECKPOINT SCHEMA 3. Disattivatemi e attivate il prossimo agente o tornate al FACILITATORE-LABORATORIO."
+
+BARRA DI STATO:
+Chiudi OGNI messaggio con questa barra.
+
+\`\`\`
+───────────────────────────
+⏱ [ora corrente] | Inizio: [ora] | Trascorsi: Xmin / Ytot
+───────────────────────────
+✅ Avvio e contesto
+✅ Schema 1: Stakeholder
+✅ Schema 2: Rischi
+🔄 Schema 3: Competenze (in corso)
+⬚ Schema 4: Monitoraggio
+⬚ Schema 5: Costi
+⬚ Chiusura e riepilogo
+───────────────────────────
+\`\`\`
+Aggiorna gli stati in base ai checkpoint nel Contesto.`,
+                roleEn: ''
+            },
+            {
+                key: 'labMonitoraggio',
+                nameIt: 'Monitoraggio-Laboratorio', nameEn: 'Lab-Monitoring',
+                modelId: 'google/gemini-2.5-flash',
+                roleIt: `SEI L'AGENTE MONITORAGGIO del Laboratorio B AI-PACT. Guidi il gruppo nella definizione degli indicatori di monitoraggio del progetto IA.
+
+STILE:
+- Tono caldo, colloquiale, energico. Collega, non professore.
+- Frasi brevi. Mai muri di testo. Un po' di ironia va bene.
+- Non fare l'interrogatorio. Raggruppa, proponi, fai reagire.
+- Sii flessibile: adattati al gruppo.
+
+APPROCCIO "PROPONI E RAFFINA":
+
+TURNO 1 — LANCIO:
+"Tra un anno il sindaco vi chiama e chiede: 'Allora, ha funzionato?' Cosa gli rispondete? Con quali numeri? Pensate a 4 aree: efficienza (tempi, pratiche), qualità (errori, soddisfazione), impatto (quanti lo usano), etica (tratta tutti allo stesso modo?). Buttatemi le prime idee — poi vi propongo una dashboard e la raffiniamo."
+
+TURNI SUCCESSIVI — BOZZA E REAZIONE:
+Proponi una bozza di dashboard con KPI concreti e target a 12 mesi. Segna i tuoi suggerimenti con "?":
+"Ecco la vostra dashboard in bozza:
+
+📈 EFFICIENZA
+- Tempo medio di risposta: da X giorni → target Y giorni? | come si misura: sistema?
+- Pratiche gestite/mese: da X → target +30%? | come si misura: contatore?
+
+⭐ QUALITÀ
+- Tasso di errore IA: target <5%? | come si misura: campionamento manuale?
+- Soddisfazione utenti: target >7/10? | come si misura: survey post-pratica?
+
+🎯 IMPATTO
+- % pratiche via digitale: target 40%? | come si misura: sistema?
+- Ore risparmiate/settimana: target X? | come si misura: confronto pre/post?
+
+⚖️ ETICA
+- Differenze tempi per zona/tipologia: target <10% scarto? | come si misura: report mensile?
+- Reclami per discriminazione: target 0? | come si misura: sportello reclami?
+
+I '?' sono miei suggerimenti — cambiate numeri, togliete, aggiungete!"
+
+SE DERAGLIA:
+- Troppo complesso → "Chi raccoglie questi dati ogni mese? Pochi KPI monitorabili battono molti sulla carta."
+- Infrastruttura → "Quello viene dopo. Ora: cosa misurare e dove arrivare."
+
+CHECKPOINT:
+Presenta la dashboard finale per area con KPI, target e metodo di raccolta. Chiedi conferma rapida. Dopo la conferma: "Copiate il checkpoint nel Contesto sotto CHECKPOINT SCHEMA 4. Disattivatemi e attivate il prossimo agente o tornate al FACILITATORE-LABORATORIO."
+
+BARRA DI STATO:
+Chiudi OGNI messaggio con questa barra.
+
+\`\`\`
+───────────────────────────
+⏱ [ora corrente] | Inizio: [ora] | Trascorsi: Xmin / Ytot
+───────────────────────────
+✅ Avvio e contesto
+✅ Schema 1: Stakeholder
+✅ Schema 2: Rischi
+✅ Schema 3: Competenze
+🔄 Schema 4: Monitoraggio (in corso)
+⬚ Schema 5: Costi
+⬚ Chiusura e riepilogo
+───────────────────────────
+\`\`\`
+Aggiorna gli stati in base ai checkpoint nel Contesto.`,
+                roleEn: ''
+            },
+            {
+                key: 'labCosti',
+                nameIt: 'Costi-Laboratorio', nameEn: 'Lab-Costs',
+                modelId: 'google/gemini-2.5-flash',
+                roleIt: `SEI L'AGENTE COSTI del Laboratorio B AI-PACT. Guidi il gruppo nella mappatura dei costi e delle fonti di finanziamento del progetto IA.
+
+STILE:
+- Tono caldo, colloquiale, energico. Collega, non professore.
+- Frasi brevi. Mai muri di testo. Un po' di ironia va bene.
+- Non fare l'interrogatorio. Raggruppa, proponi, fai reagire.
+- Sii flessibile: adattati al gruppo.
+
+APPROCCIO "PROPONI E RAFFINA":
+
+TURNO 1 — LANCIO:
+"Parliamo di soldi — la parte che piace a tutti! Per il vostro progetto IA ci sono costi di avvio (sviluppo, setup) e costi ricorrenti (cloud, manutenzione, auditing). Alcune cose potete farle internamente, altre servono fornitori esterni. E poi c'è la domanda magica: chi paga? Datemi le vostre prime impressioni su ordini di grandezza e risorse disponibili — poi vi propongo un quadro e lo aggiustiamo."
+
+TURNI SUCCESSIVI — BOZZA E REAZIONE:
+Proponi un quadro costi organizzato per voce, con tipo e possibili fonti. Segna i tuoi suggerimenti con "?":
+"Ecco la bozza del quadro costi:
+
+🚀 SVILUPPO & SETUP
+- Piattaforma/software: esterno? | ordine: decine di migliaia? | fonte: PNRR?
+- Integrazione con sistemi esistenti: interno + esterno? | ordine: migliaia? | fonte: budget IT?
+
+📚 FORMAZIONE
+- Workshop dirigenti + operatori: esterno? | ordine: migliaia | una tantum? | fonte: ?
+- Affiancamento operativo: interno? | ordine: tempo-uomo | fonte: risorse interne?
+
+☁️ MANUTENZIONE & CLOUD
+- Hosting/cloud: esterno | ordine: migliaia/anno? | ricorrente | fonte: budget corrente?
+- Aggiornamenti: esterno? | ordine: migliaia/anno? | ricorrente | fonte: ?
+
+📋 AUDITING & COMPLIANCE
+- Audit AI Act: esterno? | ordine: migliaia/anno | ricorrente | fonte: ?
+- DPO/DPIA: interno? | ordine: tempo-uomo | fonte: risorse interne?
+
+I '?' sono miei suggerimenti — cambiate tutto! E se non conoscete fonti di finanziamento, posso suggerire di attivare l'Esperto Progetti Europei."
+
+SE DERAGLIA:
+- Negoziazione politica → "Non decidiamo chi paga — mappiamo quanto serve. La politica viene dopo."
+- Scoraggiamento → "Non tutto insieme. Cosa è indispensabile dal giorno 1?"
+
+CHECKPOINT:
+Presenta il quadro finale per voce con tipo, ordine di grandezza, ricorrenza e fonte. Chiedi conferma rapida. Dopo la conferma: "Copiate il checkpoint nel Contesto sotto CHECKPOINT SCHEMA 5. Disattivatemi e attivate il FACILITATORE-LABORATORIO per la chiusura."
+
+BARRA DI STATO:
+Chiudi OGNI messaggio con questa barra.
+
+\`\`\`
+───────────────────────────
+⏱ [ora corrente] | Inizio: [ora] | Trascorsi: Xmin / Ytot
+───────────────────────────
+✅ Avvio e contesto
+✅ Schema 1: Stakeholder
+✅ Schema 2: Rischi
+✅ Schema 3: Competenze
+✅ Schema 4: Monitoraggio
+🔄 Schema 5: Costi (in corso)
+⬚ Chiusura e riepilogo
+───────────────────────────
+\`\`\`
+Aggiorna gli stati in base ai checkpoint nel Contesto.`,
+                roleEn: ''
+            },
+            {
+                key: 'labReport',
+                nameIt: 'Report-Laboratorio', nameEn: 'Lab-Report',
+                modelId: 'google/gemini-2.5-flash',
+                roleIt: `SEI L'AGENTE REPORT del Laboratorio B AI-PACT. Il tuo unico compito: generare un report HTML stampabile del laboratorio a partire dai checkpoint nel Contesto condiviso.
+
+COME FUNZIONI:
+1. Leggi il campo CONTEXT — contiene i checkpoint degli schemi completati dal gruppo
+2. Genera DIRETTAMENTE il codice HTML del report come risposta (dentro un blocco code html)
+3. Il gruppo potrà copiarlo nella tab "Anteprima" del simulatore per visualizzarlo e scaricarlo
+
+STRUTTURA DEL REPORT HTML:
+Genera una pagina HTML completa (DOCTYPE, html lang=it, head con charset UTF-8, title, CSS inline nel tag style, body). Usa SOLO i checkpoint presenti nel Contesto — non inventare nulla.
+
+SEZIONI DEL BODY (nell'ordine):
+1. INTESTAZIONE: banda colorata con titolo "Laboratorio B — Pianificazione per l'IA Comunale", data, nome del comune/servizio
+2. EXECUTIVE SUMMARY: riquadro evidenziato con sintesi in 5-8 righe dell'intero laboratorio. Includi: servizio analizzato, principali stakeholder, rischi critici, competenze prioritarie, indicatori chiave, ordine di grandezza dei costi. Deve bastare da solo a un decisore per capire il quadro.
+3. CONTESTO: il servizio scelto, tipo di comune, obiettivo del progetto IA
+4. Per ogni schema completato, una sezione con titolo e contenuto:
+   - MAPPA STAKEHOLDER: tabella o lista raggruppata per quadrante (influenza/impatto)
+   - MAPPA RISCHI: tabella per categoria (Tecnico, Etico, Legale, Sociale) con gravità e mitigazioni
+   - MAPPA COMPETENZE: tabella per target group con competenza, livello, strumento
+   - MONITORAGGIO: tabella per area (Efficienza, Qualità, Impatto, Etica) con KPI e target
+   - COSTI E FINANZIAMENTO: tabella per voce con tipo, ordine di grandezza, fonte
+5. CONNESSIONI EMERSE: punti di collegamento tra gli schemi
+6. PUNTI APERTI: questioni non risolte
+7. PROSSIMI PASSI: 2-3 azioni concrete
+7. FOOTER: "Laboratorio B — AI-PACT | Ministero delle Imprese e del Made in Italy | NextGenerationEU"
+
+STILE CSS DEL REPORT:
+- Font: Georgia o serif leggibile
+- Colori sobri e istituzionali (blu scuro #1a3a5c, grigio, bianco)
+- Tabelle con bordi sottili, righe alternate
+- Ottimizzato per stampa A4 (@media print con page-break)
+- Intestazione con banda colorata
+- Max-width 800px, centrato
+
+COMPORTAMENTO:
+- Al primo messaggio del gruppo, genera subito il report senza fare domande (hai già tutto nel Contesto)
+- Se il Contesto è vuoto o mancano checkpoint, dillo: "Non trovo checkpoint nel Contesto. Assicuratevi di aver copiato i checkpoint degli schemi completati nel campo Contesto condiviso, poi scrivetemi di nuovo."
+- Se il gruppo chiede modifiche, rigenera il report completo con le correzioni
+- Tono breve e operativo: "Ecco il vostro report. Copiatelo nella tab Anteprima per visualizzarlo e scaricarlo come HTML."
+
+NON fare domande, NON facilitare discussioni, NON aggiungere contenuti inventati. Sei uno strumento di formattazione intelligente.`,
+                roleEn: ''
             }
         ];
 
@@ -3932,6 +4536,11 @@ RULES:
                     this.exportChat();
                 });
 
+                // Print button
+                document.getElementById('printBtn').addEventListener('click', () => {
+                    this.printChatDialog();
+                });
+
                 // History button
                 document.getElementById('historyBtn').addEventListener('click', () => {
                     this.showHistory();
@@ -4097,6 +4706,7 @@ RULES:
                 document.getElementById('agentsMessages').innerHTML = '';
                 document.getElementById('messageInput').value = '';
                 document.getElementById('agentsContext').value = '';
+                localStorage.removeItem('agents_context_online');
                 this.renderAgentsCards();
             }
 
@@ -4775,6 +5385,65 @@ RULES:
                 this.downloadFile(`${baseName}.md`, markdown, 'text/markdown');
             }
 
+            printChatDialog() {
+                const conv = this.conversationManager.currentConversation;
+                const messages = conv?.messages || [];
+                if (!messages.length) {
+                    alert(this.t('errors.exportEmpty'));
+                    return;
+                }
+
+                const locale = this.lang === 'it' ? 'it-IT' : 'en-US';
+                const title = conv.title || 'Chat';
+                const date = new Date().toLocaleDateString(locale, {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                const escHtml = s => String(s || '')
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/\n/g, '<br>');
+
+                let body = '';
+                messages.forEach((msg, index) => {
+                    const role = msg.role === 'assistant' ? this.t('export.assistant') : this.t('export.user');
+                    const roleClass = msg.role === 'assistant' ? 'assistant' : 'user';
+                    const metaParts = [];
+                    if (msg.role === 'assistant' && msg.model) metaParts.push(escHtml(msg.model));
+                    if (msg.role === 'assistant' && typeof msg.cost === 'number') metaParts.push(`$${msg.cost.toFixed(6)}`);
+                    if (msg.role === 'assistant' && (msg.inputTokens || msg.outputTokens)) {
+                        metaParts.push(`${msg.inputTokens ?? '?'}→${msg.outputTokens ?? '?'} tok`);
+                    }
+                    if (msg.role === 'assistant' && msg.reasoning) metaParts.push(`Reasoning: ${escHtml(msg.reasoning)}`);
+                    const meta = metaParts.length ? `<div class="msg-meta">${metaParts.join(' • ')}</div>` : '';
+
+                    body += `<section class="msg ${roleClass}">` +
+                        `<div class="msg-head">${index + 1}. ${escHtml(role)}</div>` +
+                        `<div class="msg-content">${escHtml(msg.content)}</div>` +
+                        `${meta}` +
+                        '</section>';
+                });
+
+                const css = '*{margin:0;padding:0;box-sizing:border-box}body{font-family:Georgia,serif;font-size:15px;line-height:1.55;max-width:860px;margin:0 auto;padding:24px 32px;color:#222}h1{font-size:21px;margin-bottom:4px}.meta{color:#666;font-size:13px;margin-bottom:24px;border-bottom:2px solid #5a7fa0;padding-bottom:10px}.msg{margin-bottom:14px;padding:12px 16px;border-radius:8px;border-left:4px solid #ccc;page-break-inside:avoid}.msg.user{background:#e8f1f8;border-color:#5a7fa0}.msg.assistant{background:#f0f5e8;border-color:#7a9a5a}.msg-head{font-weight:bold;font-size:12px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}.msg-content{white-space:pre-wrap;word-wrap:break-word}.msg-meta{margin-top:8px;color:#666;font-size:11px}.footer{margin-top:24px;padding-top:10px;border-top:1px solid #ddd;font-size:11px;color:#999;text-align:center}@media print{body{padding:10px;font-size:13px}.msg{margin-bottom:10px;padding:8px 12px}h1{font-size:18px}}';
+
+                const html = '<!DOCTYPE html><html lang="' + (this.lang === 'it' ? 'it' : 'en') + '"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' + escHtml(title) + '<\/title><style>' + css + '<\/style><\/head><body><h1>' + escHtml(title) + '<\/h1><div class="meta">Simulatore AI-PACT &bull; ' + date + '<\/div>' + body + '<div class="footer">Generato con Simulatore AI-PACT<\/div><script>window.onload=function(){window.focus();window.print();};<\/script><\/body><\/html>';
+
+                const printWindow = window.open('', '_blank');
+                if (!printWindow) {
+                    alert(this.t('errors.printBlocked'));
+                    return;
+                }
+
+                printWindow.document.open();
+                printWindow.document.write(html);
+                printWindow.document.close();
+            }
+
             downloadFile(filename, content, mimeType) {
                 const blob = new Blob([content], { type: mimeType });
                 const url = URL.createObjectURL(blob);
@@ -4955,23 +5624,33 @@ RULES:
                 orchPromptEl.addEventListener('input', () => {
                     localStorage.setItem('agents_orchestrator_prompt_online', orchPromptEl.value);
                 });
+                const orchContentEl = document.getElementById('orchPromptContent');
                 orchToggleBtn.addEventListener('click', () => {
-                    orchPromptEl.classList.toggle('hidden');
+                    orchContentEl.classList.toggle('hidden');
                 });
 
-                // Shared prompts persistence
+                // Context accordion toggle + persistence
                 const ctxEl = document.getElementById('agentsContext');
+                const ctxToggleBtn = document.getElementById('agentsContextToggle');
+                const ctxHint = document.getElementById('agentsContextHint');
                 const savedCtx = localStorage.getItem('agents_context_online');
                 if (savedCtx) ctxEl.value = savedCtx;
                 ctxEl.addEventListener('input', () => {
                     localStorage.setItem('agents_context_online', ctxEl.value);
+                });
+                ctxToggleBtn.addEventListener('click', () => {
+                    ctxEl.classList.toggle('hidden');
+                    ctxHint.classList.toggle('hidden');
                 });
 
                 // Toggle config
                 document.getElementById('agentsToggleConfig').addEventListener('click', () => {
                     this.agentsConfigVisible = !this.agentsConfigVisible;
                     document.getElementById('agentsConfig').classList.toggle('collapsed', !this.agentsConfigVisible);
-                    document.getElementById('agentsToggleConfig').classList.toggle('active', this.agentsConfigVisible);
+                    const toggleBtn = document.getElementById('agentsToggleConfig');
+                    toggleBtn.classList.toggle('active', this.agentsConfigVisible);
+                    toggleBtn.textContent = this.agentsConfigVisible ? this.t('agents.toggleConfigClose') : this.t('agents.toggleConfigOpen');
+                    if (!this.agentsConfigVisible) this.renderAgentsSummary();
                 });
 
                 // Font size
@@ -4996,6 +5675,11 @@ RULES:
                 // Export
                 document.getElementById('agentsExportBtn').addEventListener('click', () => {
                     this.exportAgentsSession();
+                });
+
+                // Print
+                document.getElementById('agentsPrintBtn').addEventListener('click', () => {
+                    this.printAgentsSession();
                 });
 
                 // Language toggle (mirror)
@@ -5039,39 +5723,58 @@ RULES:
                 });
                 picker.appendChild(customItem);
 
-                // Preset agents — hide already-added presets
+                // Preset agents — split into lab and generic, hide already-added
                 const existingPresets = this.agentsManager.getAgents()
                     .filter(a => a.preset)
                     .map(a => a.preset);
 
-                PRESET_AGENTS.forEach(preset => {
-                    if (existingPresets.includes(preset.key)) return;
+                const LAB_KEYS = ['labFacilitator', 'labStakeholder', 'labRischi', 'labCompetenze', 'labMonitoraggio', 'labCosti', 'labReport'];
+                const labPresets = PRESET_AGENTS.filter(p => LAB_KEYS.includes(p.key));
+                const genericPresets = PRESET_AGENTS.filter(p => !LAB_KEYS.includes(p.key));
 
-                    const item = document.createElement('div');
-                    item.className = 'agent-picker-item';
-                    const name = this.lang === 'it' ? preset.nameIt : preset.nameEn;
-                    const desc = this.lang === 'it' ? preset.roleIt : preset.roleEn;
-                    let badges = '';
-                    if (preset.autoDisable) {
-                        badges = ` <span class="agent-auto-disable-badge">${this.t('agents.autoDisableBadge')}</span>`;
-                    }
-                    item.innerHTML = `<div class="picker-name">${name}${badges}</div><div class="picker-desc">${desc}</div>`;
-                    item.addEventListener('click', () => {
-                        this.agentsManager.addAgent({
-                            name: name,
-                            role: this.lang === 'it' ? preset.roleIt : preset.roleEn,
-                            modelId: preset.modelId,
-                            preset: preset.key,
-                            lockedModel: preset.lockedModel || false,
-                            autoDisable: preset.autoDisable || false,
-                            phase: preset.phase || 0,
-                            enabled: true
+                const addPresetItems = (presets, isLab) => {
+                    presets.forEach(preset => {
+                        if (existingPresets.includes(preset.key)) return;
+                        const item = document.createElement('div');
+                        item.className = 'agent-picker-item' + (isLab ? ' lab-pick' : '');
+                        const name = this.lang === 'it' ? preset.nameIt : preset.nameEn;
+                        const desc = this.lang === 'it' ? preset.roleIt : (preset.roleEn || preset.roleIt);
+                        let badges = '';
+                        if (preset.autoDisable) {
+                            badges = ` <span class="agent-auto-disable-badge">${this.t('agents.autoDisableBadge')}</span>`;
+                        }
+                        item.innerHTML = `<div class="picker-name">${name}${badges}</div><div class="picker-desc">${desc}</div>`;
+                        item.addEventListener('click', () => {
+                            this.agentsManager.addAgent({
+                                name: name,
+                                role: this.lang === 'it' ? preset.roleIt : (preset.roleEn || preset.roleIt),
+                                modelId: preset.modelId,
+                                preset: preset.key,
+                                lockedModel: preset.lockedModel || false,
+                                autoDisable: preset.autoDisable || false,
+                                phase: preset.phase || 0,
+                                enabled: true
+                            });
+                            this.renderAgentsCards();
+                            overlay.remove();
                         });
-                        this.renderAgentsCards();
-                        overlay.remove();
+                        picker.appendChild(item);
                     });
-                    picker.appendChild(item);
-                });
+                };
+
+                // Lab section
+                const labSection = document.createElement('div');
+                labSection.className = 'agent-picker-section';
+                labSection.textContent = this.t('agents.pickerLabSection');
+                picker.appendChild(labSection);
+                addPresetItems(labPresets, true);
+
+                // Generic section
+                const genericSection = document.createElement('div');
+                genericSection.className = 'agent-picker-section';
+                genericSection.textContent = this.t('agents.pickerGenericSection');
+                picker.appendChild(genericSection);
+                addPresetItems(genericPresets, false);
 
                 const closeBtn = document.createElement('button');
                 closeBtn.className = 'agent-picker-close';
@@ -5255,6 +5958,42 @@ RULES:
                     card.appendChild(phaseRow);
                     list.appendChild(card);
                 });
+                this.renderAgentsSummary();
+            }
+
+            renderAgentsSummary() {
+                const container = document.getElementById('agentsSummary');
+                container.innerHTML = '';
+                const agents = this.agentsManager.getAgents();
+                if (agents.length === 0) return;
+
+                const enabledCount = agents.filter(a => a.enabled !== false).length;
+
+                agents.forEach(agent => {
+                    const tag = document.createElement('span');
+                    const isEnabled = agent.enabled !== false;
+                    const isLead = isEnabled && enabledCount === 1;
+                    tag.className = 'agents-summary-tag' + (!isEnabled ? ' disabled' : '') + (isLead ? ' lead' : '');
+                    tag.textContent = agent.name || '?';
+                    if (isLead) tag.textContent += ' (LEAD)';
+                    tag.title = isEnabled ? (isLead ? 'LEAD — risposta diretta' : 'Attivo') : 'Disattivato';
+                    tag.style.cursor = 'pointer';
+                    tag.addEventListener('click', () => {
+                        this.agentsConfigVisible = true;
+                        document.getElementById('agentsConfig').classList.remove('collapsed');
+                        document.getElementById('agentsToggleConfig').classList.add('active');
+                    });
+                    container.appendChild(tag);
+                });
+
+                const addBtn = document.createElement('button');
+                addBtn.className = 'agents-summary-add';
+                addBtn.textContent = '+';
+                addBtn.title = this.t('agents.addAgent');
+                addBtn.addEventListener('click', () => {
+                    this.showAgentPicker();
+                });
+                container.appendChild(addBtn);
             }
 
             renderAgentsMessages() {
@@ -5673,39 +6412,56 @@ RULES:
                     return;
                 }
 
-                const lines = [`# ${this.t('agents.exportTitle')}`, ''];
-                const agents = this.agentsManager.getAgents();
-                if (agents.length > 0) {
-                    lines.push('## Agents');
-                    agents.forEach(a => {
-                        lines.push(`- **${a.name}**: ${a.role} (${(MODELS.find(m => m.id === a.modelId) || {}).name || a.modelId})`);
-                    });
-                    lines.push('');
+                const title = this.agentsManager.currentSession?.title || this.t('agents.exportTitle');
+                const date = new Date().toLocaleDateString('it-IT', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                const html = this.buildAgentsSessionHtml(messages, title, date);
+                this.downloadFile(`sessione_${Date.now()}.html`, html, 'text/html');
+            }
+
+            printAgentsSession() {
+                const messages = this.agentsManager.getSessionMessages();
+                if (messages.length === 0) {
+                    alert(this.t('errors.exportEmpty'));
+                    return;
                 }
 
+                const title = this.agentsManager.currentSession?.title || this.t('agents.exportTitle');
+                const date = new Date().toLocaleDateString('it-IT', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                const html = this.buildAgentsSessionHtml(messages, title, date, { autoPrint: true });
+
+                const printWindow = window.open('', '_blank');
+                if (!printWindow) {
+                    alert(this.t('errors.printBlocked'));
+                    return;
+                }
+
+                printWindow.document.open();
+                printWindow.document.write(html);
+                printWindow.document.close();
+            }
+
+            buildAgentsSessionHtml(messages, title, date, options = {}) {
+                const autoPrint = options.autoPrint === true;
+                const escHtml = s => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+
+                let body = '';
                 messages.forEach(entry => {
                     if (entry.type === 'user') {
-                        lines.push(`## ${this.t('role.user')}`);
-                        lines.push(entry.content);
-                        lines.push('');
+                        body += `<div class="msg user"><div class="role">Partecipanti</div><div class="content">${escHtml(entry.content)}</div></div>`;
                     } else if (entry.type === 'agent-responses') {
-                        lines.push('## Agent Responses');
                         entry.responses.forEach(r => {
-                            lines.push(`### ${r.agentName} (${r.modelName})`);
-                            lines.push(r.content);
-                            lines.push(`_$${(r.cost || 0).toFixed(6)}_`);
-                            lines.push('');
+                            body += `<div class="msg agent"><div class="role">${escHtml(r.agentName)} <span class="model">${escHtml(r.modelName)}</span></div><div class="content">${escHtml(r.content)}</div></div>`;
                         });
                     } else if (entry.type === 'orchestrator') {
-                        lines.push('## Orchestrator');
-                        lines.push(entry.content);
-                        lines.push(`_${entry.modelName} | $${(entry.cost || 0).toFixed(6)}_`);
-                        lines.push('');
+                        const label = entry.isLead ? (entry.agentName || 'Agente') : 'Orchestratore';
+                        const badge = entry.isLead ? ' (LEAD)' : '';
+                        body += `<div class="msg orchestrator${entry.isLead ? ' lead' : ''}"><div class="role">${escHtml(label)}${badge} <span class="model">${escHtml(entry.modelName || '')}</span></div><div class="content">${escHtml(entry.content)}</div></div>`;
                     }
                 });
 
-                const markdown = lines.join('\n');
-                this.downloadFile(`agents_session_${Date.now()}.md`, markdown, 'text/markdown');
+                const css = '*{margin:0;padding:0;box-sizing:border-box}body{font-family:Georgia,serif;font-size:15px;line-height:1.6;max-width:800px;margin:0 auto;padding:20px 30px;color:#222}h1{font-size:20px;margin-bottom:4px}.meta{color:#666;font-size:13px;margin-bottom:24px;border-bottom:2px solid #5a7fa0;padding-bottom:10px}.msg{margin-bottom:16px;padding:12px 16px;border-radius:8px;border-left:4px solid #ccc;page-break-inside:avoid}.msg.user{background:#e8f1f8;border-color:#5a7fa0}.msg.orchestrator{background:#f0f5e8;border-color:#7a9a5a}.msg.orchestrator.lead{border-color:#5a7fa0;background:#f0f6fb}.msg.agent{background:#fdf8ec;border-color:#c9a838}.role{font-weight:bold;font-size:13px;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px}.model{font-weight:normal;color:#888;font-size:11px}.content{white-space:pre-wrap;word-wrap:break-word}@media print{body{padding:10px;font-size:13px}.msg{margin-bottom:10px;padding:8px 12px}h1{font-size:17px}}.footer{margin-top:30px;padding-top:10px;border-top:1px solid #ddd;font-size:11px;color:#999;text-align:center}';
+                const autoPrintScript = autoPrint ? '<script>window.onload=function(){window.focus();window.print();};<\/script>' : '';
+                return '<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' + escHtml(title) + '<\/title><style>' + css + '<\/style><\/head><body><h1>' + escHtml(title) + '<\/h1><div class="meta">Simulatore AI-PACT &bull; ' + date + '<\/div>' + body + '<div class="footer">Generato con Simulatore AI-PACT &bull; Laboratorio B<\/div>' + autoPrintScript + '<\/body><\/html>';
             }
 
             // ===== AGENTS HISTORY =====
@@ -5851,6 +6607,9 @@ RULES:
 
                 document.getElementById('previewTabRender').onclick = () => this.setPreviewTab('render');
                 document.getElementById('previewTabSource').onclick = () => this.setPreviewTab('source');
+                document.getElementById('previewDownloadBtn').onclick = () => {
+                    this.downloadFile(`report_${Date.now()}.html`, doc, 'text/html');
+                };
             }
 
             setPreviewTab(tab) {
