@@ -3713,12 +3713,24 @@ SEZIONI DEL BODY (nell'ordine):
 7. FOOTER: "Laboratorio B — AI-PACT | Ministero delle Imprese e del Made in Italy | NextGenerationEU"
 
 STILE CSS DEL REPORT:
+- ACCESSIBILITÀ (WCAG 2.1 AA obbligatorio):
+  * Contrasto minimo 4.5:1 per testo normale, 3:1 per testo grande (titoli)
+  * MAI testo grigio o chiaro su sfondo scuro. Testo su sfondo colorato = sempre bianco #ffffff
+  * Font-size minimo 16px per il body, 14px minimo assoluto per note e caption
+  * Line-height minimo 1.5 per il corpo del testo
+  * Tabelle con tag th, scope, e caption per screen reader
+  * Struttura semantica: h1 per titolo, h2 per sezioni, h3 per sotto-sezioni. Mai saltare livelli
+  * Link e riferimenti sottolineati, non solo colorati
+  * Immagini decorative con alt vuoto, informative con alt descrittivo
 - Font: Georgia o serif leggibile
-- Colori sobri e istituzionali (blu scuro #1a3a5c, grigio, bianco)
-- Tabelle con bordi sottili, righe alternate
+- Colori sobri e istituzionali
+- INTESTAZIONE: sfondo blu scuro #1a3a5c, testo BIANCO #ffffff
+- Executive summary: riquadro con sfondo chiaro (#f0f4f8), bordo sinistro blu
+- Titoli sezioni: colore blu scuro #1a3a5c
+- Tabelle con bordi sottili, righe alternate (#f9f9f9 e bianco)
 - Ottimizzato per stampa A4 (@media print con page-break)
-- Intestazione con banda colorata
 - Max-width 800px, centrato
+- Attributo lang="it" su tag html
 
 COMPORTAMENTO:
 - Al primo messaggio del gruppo, genera subito il report senza fare domande (hai già tutto nel Contesto)
