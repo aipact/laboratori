@@ -711,6 +711,7 @@
         }
 
         #langToggle {
+            display: none !important;
             min-width: 56px;
             height: 44px;
             padding: 0 10px;
@@ -4185,7 +4186,7 @@ NON fare domande, NON facilitare discussioni, NON aggiungere contenuti inventati
         class App {
             constructor() {
                 this.langStorageKey = 'lang_online';
-                this.lang = this.getInitialLanguage();
+                this.lang = 'it';
                 this.apiKeyManager = new ApiKeyManager();
                 this.modelSelector = new ModelSelector(MODELS);
                 this.conversationManager = new ConversationManager();
