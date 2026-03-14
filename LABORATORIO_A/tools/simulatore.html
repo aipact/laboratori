@@ -2926,7 +2926,7 @@
                     orchPromptPlaceholder: 'Istruzioni per l\'orchestratore (come sintetizzare, formato, lunghezza...)',
                     contextToggle: 'Contesto condiviso \u25BC',
                     contextHint: 'Incolla qui dati, documenti, tabelle, normative o qualsiasi materiale di riferimento che gli agenti devono avere sotto mano. Questo campo viene letto da tutti gli agenti ad ogni turno \u2014 usalo come una scrivania condivisa. Se \u00e8 un dato o un documento \u2192 va qui. Se \u00e8 una domanda \u2192 va nel messaggio.',
-                    labGenovaHint: 'Area Metropolitana di Genova: per orientarti nel percorso, attiva FACILITATORE-LABORATORIO in modalit\u00e0 LEAD e scrivi "Aiutaci a orientarci e guidaci nel percorso".',
+                    labGenovaHint: 'Area Metropolitana di Genova: per orientarti nel percorso, attiva FACILITATORE-LABORATORIO in modalit\u00e0 LEAD e scrivi "Aiutaci a orientarci e guidaci nel percorso". \uD83C\uDFAC Video guida: ../ISTRUZIONI_GENOVA/VIDEO_GUIDA.mp4',
                     pickerLabSection: 'Laboratorio B \u2014 AI-PACT',
                     pickerGenericSection: 'Agenti generici',
                     leadHint: '1 agente attivo → modalità LEAD: la risposta dell\'agente è quella finale, senza passare dall\'orchestratore.',
@@ -3147,7 +3147,7 @@
                     orchPromptPlaceholder: 'Instructions for the orchestrator (how to synthesize, format, length...)',
                     contextToggle: 'Shared context \u25BC',
                     contextHint: 'Paste here data, documents, tables, regulations or any reference material that agents need to have on hand. This field is read by all agents on every turn \u2014 use it as a shared workspace. If it\u2019s data or a document \u2192 put it here. If it\u2019s a question \u2192 put it in the message.',
-                    labGenovaHint: 'Genoa Metropolitan Area: to get oriented in the pathway, activate LAB-FACILITATOR in LEAD mode and write "Help us get oriented and guide us through the pathway."',
+                    labGenovaHint: 'Genoa Metropolitan Area: to get oriented in the pathway, activate LAB-FACILITATOR in LEAD mode and write "Help us get oriented and guide us through the pathway." \uD83C\uDFAC Video guide: ../ISTRUZIONI_GENOVA/VIDEO_GUIDA.mp4',
                     pickerLabSection: 'Lab B \u2014 AI-PACT',
                     pickerGenericSection: 'Generic agents',
                     leadHint: '1 active agent → LEAD mode: the agent\'s response is the final output, bypassing the orchestrator.',
@@ -5950,7 +5950,7 @@ NON fare domande, NON facilitare discussioni, NON aggiungere contenuti inventati
                     const labHint = document.createElement('div');
                     labHint.id = 'labGenovaHint';
                     labHint.style.cssText = 'padding: 8px 12px; margin: 0 0 6px 0; background: #e8f5e9; border-left: 3px solid #2e7d32; border-radius: 4px; font-size: 12px; color: #1b5e20; line-height: 1.4;';
-                    labHint.textContent = this.t('agents.labGenovaHint');
+                    labHint.innerHTML = this.t('agents.labGenovaHint').replace(/(VIDEO_GUIDA\.mp4)/, '<a href="../ISTRUZIONI_GENOVA/VIDEO_GUIDA.mp4" target="_blank" style="color:#1b5e20;font-weight:bold;">$1</a>');
                     list.parentNode.insertBefore(labHint, list);
                 }
                 if (enabledCount === 1) {
