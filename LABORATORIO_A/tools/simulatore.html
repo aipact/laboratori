@@ -1360,6 +1360,33 @@
             font-family: inherit;
         }
 
+        .lab-genova-btn {
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: bold;
+            border: 2px solid #2e7d32;
+            border-radius: 6px;
+            background: #ffffff;
+            color: #2e7d32;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .lab-genova-btn.active {
+            background: #2e7d32;
+            color: #ffffff;
+            box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.3);
+        }
+
+        .lab-genova-btn:hover {
+            background: #e8f5e9;
+        }
+
+        .lab-genova-btn.active:hover {
+            background: #1b5e20;
+        }
+
         .add-agent-btn {
             padding: 6px 12px;
             font-size: 13px;
@@ -1492,6 +1519,12 @@
         .agent-card.disabled input,
         .agent-card.disabled select {
             pointer-events: none;
+        }
+
+        .agent-card.disabled .agent-toggle,
+        .agent-card.disabled .agent-toggle *  {
+            pointer-events: auto !important;
+            cursor: pointer;
         }
 
         .agent-toggle {
@@ -2481,6 +2514,7 @@
                 <div class="agents-config-header">
                     <h3 data-i18n="agents.title">Configura Agenti</h3>
                     <div class="agents-config-actions">
+                        <button class="lab-genova-btn" id="labGenovaBtn">Lab Genova</button>
                         <button class="add-agent-btn" id="addAgentBtn" data-i18n="agents.addAgent">+ Agente</button>
                     </div>
                 </div>
@@ -2892,6 +2926,7 @@
                     orchPromptPlaceholder: 'Istruzioni per l\'orchestratore (come sintetizzare, formato, lunghezza...)',
                     contextToggle: 'Contesto condiviso \u25BC',
                     contextHint: 'Incolla qui dati, documenti, tabelle, normative o qualsiasi materiale di riferimento che gli agenti devono avere sotto mano. Questo campo viene letto da tutti gli agenti ad ogni turno \u2014 usalo come una scrivania condivisa. Se \u00e8 un dato o un documento \u2192 va qui. Se \u00e8 una domanda \u2192 va nel messaggio.',
+                    labGenovaHint: 'Area Metropolitana di Genova: per orientarti nel percorso, attiva FACILITATORE-LABORATORIO in modalit\u00e0 LEAD e scrivi "Aiutaci a orientarci e guidaci nel percorso".',
                     pickerLabSection: 'Laboratorio B \u2014 AI-PACT',
                     pickerGenericSection: 'Agenti generici',
                     leadHint: '1 agente attivo → modalità LEAD: la risposta dell\'agente è quella finale, senza passare dall\'orchestratore.',
@@ -3112,6 +3147,7 @@
                     orchPromptPlaceholder: 'Instructions for the orchestrator (how to synthesize, format, length...)',
                     contextToggle: 'Shared context \u25BC',
                     contextHint: 'Paste here data, documents, tables, regulations or any reference material that agents need to have on hand. This field is read by all agents on every turn \u2014 use it as a shared workspace. If it\u2019s data or a document \u2192 put it here. If it\u2019s a question \u2192 put it in the message.',
+                    labGenovaHint: 'Genoa Metropolitan Area: to get oriented in the pathway, activate LAB-FACILITATOR in LEAD mode and write "Help us get oriented and guide us through the pathway."',
                     pickerLabSection: 'Lab B \u2014 AI-PACT',
                     pickerGenericSection: 'Generic agents',
                     leadHint: '1 active agent → LEAD mode: the agent\'s response is the final output, bypassing the orchestrator.',
@@ -3305,6 +3341,7 @@ RULES:
                 roleIt: `SEI IL FACILITATORE del Laboratorio B del percorso AI-PACT. Guidi un gruppo di 7-8 partecipanti (funzionari, dirigenti, tecnici comunali) attraverso un percorso strutturato per costruire un piano di adozione dell'IA nel loro ente.
 
 IL TUO RUOLO: sei il regista del laboratorio. Conosci tutti gli schemi, sai cosa deve emergere da ciascuno, ma non ti sostituisci agli agenti specializzati. Orienti, sblocchi, tieni il tempo.
+INDICAZIONE PRIORITARIA (Area Metropolitana di Genova): se il gruppo \u00e8 disorientato o chiede da dove iniziare, guidalo subito e invitalo in modo esplicito a scrivere: "Facilitatore-Laboratorio, aiutaci a orientarci e guidaci nel percorso."
 
 COME PARLI:
 - Tono caldo, colloquiale, energico, scherzoso. Sei un facilitatore esperto, non un superiore. L'obiettivo è che il gruppo si diverta e produca.
@@ -4206,6 +4243,26 @@ NON fare domande, NON facilitare discussioni, NON aggiungere contenuti inventati
                 this.activeTab = 'agents';
                 this.agentsConfigVisible = true;
                 this.agentsManager = null;
+                this.agentsModes = {
+                    normal: {
+                        name: 'normal',
+                        radio: false,
+                        locked: false,
+                        contextKey: 'agents_context_online',
+                        orchPromptKey: 'agents_orchestrator_prompt_online',
+                        manager: null
+                    },
+                    labGenova: {
+                        name: 'labGenova',
+                        radio: true,
+                        locked: true,
+                        contextKey: 'agents_context_genova',
+                        orchPromptKey: 'agents_orchestrator_prompt_genova',
+                        manager: null,
+                        presets: ['labFacilitator', 'labStakeholder', 'labRischi', 'labCompetenze', 'labMonitoraggio', 'labCosti', 'labReport']
+                    }
+                };
+                this.agentsMode = this.agentsModes.normal;
 
                 this.init();
             }
@@ -4280,9 +4337,9 @@ NON fare domande, NON facilitare discussioni, NON aggiungere contenuti inventati
                 localStorage.setItem(this.langStorageKey, lang);
                 this.updateLanguageControls();
                 this.chatUI.setTranslator((key, vars) => this.t(key, vars));
-                if (this.agentsManager) {
-                    this.agentsManager.setTranslator((key, vars) => this.t(key, vars));
-                }
+                Object.values(this.agentsModes).forEach(mode => {
+                    if (mode.manager) mode.manager.setTranslator((key, vars) => this.t(key, vars));
+                });
                 this.applyTranslations();
                 this.chatUI.renderMessages(this.conversationManager.getCurrentMessages());
                 if (document.getElementById('pageModal').classList.contains('active')) {
@@ -4421,11 +4478,20 @@ NON fare domande, NON facilitare discussioni, NON aggiungere contenuti inventati
                         (content) => this.chatUI.updateLastMessage(content)
                     );
 
-                    this.agentsManager = new AgentsManager(
+                    this.agentsModes.normal.manager = new AgentsManager(
                         this.apiKeyManager,
                         MODELS,
-                        (key, vars) => this.t(key, vars)
+                        (key, vars) => this.t(key, vars),
+                        '_online'
                     );
+                    this.agentsModes.labGenova.manager = new AgentsManager(
+                        this.apiKeyManager,
+                        MODELS,
+                        (key, vars) => this.t(key, vars),
+                        '_genova'
+                    );
+                    this.agentsMode = this.agentsModes.normal;
+                    this.agentsManager = this.agentsMode.manager;
                     this.setupTabs();
                     this.setupAgentsView();
                 }
@@ -4720,13 +4786,15 @@ NON fare domande, NON facilitare discussioni, NON aggiungere contenuti inventati
                 if (this.agentsManager) {
                     this.agentsManager.saveCurrentSession();
                     this.agentsManager.currentSession = null;
-                    this.agentsManager.agents = [];
-                    this.agentsManager.saveAgents();
+                    if (!this.agentsMode.locked) {
+                        this.agentsManager.agents = [];
+                        this.agentsManager.saveAgents();
+                    }
                 }
                 document.getElementById('agentsMessages').innerHTML = '';
                 document.getElementById('messageInput').value = '';
                 document.getElementById('agentsContext').value = '';
-                localStorage.removeItem('agents_context_online');
+                localStorage.removeItem(this.agentsMode.contextKey);
                 this.renderAgentsCards();
             }
 
@@ -5636,13 +5704,19 @@ NON fare domande, NON facilitare discussioni, NON aggiungere contenuti inventati
                     this.agentsManager.setOrchestratorModelId(e.target.value);
                 });
 
+                // Lab Genova toggle
+                document.getElementById('labGenovaBtn').addEventListener('click', () => {
+                    const target = this.agentsMode.name === 'normal' ? 'labGenova' : 'normal';
+                    this.switchAgentsMode(target);
+                });
+
                 // Orchestrator prompt toggle and persistence
                 const orchPromptEl = document.getElementById('orchestratorPrompt');
                 const orchToggleBtn = document.getElementById('orchPromptToggle');
                 const savedOrchPrompt = localStorage.getItem('agents_orchestrator_prompt_online');
                 orchPromptEl.value = savedOrchPrompt !== null ? savedOrchPrompt : this.t('agents.orchestratorRole');
                 orchPromptEl.addEventListener('input', () => {
-                    localStorage.setItem('agents_orchestrator_prompt_online', orchPromptEl.value);
+                    localStorage.setItem(this.agentsMode.orchPromptKey, orchPromptEl.value);
                 });
                 const orchContentEl = document.getElementById('orchPromptContent');
                 orchToggleBtn.addEventListener('click', () => {
@@ -5656,7 +5730,7 @@ NON fare domande, NON facilitare discussioni, NON aggiungere contenuti inventati
                 const savedCtx = localStorage.getItem('agents_context_online');
                 if (savedCtx) ctxEl.value = savedCtx;
                 ctxEl.addEventListener('input', () => {
-                    localStorage.setItem('agents_context_online', ctxEl.value);
+                    localStorage.setItem(this.agentsMode.contextKey, ctxEl.value);
                 });
                 ctxToggleBtn.addEventListener('click', () => {
                     ctxEl.classList.toggle('hidden');
@@ -5712,6 +5786,54 @@ NON fare domande, NON facilitare discussioni, NON aggiungere contenuti inventati
                     this.updateCreditDisplay();
                 });
 
+                this.renderAgentsCards();
+                this.renderAgentsMessages();
+            }
+
+            switchAgentsMode(modeName) {
+                const ctxEl = document.getElementById('agentsContext');
+                const orchEl = document.getElementById('orchestratorPrompt');
+                const orchSelect = document.getElementById('orchestratorSelector');
+                const addBtn = document.getElementById('addAgentBtn');
+                const newMode = this.agentsModes[modeName];
+                if (!newMode || newMode === this.agentsMode) return;
+
+                // Save current mode's textarea state
+                localStorage.setItem(this.agentsMode.contextKey, ctxEl.value);
+                localStorage.setItem(this.agentsMode.orchPromptKey, orchEl.value);
+
+                // Switch mode
+                this.agentsMode = newMode;
+                this.agentsManager = newMode.manager;
+
+                // Pre-load presets on first use
+                if (newMode.presets && this.agentsManager.getAgents().length === 0) {
+                    newMode.presets.forEach((key, idx) => {
+                        const preset = PRESET_AGENTS.find(p => p.key === key);
+                        if (preset) {
+                            this.agentsManager.addAgent({
+                                name: preset.nameIt,
+                                role: preset.roleIt,
+                                modelId: preset.modelId,
+                                preset: preset.key,
+                                lockedModel: preset.lockedModel || false,
+                                autoDisable: preset.autoDisable || false,
+                                phase: preset.phase || 0,
+                                enabled: idx === 0
+                            });
+                        }
+                    });
+                }
+
+                // Restore new mode's textarea state
+                ctxEl.value = localStorage.getItem(newMode.contextKey) || '';
+                const savedOrch = localStorage.getItem(newMode.orchPromptKey);
+                orchEl.value = savedOrch !== null ? savedOrch : this.t('agents.orchestratorRole');
+
+                // Update UI
+                addBtn.style.display = newMode.locked ? 'none' : '';
+                orchSelect.value = this.agentsManager.getOrchestratorModelId();
+                document.getElementById('labGenovaBtn').classList.toggle('active', newMode.name === 'labGenova');
                 this.renderAgentsCards();
                 this.renderAgentsMessages();
             }
@@ -5812,6 +5934,10 @@ NON fare domande, NON facilitare discussioni, NON aggiungere contenuti inventati
             renderAgentsCards() {
                 const list = document.getElementById('agentsList');
                 list.innerHTML = '';
+                const existingLabHint = document.getElementById('labGenovaHint');
+                if (existingLabHint) existingLabHint.remove();
+                const existingHint = document.getElementById('leadHint');
+                if (existingHint) existingHint.remove();
                 const agents = this.agentsManager.getAgents();
 
                 if (agents.length === 0) {
@@ -5820,8 +5946,13 @@ NON fare domande, NON facilitare discussioni, NON aggiungere contenuti inventati
                 }
 
                 const enabledCount = agents.filter(a => a.enabled !== false).length;
-                const existingHint = document.getElementById('leadHint');
-                if (existingHint) existingHint.remove();
+                if (this.agentsMode.name === 'labGenova') {
+                    const labHint = document.createElement('div');
+                    labHint.id = 'labGenovaHint';
+                    labHint.style.cssText = 'padding: 8px 12px; margin: 0 0 6px 0; background: #e8f5e9; border-left: 3px solid #2e7d32; border-radius: 4px; font-size: 12px; color: #1b5e20; line-height: 1.4;';
+                    labHint.textContent = this.t('agents.labGenovaHint');
+                    list.parentNode.insertBefore(labHint, list);
+                }
                 if (enabledCount === 1) {
                     const hint = document.createElement('div');
                     hint.id = 'leadHint';
@@ -5848,7 +5979,18 @@ NON fare domande, NON facilitare discussioni, NON aggiungere contenuti inventati
                     toggleInput.type = 'checkbox';
                     toggleInput.checked = isEnabled;
                     toggleInput.addEventListener('change', (e) => {
-                        this.agentsManager.updateAgent(agent.id, { enabled: e.target.checked });
+                        if (this.agentsMode.radio) {
+                            if (e.target.checked) {
+                                this.agentsManager.getAgents().forEach(a => {
+                                    this.agentsManager.updateAgent(a.id, { enabled: a.id === agent.id });
+                                });
+                            } else {
+                                e.target.checked = true;
+                                return;
+                            }
+                        } else {
+                            this.agentsManager.updateAgent(agent.id, { enabled: e.target.checked });
+                        }
                         this.renderAgentsCards();
                     });
                     const slider = document.createElement('span');
@@ -5857,18 +5999,20 @@ NON fare domande, NON facilitare discussioni, NON aggiungere contenuti inventati
                     toggle.appendChild(slider);
                     headerLeft.appendChild(toggle);
 
-                    const leadBtn = document.createElement('button');
-                    leadBtn.className = 'agent-lead-btn' + (enabledCount === 1 && isEnabled ? ' active' : '');
-                    leadBtn.textContent = 'LEAD';
-                    leadBtn.title = this.t('agents.leadHint');
-                    leadBtn.addEventListener('click', () => {
-                        const allAgents = this.agentsManager.getAgents();
-                        allAgents.forEach(a => {
-                            this.agentsManager.updateAgent(a.id, { enabled: a.id === agent.id });
+                    if (!this.agentsMode.radio) {
+                        const leadBtn = document.createElement('button');
+                        leadBtn.className = 'agent-lead-btn' + (enabledCount === 1 && isEnabled ? ' active' : '');
+                        leadBtn.textContent = 'LEAD';
+                        leadBtn.title = this.t('agents.leadHint');
+                        leadBtn.addEventListener('click', () => {
+                            const allAgents = this.agentsManager.getAgents();
+                            allAgents.forEach(a => {
+                                this.agentsManager.updateAgent(a.id, { enabled: a.id === agent.id });
+                            });
+                            this.renderAgentsCards();
                         });
-                        this.renderAgentsCards();
-                    });
-                    headerLeft.appendChild(leadBtn);
+                        headerLeft.appendChild(leadBtn);
+                    }
 
                     if (isPreset) {
                         const badge = document.createElement('span');
@@ -5883,16 +6027,18 @@ NON fare domande, NON facilitare discussioni, NON aggiungere contenuti inventati
                         headerLeft.appendChild(adBadge);
                     }
 
-                    const removeBtn = document.createElement('button');
-                    removeBtn.className = 'agent-remove-btn';
-                    removeBtn.textContent = '\u00D7';
-                    removeBtn.addEventListener('click', () => {
-                        this.agentsManager.removeAgent(agent.id);
-                        this.renderAgentsCards();
-                    });
-
                     headerDiv.appendChild(headerLeft);
-                    headerDiv.appendChild(removeBtn);
+
+                    if (!this.agentsMode.locked) {
+                        const removeBtn = document.createElement('button');
+                        removeBtn.className = 'agent-remove-btn';
+                        removeBtn.textContent = '\u00D7';
+                        removeBtn.addEventListener('click', () => {
+                            this.agentsManager.removeAgent(agent.id);
+                            this.renderAgentsCards();
+                        });
+                        headerDiv.appendChild(removeBtn);
+                    }
 
                     const nameLabel = document.createElement('label');
                     nameLabel.textContent = this.t('agents.agentName');
@@ -6589,7 +6735,20 @@ NON fare domande, NON facilitare discussioni, NON aggiungere contenuti inventati
 
             applyAgentsSnapshot(snapshot) {
                 if (snapshot.agents) {
-                    this.agentsManager.agents = JSON.parse(JSON.stringify(snapshot.agents));
+                    const rawAgents = Array.isArray(snapshot.agents) ? snapshot.agents : [];
+                    const usedIds = new Set();
+                    const normalizedAgents = rawAgents.map((agent) => {
+                        const entry = agent && typeof agent === 'object' ? JSON.parse(JSON.stringify(agent)) : {};
+                        const currentId = (entry.id !== undefined && entry.id !== null) ? String(entry.id) : '';
+                        if (!currentId || usedIds.has(currentId)) {
+                            entry.id = this.agentsManager.generateAgentId(usedIds);
+                        } else {
+                            entry.id = currentId;
+                        }
+                        usedIds.add(entry.id);
+                        return entry;
+                    });
+                    this.agentsManager.agents = normalizedAgents;
                     this.agentsManager.saveAgents();
                 }
 
@@ -6602,13 +6761,13 @@ NON fare domande, NON facilitare discussioni, NON aggiungere contenuti inventati
                 const orchPromptEl = document.getElementById('orchestratorPrompt');
                 if (orchPromptEl && snapshot.orchestratorPrompt !== undefined) {
                     orchPromptEl.value = snapshot.orchestratorPrompt;
-                    localStorage.setItem('agents_orchestrator_prompt_online', orchPromptEl.value);
+                    localStorage.setItem(this.agentsMode.orchPromptKey, orchPromptEl.value);
                 }
 
                 const ctxEl = document.getElementById('agentsContext');
                 if (ctxEl) {
                     ctxEl.value = snapshot.context || '';
-                    localStorage.setItem('agents_context_online', ctxEl.value);
+                    localStorage.setItem(this.agentsMode.contextKey, ctxEl.value);
                 }
             }
 
@@ -6661,13 +6820,14 @@ NON fare domande, NON facilitare discussioni, NON aggiungere contenuti inventati
 
         // ===== AGENTS MANAGER CLASS =====
         class AgentsManager {
-            constructor(apiKeyManager, models, translator) {
+            constructor(apiKeyManager, models, translator, storageSuffix = '_online') {
                 this.apiKeyManager = apiKeyManager;
                 this.models = models;
                 this.t = translator;
-                this.storageKey = 'agents_config_online';
-                this.historyKey = 'agents_history_online';
-                this.orchestratorKey = 'agents_orchestrator_online';
+                this.storageSuffix = storageSuffix;
+                this.storageKey = 'agents_config' + storageSuffix;
+                this.historyKey = 'agents_history' + storageSuffix;
+                this.orchestratorKey = 'agents_orchestrator' + storageSuffix;
                 this.agents = this.loadAgents();
                 this.history = this.loadHistory();
                 this.currentSession = null;
@@ -6681,9 +6841,44 @@ NON fare domande, NON facilitare discussioni, NON aggiungere contenuti inventati
             loadAgents() {
                 const saved = localStorage.getItem(this.storageKey);
                 if (saved) {
-                    try { return JSON.parse(saved); } catch(e) {}
+                    try {
+                        const parsed = JSON.parse(saved);
+                        if (!Array.isArray(parsed)) return [];
+                        const usedIds = new Set();
+                        let changed = false;
+                        const normalized = parsed.map((agent) => {
+                            const entry = agent && typeof agent === 'object' ? { ...agent } : {};
+                            const currentId = (entry.id !== undefined && entry.id !== null) ? String(entry.id) : '';
+                            if (!currentId || usedIds.has(currentId)) {
+                                entry.id = this.generateAgentId(usedIds);
+                                changed = true;
+                            } else {
+                                if (entry.id !== currentId) {
+                                    entry.id = currentId;
+                                    changed = true;
+                                }
+                            }
+                            usedIds.add(entry.id);
+                            return entry;
+                        });
+                        if (changed) {
+                            localStorage.setItem(this.storageKey, JSON.stringify(normalized));
+                        }
+                        return normalized;
+                    } catch(e) {}
                 }
                 return [];
+            }
+
+            generateAgentId(existingIds = null) {
+                const usedIds = existingIds || new Set((this.agents || []).map(a => String(a.id)));
+                let id = '';
+                do {
+                    id = (typeof crypto !== 'undefined' && crypto.randomUUID)
+                        ? crypto.randomUUID()
+                        : Date.now().toString(36) + Math.random().toString(36).slice(2);
+                } while (usedIds.has(id));
+                return id;
             }
 
             saveAgents() {
@@ -6692,7 +6887,7 @@ NON fare domande, NON facilitare discussioni, NON aggiungere contenuti inventati
 
             addAgent(agent) {
                 const entry = {
-                    id: Date.now(),
+                    id: this.generateAgentId(),
                     name: agent.name || '',
                     role: agent.role || '',
                     modelId: agent.modelId || this.models[0].id,
