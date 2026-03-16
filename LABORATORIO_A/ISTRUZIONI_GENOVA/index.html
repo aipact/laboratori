@@ -703,14 +703,9 @@
     <div class="container">
         <!-- SELETTORE PERCORSO -->
         <div class="percorso-selector">
-            <h3>Quale percorso segue il tuo gruppo?</h3>
-            <p>Chiedi al coordinatore se non sei sicuro. Il contenuto della guida si adatta automaticamente.</p>
+            <h3>Percorso del laboratorio</h3>
             <div class="percorso-tabs">
-                <button class="percorso-tab active" onclick="setTrack('a')">
-                    <div class="percorso-tab-title">Percorso A — Problem Solving</div>
-                    <div class="percorso-tab-desc">Parti da un problema reale, esplori con gli agenti generici, produci un report con lo Sviluppatore Web</div>
-                </button>
-                <button class="percorso-tab" onclick="setTrack('ab')">
+                <button class="percorso-tab active" disabled>
                     <div class="percorso-tab-title">Percorso A+B — Problem Solving + Pianificazione</div>
                     <div class="percorso-tab-desc">Parti da un problema, poi costruisci un piano d'adozione IA con agenti specializzati: stakeholder, rischi, competenze, monitoraggio, costi</div>
                 </button>
@@ -781,12 +776,12 @@
                 </div>
             </div>
 
-            <p>In questo percorso tutti i gruppi lavorano sullo <strong>stesso tema</strong>, presentato in plenaria dal coordinatore.</p>
+            <p>I gruppi lavoreranno su <strong>temi selezionati dal team AI-PACT</strong>, che verranno presentati in plenaria dal coordinatore.</p>
 
             <div style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-radius: 16px; padding: 2rem; margin: 1.5rem 0; border: 3px solid var(--primary-light); text-align: center;">
-                <p style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;">Tema della giornata</p>
-                <h3 style="font-size: 1.5rem; color: var(--primary);" id="temaGiornata">Verrà comunicato in plenaria</h3>
-                <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">Ogni gruppo costruirà un piano di adozione dell'IA per il proprio servizio/reparto partendo da questo tema</p>
+                <p style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;">Temi del laboratorio</p>
+                <h3 style="font-size: 1.5rem; color: var(--primary);" id="temaGiornata">Verranno comunicati in plenaria</h3>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">Ogni gruppo costruirà un piano di adozione dell'IA partendo dal tema assegnato</p>
             </div>
 
             <p style="font-size: 0.9rem;">Dopo la presentazione, vi dividerete in gruppi e passerete direttamente al simulatore. Il Facilitatore-Laboratorio vi guiderà passo dopo passo.</p>
@@ -1154,8 +1149,8 @@
             });
             localStorage.setItem('lab_track', track);
         }
-        // Init
-        setTrack(localStorage.getItem('lab_track') || 'a');
+        // Init — solo percorso A+B
+        setTrack('ab');
     </script>
 </body>
 </html>
