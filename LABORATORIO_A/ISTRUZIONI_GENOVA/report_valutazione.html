@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laboratorio AI-PACT Genova — Valutazione Complessiva</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* ── Reset & base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:    #1a2e4a;
+      --navy-mid:#1e3a5f;
+      --teal:    #2a9d8f;
+      --teal-lt: #3bbcad;
+      --slate:   #4a6080;
+      --grey-dk: #334155;
+      --grey:    #64748b;
+      --grey-lt: #94a3b8;
+      --bg:      #f0f4f8;
+      --bg-card: #ffffff;
+      --border:  #dde4ed;
+      --text:    #1e293b;
+      --text-lt: #475569;
+      --accent:  #e9c46a;
+      --danger:  #e76f51;
+      --radius:  10px;
+      --shadow:  0 2px 12px rgba(26,46,74,.09);
+      --shadow-md: 0 4px 24px rgba(26,46,74,.13);
+      --transition: .25s ease;
+    }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Skip link ── */
+    .skip { position: absolute; left: -999px; top: 4px; background: var(--teal); color: #fff; padding: 6px 14px; border-radius: 4px; font-size: .85rem; }
+    .skip:focus { left: 12px; }
+
+    /* ── Header ── */
+    .site-header {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #1c4068 100%);
+      color: #fff;
+      padding: 56px 24px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .site-header::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -80px;
+      width: 380px; height: 380px;
+      border-radius: 50%;
+      background: rgba(42,157,143,.13);
+      pointer-events: none;
+    }
+    .site-header::after {
+      content: '';
+      position: absolute;
+      bottom: -100px; left: 40%;
+      width: 260px; height: 260px;
+      border-radius: 50%;
+      background: rgba(42,157,143,.08);
+      pointer-events: none;
+    }
+    .header-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+    .header-badge {
+      display: inline-block;
+      background: rgba(42,157,143,.25);
+      border: 1px solid rgba(42,157,143,.55);
+      color: #7feee4;
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+    .site-header h1 {
+      font-size: clamp(1.7rem, 4vw, 2.7rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 14px;
+      letter-spacing: -.02em;
+    }
+    .site-header h1 span { color: #7feee4; }
+    .site-header .subtitle {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,.75);
+      max-width: 680px;
+      margin-bottom: 28px;
+    }
+    .header-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 4px;
+    }
+    .meta-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: .85rem;
+      color: rgba(255,255,255,.88);
+    }
+    .meta-pill svg { width: 16px; height: 16px; flex-shrink: 0; opacity: .8; }
+
+    /* ── Layout ── */
+    .layout { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+    /* ── Stats strip ── */
+    .stats-strip {
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0;
+    }
+    .stat-item {
+      padding: 24px 20px;
+      text-align: center;
+      border-right: 1px solid var(--border);
+      transition: background var(--transition);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-item:hover { background: #f7fafc; }
+    .stat-num {
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .stat-num .unit { font-size: 1rem; font-weight: 500; color: var(--teal); }
+    .stat-label { font-size: .78rem; color: var(--grey); text-transform: uppercase; letter-spacing: .06em; font-weight: 500; }
+
+    /* ── Nav tabs ── */
+    .nav-wrap {
+      background: var(--bg-card);
+      border-bottom: 2px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(26,46,74,.06);
+    }
+    .nav-tabs {
+      display: flex;
+      gap: 0;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .nav-tabs::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 18px 26px;
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--grey);
+      letter-spacing: .02em;
+      white-space: nowrap;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: color var(--transition), border-color var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tab-btn:hover { color: var(--navy); }
+    .tab-btn.active { color: var(--teal); border-bottom-color: var(--teal); }
+    .tab-btn .tab-icon { font-size: 1rem; }
+
+    /* ── Sections ── */
+    .section-panel { display: none; padding: 48px 0 64px; animation: fadeUp .35s ease; }
+    .section-panel.active { display: block; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Section header ── */
+    .section-header {
+      margin-bottom: 36px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-tag {
+      font-size: .75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--teal);
+      margin-bottom: 8px;
+    }
+    .section-header h2 {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+    .section-header p {
+      color: var(--text-lt);
+      font-size: 1rem;
+      max-width: 720px;
+    }
+
+    /* ── Cards grid ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+      transition: box-shadow var(--transition), transform var(--transition);
+    }
+    .card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .card-icon {
+      width: 44px; height: 44px;
+      background: linear-gradient(135deg, var(--teal), #1d7a6e);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+      font-size: 1.2rem;
+    }
+    .card h3 { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+    .card p { font-size: .9rem; color: var(--text-lt); line-height: 1.65; }
+    .card.accent-border { border-left: 4px solid var(--teal); }
+    .card.warn-border  { border-left: 4px solid var(--accent); }
+    .card.alert-border { border-left: 4px solid var(--danger); }
+
+    /* ── Accordion ── */
+    .accordion { margin-bottom: 12px; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+    .accordion-btn {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-size: .95rem;
+      font-weight: 600;
+      color: var(--navy);
+      transition: background var(--transition);
+      text-align: left;
+      gap: 12px;
+    }
+    .accordion-btn:hover { background: #f0f6f9; }
+    .accordion-btn.open { background: var(--navy); color: #fff; border-color: var(--navy); border-radius: var(--radius) var(--radius) 0 0; }
+    .accordion-btn .acc-arrow {
+      flex-shrink: 0;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: rgba(42,157,143,.15);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform var(--transition), background var(--transition);
+      font-style: normal;
+      font-size: .75rem;
+    }
+    .accordion-btn.open .acc-arrow { transform: rotate(180deg); background: rgba(255,255,255,.2); }
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .4s cubic-bezier(.4,0,.2,1);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 var(--radius) var(--radius);
+    }
+    .accordion-content.open { max-height: 1200px; }
+    .accordion-inner { padding: 24px 28px; }
+    .accordion-inner p { color: var(--text-lt); font-size: .9rem; line-height: 1.75; margin-bottom: 14px; }
+    .accordion-inner p:last-child { margin-bottom: 0; }
+    .accordion-inner strong { color: var(--navy); }
+
+    /* ── Highlight box ── */
+    .highlight-box {
+      background: linear-gradient(135deg, #eef7f6 0%, #e4f4f2 100%);
+      border: 1px solid rgba(42,157,143,.25);
+      border-left: 4px solid var(--teal);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin: 20px 0;
+    }
+    .highlight-box p { color: var(--grey-dk); font-size: .92rem; margin: 0; line-height: 1.7; }
+    .highlight-box strong { color: var(--navy); }
+
+    .warn-box {
+      background: #fefcec;
+      border: 1px solid rgba(233,196,106,.4);
+      border-left: 4px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin: 20px 0;
+    }
+    .warn-box p { color: var(--grey-dk); font-size: .92rem; margin: 0; line-height: 1.7; }
+
+    /* ── Charts section ── */
+    .charts-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin: 32px 0;
+    }
+    .chart-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+    .chart-card h3 {
+      font-size: .9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--slate);
+      margin-bottom: 20px;
+    }
+    .chart-wrap { position: relative; height: 260px; }
+    .chart-wrap-lg { position: relative; height: 320px; }
+
+    /* ── Lists ── */
+    .styled-list { list-style: none; margin: 16px 0; }
+    .styled-list li {
+      position: relative;
+      padding: 10px 12px 10px 38px;
+      font-size: .9rem;
+      color: var(--text-lt);
+      border-bottom: 1px solid var(--border);
+      line-height: 1.6;
+    }
+    .styled-list li:last-child { border-bottom: none; }
+    .styled-list li::before {
+      content: counter(list-counter);
+      counter-increment: list-counter;
+      position: absolute;
+      left: 8px;
+      top: 10px;
+      width: 22px; height: 22px;
+      background: var(--teal);
+      color: #fff;
+      font-size: .72rem;
+      font-weight: 700;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      line-height: 22px;
+    }
+    .styled-list { counter-reset: list-counter; }
+    .styled-list li strong { color: var(--navy); }
+
+    .bullet-list { list-style: none; margin: 12px 0; }
+    .bullet-list li {
+      padding: 7px 10px 7px 28px;
+      font-size: .9rem;
+      color: var(--text-lt);
+      position: relative;
+      line-height: 1.6;
+    }
+    .bullet-list li::before {
+      content: '';
+      position: absolute;
+      left: 8px; top: 14px;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--teal);
+    }
+    .bullet-list li strong { color: var(--navy); }
+
+    /* ── Two-col text ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin: 24px 0; }
+    @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; gap: 16px; } }
+
+    /* ── Divider ── */
+    .divider { height: 1px; background: var(--border); margin: 36px 0; }
+
+    /* ── Intro section ── */
+    .intro-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin: 24px 0;
+    }
+    @media (max-width: 700px) { .intro-grid { grid-template-columns: 1fr; } }
+
+    .schema-flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin: 20px 0;
+    }
+    .schema-pill {
+      background: var(--navy);
+      color: #fff;
+      border-radius: 20px;
+      padding: 6px 18px;
+      font-size: .82rem;
+      font-weight: 600;
+      letter-spacing: .03em;
+      white-space: nowrap;
+    }
+    .schema-pill.teal { background: var(--teal); }
+    .schema-arrow { color: var(--grey-lt); font-size: 1.1rem; }
+
+    /* ── Recommendation cards ── */
+    .rec-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .rec-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow);
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      transition: box-shadow var(--transition);
+    }
+    .rec-card:hover { box-shadow: var(--shadow-md); }
+    .rec-num {
+      flex-shrink: 0;
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal), #1d7a6e);
+      color: #fff;
+      font-size: .85rem;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .rec-card h4 { font-size: .9rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+    .rec-card p  { font-size: .83rem; color: var(--text-lt); line-height: 1.6; margin: 0; }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--navy);
+      color: rgba(255,255,255,.65);
+      padding: 32px 24px;
+      text-align: center;
+      font-size: .82rem;
+      margin-top: 64px;
+    }
+    footer a { color: #7feee4; text-decoration: none; }
+    footer strong { color: rgba(255,255,255,.85); }
+    .footer-inner { max-width: 1100px; margin: 0 auto; }
+    .footer-divider { width: 60px; height: 2px; background: var(--teal); margin: 14px auto; border-radius: 2px; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .site-header { padding: 40px 20px 36px; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .charts-row { grid-template-columns: 1fr; }
+      .tab-btn { padding: 14px 18px; font-size: .82rem; }
+      .rec-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Print ── */
+    @media print {
+      .nav-wrap, .stats-strip { position: static !important; box-shadow: none; }
+      .section-panel { display: block !important; page-break-before: always; }
+      .section-panel:first-of-type { page-break-before: avoid; }
+      .accordion-content { max-height: none !important; }
+      body { background: #fff; }
+      .card, .chart-card, .rec-card { box-shadow: none; border: 1px solid #ccc; }
+      footer { background: var(--navy) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .site-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+
+    /* ── Utility ── */
+    .mt-8  { margin-top: 8px; }
+    .mt-16 { margin-top: 16px; }
+    .mt-24 { margin-top: 24px; }
+    .mb-8  { margin-bottom: 8px; }
+    .mb-16 { margin-bottom: 16px; }
+    .mb-24 { margin-bottom: 24px; }
+    .text-sm { font-size: .85rem; color: var(--text-lt); }
+    .full-chart { grid-column: 1 / -1; }
+  </style>
+</head>
+<body>
+
+<a class="skip" href="#main-content">Vai al contenuto principale</a>
+
+<!-- ══ HEADER ══ -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-badge">Rapporto di Valutazione · AI-PACT</div>
+    <h1>Laboratorio AI-PACT <span>Genova</span></h1>
+    <p class="subtitle">Valutazione complessiva dell'esperienza — analisi dei trend generali emersi dalla sperimentazione con il chatbot agentico AI-PACT</p>
+    <div class="header-meta">
+      <div class="meta-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        16 marzo 2026
+      </div>
+      <div class="meta-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        9 gruppi · PA Genova e Città Metropolitana
+      </div>
+      <div class="meta-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        Comune e Città Metropolitana
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ══ STATS STRIP ══ -->
+<div class="stats-strip">
+  <div class="layout">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-num">9</div>
+        <div class="stat-label">Gruppi partecipanti</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">3</div>
+        <div class="stat-label">Tracce proposte</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">53<span class="unit"> msg</span></div>
+        <div class="stat-label">Media messaggi/sessione</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">9<span class="unit">/9</span></div>
+        <div class="stat-label">Percorsi completati</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">5</div>
+        <div class="stat-label">Schemi per gruppo</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">3<span class="unit">/9</span></div>
+        <div class="stat-label">Gruppi più critici</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ NAV TABS ══ -->
+<div class="nav-wrap">
+  <nav class="nav-tabs" role="tablist">
+    <button class="tab-btn active" role="tab" aria-selected="true"  onclick="switchTab('intro', this)">
+      <span class="tab-icon">📋</span> Introduzione
+    </button>
+    <button class="tab-btn" role="tab" aria-selected="false" onclick="switchTab('hmi', this)">
+      <span class="tab-icon">🖥</span> Interazione HMI
+    </button>
+    <button class="tab-btn" role="tab" aria-selected="false" onclick="switchTab('pa', this)">
+      <span class="tab-icon">🏛</span> Contenuti PA
+    </button>
+    <button class="tab-btn" role="tab" aria-selected="false" onclick="switchTab('sintesi', this)">
+      <span class="tab-icon">💡</span> Sintesi e Raccomandazioni
+    </button>
+  </nav>
+</div>
+
+<!-- ══ MAIN CONTENT ══ -->
+<main id="main-content">
+
+  <!-- ───────────── INTRO ───────────── -->
+  <div id="panel-intro" class="section-panel active">
+    <div class="layout">
+
+      <div class="section-header">
+        <div class="section-tag">Contesto e obiettivi</div>
+        <h2>Il laboratorio: come è stato strutturato</h2>
+        <p>Una sperimentazione inedita nel panorama della formazione sulla PA digitale: funzionari pubblici alle prese con uno strumento agentico progettato per guidarli nella pianificazione di progetti AI.</p>
+      </div>
+
+      <div class="intro-grid">
+        <div>
+          <p style="color:var(--text-lt); font-size:.95rem; line-height:1.75; margin-bottom:16px;">
+            Nove gruppi di operatori della pubblica amministrazione del <strong style="color:var(--navy);">territorio genovese</strong> — Comune, Città Metropolitana e comuni dell'area — hanno partecipato a un laboratorio pratico costruendo un <strong style="color:var(--navy);">piano di adozione dell'IA</strong> per il proprio servizio, guidati da un simulatore multi-agente progettato ad hoc per il percorso AI-PACT.
+          </p>
+          <p style="color:var(--text-lt); font-size:.95rem; line-height:1.75; margin-bottom:16px;">
+            Il simulatore mette a disposizione <strong style="color:var(--navy);">agenti specializzati</strong> — uno per ogni schema del piano — che i partecipanti attivano uno alla volta in modalità LEAD: l'agente guida la discussione, raccoglie le risposte del gruppo e produce un checkpoint strutturato prima di passare al successivo. Ogni gruppo ha potuto scegliere tra <strong style="color:var(--navy);">tre tracce</strong>: agente conversazionale per il welfare, dashboard per la pianificazione territoriale, o server per l'anonimizzazione dei dati.
+          </p>
+          <p style="color:var(--text-lt); font-size:.95rem; line-height:1.75;">
+            L'analisi che segue legge l'esperienza da <strong style="color:var(--navy);">due prospettive complementari</strong>: l'interazione uomo-macchina (HMI) — come i partecipanti hanno dialogato con il sistema — e il merito tematico PA — la qualità e la pertinenza dei contenuti prodotti.
+          </p>
+        </div>
+        <div>
+          <div class="card" style="height:100%;">
+            <div class="card-icon">🗺</div>
+            <h3>I 5 schemi progressivi del simulatore</h3>
+            <p style="margin-bottom:16px;">Ogni sessione seguiva una sequenza strutturata, pensata per costruire gradualmente l'analisi del progetto AI:</p>
+            <div class="schema-flow">
+              <span class="schema-pill">Stakeholder</span>
+              <span class="schema-arrow">→</span>
+              <span class="schema-pill">Rischi</span>
+              <span class="schema-arrow">→</span>
+              <span class="schema-pill teal">Competenze</span>
+              <span class="schema-arrow">→</span>
+              <span class="schema-pill">Monitoraggio</span>
+              <span class="schema-arrow">→</span>
+              <span class="schema-pill">Costi</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-header" style="margin-bottom:24px;">
+        <div class="section-tag">Temi di lavoro</div>
+        <h2>Le tre tracce e la scelta dei gruppi</h2>
+        <p>Ai gruppi sono state proposte tre tracce. La distribuzione delle scelte riflette le priorità percepite nella digitalizzazione dei servizi pubblici genovesi.</p>
+      </div>
+
+      <div class="charts-row">
+        <div class="chart-card">
+          <h3>Distribuzione per tema</h3>
+          <div class="chart-wrap">
+            <canvas id="donutChart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card" style="display:flex; flex-direction:column; justify-content:center;">
+          <h3>Le tre tracce</h3>
+          <div class="highlight-box" style="margin-top:0;">
+            <p><strong>Caso A — Agente conversazionale welfare</strong> (4 gruppi: G2, G3, G6, G7). L'interazione automatica con il cittadino è percepita come il punto di ingresso più naturale per la digitalizzazione PA. Il Gruppo 7 si è distinto scegliendo un taglio molto specifico: il contributo trasporto per cittadini disabili.</p>
+          </div>
+          <div class="highlight-box">
+            <p><strong>Caso B — Dashboard pianificazione territoriale</strong> (3 gruppi: G4, G8, G9). Dalle autorizzazioni ambientali alla raccolta differenziata, questi gruppi hanno prodotto analisi particolarmente radicate nel contesto operativo reale, con KPI specifici del dominio.</p>
+          </div>
+          <div class="highlight-box">
+            <p><strong>Caso C — Server anonimizzazione dati</strong> (2 gruppi: G1, G5). Il tema della tensione tra interoperabilità e protezione dei dati personali ha portato i due gruppi a confrontarsi con scelte tecniche concrete (open source, residui PNRR) e a produrre le interazioni più critiche dell'intero laboratorio.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ───────────── HMI ───────────── -->
+  <div id="panel-hmi" class="section-panel">
+    <div class="layout">
+
+      <div class="section-header">
+        <div class="section-tag">Prospettiva esperto HMI</div>
+        <h2>Come i partecipanti hanno interagito con il chatbot agentico</h2>
+        <p>L'analisi dell'interazione uomo-macchina rivela pattern ricorrenti che trascendono i singoli gruppi e delineano un profilo d'uso comune tra i funzionari PA.</p>
+      </div>
+
+      <!-- Accordions: pattern principali -->
+      <div class="section-tag mt-8 mb-16">Pattern di interazione dominanti</div>
+
+      <div class="accordion">
+        <button class="accordion-btn open" onclick="toggleAcc(this)">
+          <span>La curva di fiducia: dall'esplorazione attiva alla delega progressiva</span>
+          <span class="acc-arrow">▼</span>
+        </button>
+        <div class="accordion-content open">
+          <div class="accordion-inner">
+            <p>Un pattern ricorrente emerge dall'analisi delle sessioni: quasi tutti i gruppi mostrano <strong>contributi più ricchi nelle prime fasi</strong> (Stakeholder, Rischi) e una tendenza alla validazione rapida nelle fasi successive (Monitoraggio, Costi). Le cause sono probabilmente multiple: la <strong>pressione del tempo</strong> — con 60-90 minuti per completare 5 schemi, accelerare nelle ultime fasi è una scelta razionale — ma anche la crescente fiducia verso un sistema che ha dimostrato di produrre output ragionevoli.</p>
+            <p>La struttura a schemi progressivi ha fatto il suo lavoro, guidando anche i gruppi meno esperti verso output completi e ben organizzati. Nei casi in cui i partecipanti hanno mantenuto il <strong>pensiero critico anche nelle fasi finali</strong> — come il Gruppo 1, che ha sfidato le valutazioni dell'AI sui rischi, o il Gruppo 5, che ha dichiarato onestamente i propri limiti di budget — la qualità dell'output è stata ancora più alta.</p>
+            <p>Il dato più utile per le prossime edizioni: <strong>dare più tempo ai gruppi</strong> consentirebbe di mantenere la qualità dell'interazione costante su tutti gli schemi. In alternativa, i gruppi potrebbero negoziare con il Facilitatore quali schemi approfondire e quali trattare in modo più rapido.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion">
+        <button class="accordion-btn" onclick="toggleAcc(this)">
+          <span>Dal generico allo specifico: il ruolo dello strumento</span>
+          <span class="acc-arrow">▼</span>
+        </button>
+        <div class="accordion-content">
+          <div class="accordion-inner">
+            <p>I prompt iniziali sono spesso sintetici — "servizi sociali", "dashboard territoriale" — ma questo riflette un comportamento atteso: i gruppi non avevano esperienza pregressa con strumenti di questo tipo. La dinamica interessante è che <strong>il sistema ha funzionato come catalizzatore</strong>: ponendo domande mirate, ha gradualmente estratto contesto reale e specifico dai partecipanti.</p>
+            <p>I gruppi con maggiore competenza di dominio hanno risposto con input ricchi e dettagliati — nomi reali dell'organigramma (G6), budget concreti da residui PNRR (G5), elenchi precisi di rischi operativi (G4, G7) — dimostrando che <strong>il valore aggiunto dei partecipanti emerge quando lo strumento sa fare le domande giuste</strong>. Una breve fase di onboarding iniziale sul prompting efficace potrebbe accelerare ulteriormente questo processo.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion">
+        <button class="accordion-btn" onclick="toggleAcc(this)">
+          <span>Due modelli di interazione: validare vs co-costruire</span>
+          <span class="acc-arrow">▼</span>
+        </button>
+        <div class="accordion-content">
+          <div class="accordion-inner">
+            <p>Dall'analisi delle sessioni emergono due modelli di interazione distinti. Alcuni gruppi hanno adottato un approccio <strong>"proponi tu"</strong>: l'AI genera, il gruppo valida. Altri hanno lavorato in modalità <strong>"costruiamo insieme"</strong>: il gruppo porta contesto, contesta, riformula. Entrambi hanno prodotto output completi, ma il secondo modello ha generato piani più specifici e difendibili.</p>
+            <p>Gli esempi migliori di co-costruzione: il Gruppo 1 che ha forzato l'AI a rivedere la classificazione dei rischi ("Non mi hai convinto — abbassa a medio"), il Gruppo 5 che ha dichiarato onestamente "non sappiamo se abbiamo le risorse" aprendo una discussione concreta, il Gruppo 7 che ha chiesto spontaneamente una matrice stakeholder da compilare insieme.</p>
+            <p>La lezione per le prossime edizioni: <strong>il pensiero critico produce risultati migliori</strong> e può essere incentivato con piccoli vincoli strutturali, come richiedere almeno una contestazione motivata per schema.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion">
+        <button class="accordion-btn" onclick="toggleAcc(this)">
+          <span>Primi passi con lo strumento: una curva di apprendimento gestibile</span>
+          <span class="acc-arrow">▼</span>
+        </button>
+        <div class="accordion-content">
+          <div class="accordion-inner">
+            <p>Tre gruppi su nove hanno incontrato <strong>piccole difficoltà</strong> nell'uso del simulatore: un prompt di sistema incollato per errore nel campo messaggio (G7), confusione nello switch tra agenti (G6), una domanda sul salvataggio della sessione. Si tratta di episodi circoscritti, risolti rapidamente, che non hanno compromesso il completamento del percorso.</p>
+            <p>Per le prossime edizioni, un <strong>breve onboarding pratico</strong> di 10-15 minuti — una demo live dello switch tra agenti e dell'uso del contesto condiviso — potrebbe ridurre ulteriormente questi attriti iniziali. Nel complesso, la semplicità della modalità LEAD (un agente alla volta, interazione diretta) si è dimostrata una <strong>scelta progettuale efficace</strong> per un pubblico alla prima esperienza con strumenti di questo tipo.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Cosa ha funzionato -->
+      <div class="section-tag mb-16">Elementi che hanno funzionato bene</div>
+
+      <div class="cards-grid">
+        <div class="card accent-border">
+          <div class="card-icon">🧩</div>
+          <h3>La struttura a schemi progressivi</h3>
+          <p>La sequenza Stakeholder → Rischi → Competenze → Monitoraggio → Costi ha fornito un'impalcatura cognitiva che ha guidato anche i gruppi meno esperti. La progressione logica ha ridotto l'ansia da pagina bianca e ha reso il processo di pianificazione accessibile a chi non aveva mai affrontato la progettazione AI.</p>
+        </div>
+        <div class="card accent-border">
+          <div class="card-icon">📰</div>
+          <h3>La tecnica del "titolo di giornale"</h3>
+          <p>L'esercizio di brainstorming sui rischi basato sulla formulazione di titoli giornalistici catastrofici ha prodotto i contributi più autentici, vivaci e coinvolgenti dell'intero laboratorio. Abbassando la soglia della "correttezza formale", ha liberato la capacità dei partecipanti di immaginare scenari negativi realistici.</p>
+        </div>
+        <div class="card accent-border">
+          <div class="card-icon">🎯</div>
+          <h3>La competenza di dominio come differenziatore</h3>
+          <p>I gruppi con maggiore conoscenza del proprio ambito di lavoro hanno interagito con il chatbot in modo più critico, più specifico e più produttivo. La familiarità con l'AI conta meno di quanto si pensi: il vero valore aggiunto è sapere cosa si vuole costruire e perché.</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Grafici HMI -->
+      <div class="section-tag mb-16">Indicatori quantitativi HMI</div>
+
+      <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+        <div class="card" style="text-align:center;">
+          <div style="font-size:2.5rem; font-weight:700; color:var(--teal); line-height:1;">9/9</div>
+          <h3 style="font-size:.95rem; margin:8px 0 4px;">Percorsi completati</h3>
+          <p style="font-size:.82rem; color:var(--text-lt);">Tutti i gruppi hanno portato a termine il piano di adozione IA</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:2.5rem; font-weight:700; color:var(--navy); line-height:1;">53</div>
+          <h3 style="font-size:.95rem; margin:8px 0 4px;">Messaggi medi per sessione</h3>
+          <p style="font-size:.82rem; color:var(--text-lt);">Da 34 (G9) a 72 (G5) — sessioni ricche e articolate</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:2.5rem; font-weight:700; color:var(--accent); line-height:1;">4/9</div>
+          <h3 style="font-size:.95rem; margin:8px 0 4px;">Gruppi con pensiero critico attivo</h3>
+          <p style="font-size:.82rem; color:var(--text-lt);">G1, G4, G5 e G7 hanno contestato le proposte dell'AI</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:2.5rem; font-weight:700; color:var(--slate); line-height:1;">3/9</div>
+          <h3 style="font-size:.95rem; margin:8px 0 4px;">Piccole difficoltà tecniche</h3>
+          <p style="font-size:.82rem; color:var(--text-lt);">Risolte rapidamente, senza impatto sul completamento</p>
+        </div>
+      </div>
+
+      <div style="margin-top:24px;">
+        <div class="charts-row">
+          <div class="chart-card full-chart">
+            <h3>Profilo complessivo della sessione tipo</h3>
+            <div style="max-width:480px; margin:0 auto;">
+              <div class="chart-wrap-lg">
+                <canvas id="radarChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ───────────── PA ───────────── -->
+  <div id="panel-pa" class="section-panel">
+    <div class="layout">
+
+      <div class="section-header">
+        <div class="section-tag">Prospettiva esperto di pubblica amministrazione</div>
+        <h2>Qualità e pertinenza dei contenuti prodotti</h2>
+        <p>Al di là delle dinamiche di interazione, cosa hanno effettivamente elaborato i gruppi? Una lettura tematica rivela maturità su alcuni fronti e lacune significative su altri.</p>
+      </div>
+
+      <!-- Consapevolezza normativa -->
+      <div class="section-tag mb-16">Punti di forza</div>
+
+      <div class="highlight-box">
+        <p><strong>Sorpresa positiva: la consapevolezza normativa è alta.</strong> Tutti i gruppi hanno citato spontaneamente il GDPR e l'AI Act europeo; quasi tutti hanno previsto una DPIA nel piano di progetto. Il principio human-in-the-loop — la supervisione umana obbligatoria nelle decisioni ad alto impatto — è stato adottato in modo pressoché universale. La compliance normativa è percepita non come un ostacolo burocratico, ma come un vincolo progettuale da integrare fin dall'inizio.</p>
+      </div>
+
+      <div class="cards-grid mt-24">
+        <div class="card">
+          <div class="card-icon">⚖️</div>
+          <h3>Sensibilità al digital divide</h3>
+          <p>Il rischio di escludere le fasce di popolazione meno digitalizzate è quello più frequentemente citato e più concretamente affrontato. I gruppi hanno proposto contromisure specifiche: sportelli fisici di assistenza, interfacce multilingue, supporto telefonico dedicato. Una maturità che riflette il contatto diretto con le fragilità sociali del territorio.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔐</div>
+          <h3>Tensione trasparenza / protezione dati</h3>
+          <p>L'anonimizzazione dei dati come secondo tema più scelto (2 gruppi) segnala una consapevolezza crescente della tensione strutturale tra la necessità di condividere dati per migliorare i servizi e l'obbligo di proteggere la privacy dei cittadini. Un tema che la PA dovrà affrontare sistematicamente nei prossimi anni.</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Punti critici -->
+      <div class="section-tag mb-16">Aree critiche e lacune</div>
+
+      <div class="accordion">
+        <button class="accordion-btn open" onclick="toggleAcc(this)">
+          <span>Il bias algoritmico: riconosciuto ma non affrontato</span>
+          <span class="acc-arrow">▼</span>
+        </button>
+        <div class="accordion-content open">
+          <div class="accordion-inner">
+            <p>Il rischio di bias algoritmico è citato dalla maggior parte dei gruppi — un segnale positivo di consapevolezza. Tuttavia, nella maggior parte dei casi resta a livello di menzione nella lista dei rischi, senza un'analisi delle contromisure concrete: come costruire dataset rappresentativi, come auditare i modelli, quali popolazioni potrebbero essere sovra- o sotto-rappresentate.</p>
+            <p>Si tratta di un tema complesso, che richiede competenze specifiche difficili da sviluppare nel tempo di un laboratorio. Il fatto che sia stato riconosciuto è un buon punto di partenza; le prossime edizioni potranno dedicare uno spazio mirato a <strong>trasformare la consapevolezza del rischio in capacità di gestione</strong>.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion">
+        <button class="accordion-btn" onclick="toggleAcc(this)">
+          <span>La sostenibilità economica: il grande punto cieco</span>
+          <span class="acc-arrow">▼</span>
+        </button>
+        <div class="accordion-content">
+          <div class="accordion-inner">
+            <p>La maggior parte dei gruppi ha indicato il PNRR come fonte di finanziamento per l'avvio del progetto. Alcuni hanno fatto un passo in più: il Gruppo 5 ha identificato con precisione i residui PNRR disponibili (30.000 euro) e la ripartizione 80/20 tra infrastruttura e formazione; il Gruppo 6 ha costruito un piano con fonti diversificate (PON Metro, FASE, fondi AGID) e ha distinto costi di avvio da costi ricorrenti (500.000 + 180.000/anno).</p>
+            <p>Questi esempi virtuosi restano però l'eccezione. Per la maggior parte dei gruppi, la sostenibilità oltre la fase pilota non è stata affrontata in profondità. <strong>Per le prossime edizioni, il modulo Costi potrebbe includere un esercizio esplicito</strong> sulla sostenibilità a 5 anni: fondi strutturali, partnership, consorzi inter-ente.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion">
+        <button class="accordion-btn" onclick="toggleAcc(this)">
+          <span>La governance dell'AI: il grande assente</span>
+          <span class="acc-arrow">▼</span>
+        </button>
+        <div class="accordion-content">
+          <div class="accordion-inner">
+            <p>La governance dell'AI — <strong>chi</strong> nell'organigramma dell'ente avrà la responsabilità del sistema una volta in produzione — è stata affrontata solo parzialmente. Il Gruppo 6 ha individuato figure specifiche con nome e cognome (Sindaca, Assessori, Direttore di area); il Gruppo 2 ha assegnato responsabilità di monitoraggio all'IT con cadenza trimestrale e pubblicazione su Amministrazione Trasparente. Ma nella maggior parte dei casi la governance resta implicita.</p>
+            <p>Il principio human-in-the-loop, citato da tutti, presuppone che ci sia un "umano" identificato, formato e responsabilizzato. Per le prossime edizioni, <strong>uno schema dedicato alla governance</strong> — chi decide, chi supervisiona, chi risponde — potrebbe trasformare questo principio da slogan a struttura operativa.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion">
+        <button class="accordion-btn" onclick="toggleAcc(this)">
+          <span>Interoperabilità e baseline misurabili</span>
+          <span class="acc-arrow">▼</span>
+        </button>
+        <div class="accordion-content">
+          <div class="accordion-inner">
+            <p>L'integrazione con i sistemi esistenti — ANPR, SUAP, piattaforme regionali — non è mai stata affrontata in profondità. I progetti sembrano pensati come sistemi isolati, mentre nella realtà operativa della PA l'interoperabilità è una condizione abilitante, non un'opzione.</p>
+            <p>Sul fronte del monitoraggio, i gruppi hanno prodotto KPI ben strutturati e pertinenti, ma quasi sempre privi di <strong>dati baseline</strong>: non è possibile misurare un miglioramento se non si sa da dove si parte. Definire i target senza misurare lo stato attuale rende i KPI decorativi piuttosto che operativi.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ───────────── SINTESI ───────────── -->
+  <div id="panel-sintesi" class="section-panel">
+    <div class="layout">
+
+      <div class="section-header">
+        <div class="section-tag">Conclusioni e prospettive</div>
+        <h2>Cosa ci dice questo laboratorio</h2>
+        <p>Una sintesi delle evidenze emerse e un insieme di raccomandazioni concrete per le prossime edizioni e per gli enti partecipanti.</p>
+      </div>
+
+      <!-- Tre risultati principali -->
+      <div class="section-tag mb-16">Il laboratorio ha dimostrato che</div>
+
+      <div class="cards-grid">
+        <div class="card accent-border">
+          <div class="card-icon">✅</div>
+          <h3>Lo strumento ha funzionato</h3>
+          <p>Funzionari PA alla prima esperienza con un sistema multi-agente hanno completato piani di adozione IA strutturati in meno di 90 minuti. La modalità LEAD — un agente alla volta, interazione diretta — e la sequenza a schemi progressivi hanno abbattuto la barriera di accesso alla pianificazione AI, rendendo il processo accessibile a tutti.</p>
+        </div>
+        <div class="card accent-border">
+          <div class="card-icon">⚡</div>
+          <h3>Il dominio conta più della tecnica</h3>
+          <p>I gruppi più efficaci non erano i più "tech-savvy": erano quelli che conoscevano a fondo il proprio contesto lavorativo. Chi ha portato nomi reali, budget concreti e rischi vissuti ha prodotto piani più specifici e difendibili. La competenza di dominio è il vero acceleratore dell'interazione con l'AI.</p>
+        </div>
+        <div class="card accent-border">
+          <div class="card-icon">💡</div>
+          <h3>Il pensiero critico fa la differenza</h3>
+          <p>I gruppi che hanno contestato le proposte dell'AI — "Non mi hai convinto", "Abbassa a medio", "Non riscontriamo criticità" — hanno prodotto i piani migliori. Il pensiero critico non è un ostacolo all'uso dell'AI: è ciò che lo rende produttivo. Incentivarlo è la sfida delle prossime edizioni.</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Raccomandazioni laboratorio -->
+      <div class="section-tag mb-16">Raccomandazioni per le prossime edizioni del laboratorio</div>
+
+      <div class="rec-grid">
+        <div class="rec-card">
+          <div class="rec-num">1</div>
+          <div>
+            <h4>Più tempo per i gruppi</h4>
+            <p>Con 60-90 minuti per 5 schemi, i gruppi tendono ad accelerare nelle fasi finali. Prevedere almeno 2 ore operative, oppure permettere ai gruppi di negoziare con il Facilitatore quali schemi approfondire e quali trattare in modo più rapido.</p>
+          </div>
+        </div>
+        <div class="rec-card">
+          <div class="rec-num">2</div>
+          <div>
+            <h4>Onboarding pratico allo strumento</h4>
+            <p>Una demo live di 10-15 minuti prima del laboratorio: come funziona lo switch tra agenti, a cosa serve il contesto condiviso, come copiare i checkpoint. Riduce gli attriti iniziali e permette di partire subito con il merito.</p>
+          </div>
+        </div>
+        <div class="rec-card">
+          <div class="rec-num">3</div>
+          <div>
+            <h4>Incentivare il pensiero critico</h4>
+            <p>Introdurre la regola di almeno una contestazione motivata per schema. I gruppi che hanno sfidato l'AI hanno prodotto piani migliori: rendere questa pratica strutturale amplifica la qualità dell'output.</p>
+          </div>
+        </div>
+        <div class="rec-card">
+          <div class="rec-num">4</div>
+          <div>
+            <h4>Schema dedicato alla governance</h4>
+            <p>Aggiungere uno schema sulla governance: chi decide, chi supervisiona, chi risponde, con quale mandato formale. Trasforma il principio human-in-the-loop da dichiarazione a struttura operativa.</p>
+          </div>
+        </div>
+        <div class="rec-card">
+          <div class="rec-num">5</div>
+          <div>
+            <h4>Baseline e sostenibilità nel modulo Costi</h4>
+            <p>Richiedere dati baseline prima di definire i KPI (nessun target senza stato attuale misurato) e un esercizio esplicito sulla sostenibilità oltre il PNRR: fondi strutturali, partnership, consorzi inter-ente.</p>
+          </div>
+        </div>
+        <div class="rec-card">
+          <div class="rec-num">6</div>
+          <div>
+            <h4>Diversificare le tracce proposte</h4>
+            <p>La convergenza di 4 gruppi su 9 sullo stesso caso (agente conversazionale welfare) ha prodotto output simili. Bilanciare meglio la distribuzione tra le tracce per massimizzare la varietà delle analisi e il confronto tra approcci diversi.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Raccomandazioni PA -->
+      <div class="section-tag mb-16">Raccomandazioni per gli enti della pubblica amministrazione</div>
+
+      <div class="two-col">
+        <div>
+          <ul class="bullet-list">
+            <li><strong>Nominare un referente IA in ogni ente.</strong> Una persona identificata, con mandato formale, responsabile della supervisione dei sistemi AI e dell'aggiornamento delle competenze interne.</li>
+            <li><strong>Pianificare la sostenibilità a 5 anni.</strong> Ogni progetto AI deve prevedere un piano finanziario che va oltre la fase pilota, con fonti diversificate e costi ricorrenti esplicitati.</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="bullet-list">
+            <li><strong>Privilegiare i casi d'uso a basso rischio.</strong> Iniziare da processi interni, non da servizi diretti al cittadino, per costruire competenze e fiducia prima di passare a sistemi ad alto impatto.</li>
+            <li><strong>Non sottovalutare la resistenza organizzativa.</strong> L'introduzione di sistemi AI modifica i processi di lavoro. La gestione del cambiamento organizzativo è almeno altrettanto importante della scelta tecnologica.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Radar chart finale -->
+      <div class="section-tag mb-16">Confronto dimensionale: HMI vs PA</div>
+      <div class="charts-row">
+        <div class="chart-card full-chart">
+          <h3>Radar di valutazione — Dimensioni HMI e PA a confronto</h3>
+          <p class="text-sm mb-16">Il grafico confronta la performance media osservata (su scala 1–5) lungo le dimensioni chiave, lette attraverso le due lenti valutative.</p>
+          <div style="max-width:560px; margin:0 auto;">
+            <div class="chart-wrap-lg">
+              <canvas id="radarFullChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-divider"></div>
+    <p><strong>Laboratorio AI-PACT · Genova · 2026</strong></p>
+    <p style="margin-top:8px;">Analisi condotta dal team AI-PACT con supporto AI nell'ambito del progetto <a href="#">AI-PACT</a> · IFEL Fondazione ANCI</p>
+    <p style="margin-top:6px; font-size:.78rem; opacity:.6;">Comune di Genova · Città Metropolitana di Genova</p>
+  </div>
+</footer>
+
+<!-- ══ JAVASCRIPT ══ -->
+<script>
+  /* ── Tab switching ── */
+  function switchTab(id, btn) {
+    document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-selected', 'false');
+    });
+    document.getElementById('panel-' + id).classList.add('active');
+    btn.classList.add('active');
+    btn.setAttribute('aria-selected', 'true');
+    window.scrollTo({ top: document.querySelector('.nav-wrap').offsetTop - 4, behavior: 'smooth' });
+  }
+
+  /* ── Accordion ── */
+  function toggleAcc(btn) {
+    const content = btn.nextElementSibling;
+    const isOpen  = btn.classList.contains('open');
+    btn.classList.toggle('open', !isOpen);
+    content.classList.toggle('open', !isOpen);
+  }
+
+  /* ── Charts ── */
+  const NAVY  = '#1a2e4a';
+  const TEAL  = '#2a9d8f';
+  const SLATE = '#4a6080';
+  const GOLD  = '#e9c46a';
+  const CORAL = '#e76f51';
+  const LTBL  = '#90b4d0';
+
+  const commonFont = {
+    family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    size: 12
+  };
+
+  /* Donut chart — distribuzione tematica */
+  new Chart(document.getElementById('donutChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Caso A — Agente conversazionale welfare', 'Caso B — Dashboard pianificazione', 'Caso C — Server anonimizzazione'],
+      datasets: [{
+        data: [4, 3, 2],
+        backgroundColor: [NAVY, TEAL, GOLD],
+        borderColor: '#ffffff',
+        borderWidth: 3,
+        hoverOffset: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '62%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            font: commonFont,
+            padding: 14,
+            color: '#475569',
+            usePointStyle: true,
+            pointStyleWidth: 10
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` ${ctx.label}: ${ctx.raw} grupp${ctx.raw === 1 ? 'o' : 'i'}`
+          }
+        }
+      }
+    }
+  });
+
+  /* Radar chart — sezione HMI */
+  new Chart(document.getElementById('radarChart'), {
+    type: 'radar',
+    data: {
+      labels: ['Completamento', 'Engagement attivo', 'Specificità prompt', 'Pensiero critico', 'Autonomia tecnica'],
+      datasets: [{
+        label: 'Media osservata',
+        data: [4.1, 3.2, 3.0, 2.5, 3.5],
+        borderColor: TEAL,
+        backgroundColor: 'rgba(42,157,143,0.15)',
+        pointBackgroundColor: TEAL,
+        pointRadius: 4,
+        borderWidth: 2
+      }, {
+        label: 'Potenziale',
+        data: [4.5, 4.0, 3.5, 3.5, 3.5],
+        borderColor: NAVY,
+        backgroundColor: 'rgba(26,46,74,0.07)',
+        pointBackgroundColor: NAVY,
+        pointRadius: 4,
+        borderWidth: 2,
+        borderDash: [5,3]
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: commonFont, color: '#475569', usePointStyle: true }
+        }
+      },
+      scales: {
+        r: {
+          min: 0, max: 5,
+          ticks: { stepSize: 1, font: { size: 10 }, color: '#94a3b8' },
+          grid: { color: 'rgba(0,0,0,0.08)' },
+          pointLabels: { font: { size: 11 }, color: '#334155' }
+        }
+      }
+    }
+  });
+
+  /* Radar chart full — sezione Sintesi */
+  new Chart(document.getElementById('radarFullChart'), {
+    type: 'radar',
+    data: {
+      labels: [
+        'Consapevolezza normativa',
+        'Qualità dei KPI',
+        'Analisi dei rischi',
+        'Governance definita',
+        'Sostenibilità economica',
+        'Interoperabilità',
+        'Qualità dell\'interazione',
+        'Specificità dei prompt',
+        'Pensiero critico'
+      ],
+      datasets: [{
+        label: 'Dimensione PA',
+        data: [4.5, 3.2, 3.5, 2.0, 2.5, 1.5, null, null, null],
+        borderColor: NAVY,
+        backgroundColor: 'rgba(26,46,74,0.12)',
+        pointBackgroundColor: NAVY,
+        pointRadius: 5,
+        borderWidth: 2.5
+      }, {
+        label: 'Dimensione HMI',
+        data: [null, null, null, null, null, null, 3.2, 3.0, 2.5],
+        borderColor: TEAL,
+        backgroundColor: 'rgba(42,157,143,0.12)',
+        pointBackgroundColor: TEAL,
+        pointRadius: 5,
+        borderWidth: 2.5
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 13 }, color: '#475569', usePointStyle: true, padding: 20 }
+        },
+        tooltip: {
+          callbacks: {
+            label: ctx => {
+              if (ctx.raw === null) return null;
+              return ` ${ctx.dataset.label}: ${ctx.raw}/5`;
+            }
+          }
+        }
+      },
+      scales: {
+        r: {
+          min: 0, max: 5,
+          ticks: { stepSize: 1, font: { size: 11 }, color: '#94a3b8', backdropColor: 'transparent' },
+          grid: { color: 'rgba(0,0,0,0.07)' },
+          pointLabels: { font: { size: 12 }, color: '#334155' }
+        }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>

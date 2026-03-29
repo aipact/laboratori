@@ -2,13 +2,13 @@
 
 **L'Azione Territoriale AI-PACT**
 
-Organizzata da **IFEL - Fondazione ANCI** in collaborazione con **ANCI Toscana**.
+Organizzata da **IFEL - Fondazione ANCI** in collaborazione con **ANCI Toscana** e **Città Metropolitana di Genova**.
 
 ### [Accedi ai Laboratori](https://aipact.github.io/laboratori/)
 
 ## Obiettivo
 
-Definire e condividere a livello sperimentale un percorso ragionato di approccio alle tecnologie basate su AI nei Comuni, coinvolgendo **19 Comuni ed Unioni dei Comuni della Regione Toscana**.
+Definire e condividere a livello sperimentale un percorso ragionato di approccio alle tecnologie basate su AI nei Comuni, coinvolgendo **19 Comuni ed Unioni dei Comuni della Regione Toscana** e la **Città Metropolitana di Genova**.
 
 ---
 
@@ -44,6 +44,7 @@ A seconda dei feedback raccolti dai partecipanti in fase di iscrizione, i due la
 | **Arezzo** | 15 gennaio 2026 | 20 gennaio 2026 |
 | **Livorno** | 30 gennaio 2026 | 11 febbraio 2026 |
 | **Firenze** | 19 febbraio 2026 | 26 febbraio 2026 |
+| **Genova** | 16 marzo 2026 | 16 marzo 2026 (giornata unica) |
 
 ---
 
@@ -66,6 +67,7 @@ laboratori/
 │   ├── AREZZO/
 │   ├── LIVORNO/
 │   ├── FIRENZE/
+│   ├── ISTRUZIONI_GENOVA/        # Genova (A+B)
 │   └── tools/
 └── LABORATORIO_B/               # Piano d'Azione (Filippi)
     ├── ISTRUZIONI/
@@ -99,6 +101,10 @@ laboratori/
 - **Gruppo 4 - Comunicazione Social** (8.6/10) — [Valutazione](https://aipact.github.io/laboratori/LABORATORIO_A/LIVORNO/Gruppo_4_Comunicazione_Social/valutazione.html) | [Dashboard](https://aipact.github.io/laboratori/LABORATORIO_A/LIVORNO/Gruppo_4_Comunicazione_Social/dashboard_moderazione_social.html)
 - **Gruppo 5 - Protocollo e Segnalazioni** (8.3/10) — [Valutazione](https://aipact.github.io/laboratori/LABORATORIO_A/LIVORNO/Gruppo_5_Protocollo_Segnalazioni/valutazione.html) | [Deliverable](https://aipact.github.io/laboratori/LABORATORIO_A/LIVORNO/Gruppo_5_Protocollo_Segnalazioni/Gruppo5-Output.html) | [Documento completo](https://aipact.github.io/laboratori/LABORATORIO_A/LIVORNO/Gruppo_5_Protocollo_Segnalazioni/estratto_documento_completo.html)
 - **Gruppo 7 - Rifiuti e Territorio** (8.1/10) — [Valutazione](https://aipact.github.io/laboratori/LABORATORIO_A/LIVORNO/Gruppo_7_Rifiuti_Territorio/valutazione.html) | [Piano Orbetello](https://aipact.github.io/laboratori/LABORATORIO_A/LIVORNO/Gruppo_7_Rifiuti_Territorio/piano_rifiuti_orbetello.html.html) | [Report Rifiuti](https://aipact.github.io/laboratori/LABORATORIO_A/LIVORNO/Gruppo_7_Rifiuti_Territorio/report_rifiuti.html)
+
+### Laboratorio A+B - GENOVA (16 marzo 2026)
+- [Report di valutazione](https://aipact.github.io/laboratori/LABORATORIO_A/ISTRUZIONI_GENOVA/report_valutazione.html) — Analisi complessiva della sessione: interazione HMI, contenuti PA, raccomandazioni
+- [Istruzioni Genova](https://aipact.github.io/laboratori/LABORATORIO_A/ISTRUZIONI_GENOVA/) — Pagina istruzioni del laboratorio genovese
 
 ### Laboratorio B - Istruzioni
 - [Istruzioni Laboratorio B](https://aipact.github.io/laboratori/LABORATORIO_B/ISTRUZIONI/)
