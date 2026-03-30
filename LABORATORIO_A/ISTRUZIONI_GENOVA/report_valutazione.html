@@ -479,6 +479,35 @@
     footer strong { color: rgba(255,255,255,.85); }
     .footer-inner { max-width: 1100px; margin: 0 auto; }
     .footer-divider { width: 60px; height: 2px; background: var(--teal); margin: 14px auto; border-radius: 2px; }
+    .panel-nav {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+    .panel-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 20px;
+      cursor: pointer;
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--navy);
+      text-decoration: none;
+      transition: all .25s ease;
+      box-shadow: 0 2px 12px rgba(26,46,74,.09);
+    }
+    .panel-nav-btn:hover {
+      background: var(--teal);
+      color: #fff;
+      border-color: var(--teal);
+    }
+    .panel-nav-btn.hidden { visibility: hidden; }
 
     /* ── Responsive ── */
     @media (max-width: 768px) {
@@ -663,6 +692,11 @@
         </div>
       </div>
 
+      <div class="panel-nav">
+        <span class="panel-nav-btn hidden"></span>
+        <a class="panel-nav-btn" onclick="goTab('hmi')">Interazione HMI &rarr;</a>
+      </div>
+
     </div>
   </div>
 
@@ -797,6 +831,11 @@
         </div>
       </div>
 
+      <div class="panel-nav">
+        <a class="panel-nav-btn" onclick="goTab('intro')">&larr; Introduzione</a>
+        <a class="panel-nav-btn" onclick="goTab('pa')">Contenuti PA &rarr;</a>
+      </div>
+
     </div>
   </div>
 
@@ -885,6 +924,11 @@
             <p>Sul fronte del monitoraggio, i gruppi hanno prodotto KPI ben strutturati e pertinenti, ma quasi sempre privi di <strong>dati baseline</strong>: non è possibile misurare un miglioramento se non si sa da dove si parte. Definire i target senza misurare lo stato attuale rende i KPI decorativi piuttosto che operativi.</p>
           </div>
         </div>
+      </div>
+
+      <div class="panel-nav">
+        <a class="panel-nav-btn" onclick="goTab('hmi')">&larr; Interazione HMI</a>
+        <a class="panel-nav-btn" onclick="goTab('sintesi')">Sintesi e Raccomandazioni &rarr;</a>
       </div>
 
     </div>
@@ -1007,6 +1051,11 @@
         </div>
       </div>
 
+      <div class="panel-nav">
+        <a class="panel-nav-btn" onclick="goTab('pa')">&larr; Contenuti PA</a>
+        <span class="panel-nav-btn hidden"></span>
+      </div>
+
     </div>
   </div>
 
@@ -1035,6 +1084,12 @@
     btn.classList.add('active');
     btn.setAttribute('aria-selected', 'true');
     window.scrollTo({ top: document.querySelector('.nav-wrap').offsetTop - 4, behavior: 'smooth' });
+  }
+
+  /* ── Panel nav ── */
+  function goTab(id) {
+    const btn = document.querySelector(`.tab-btn[onclick*="${id}"]`);
+    if (btn) switchTab(id, btn);
   }
 
   /* ── Accordion ── */

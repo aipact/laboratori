@@ -82,6 +82,9 @@ laboratori/
 
 > **Sito web:** https://aipact.github.io/laboratori/
 
+### Report Complessivo di Progetto
+- [Report Complessivo](https://aipact.github.io/laboratori/report_progetto.html) — Sintesi dell'intero percorso AI-PACT: 4 sedi, 22 gruppi, lezioni apprese
+
 ### Homepage
 - [Homepage](https://aipact.github.io/laboratori/)
 
